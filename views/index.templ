@@ -3,7 +3,7 @@ package views
 templ UsernameForm(currentValue string, err error) {
 	<div class="form-group" hx-target="this" hx-swap="outerHTML">
 		<label for="username">Username</label>
-		<input type="text" id="username" name="username" required hx-post="/validate/username" value={ currentValue }/>
+		<input type="text" id="username" name="username" required hx-post="/validate/username" hx-encoding="multipart/form-data" value={ currentValue }/>
 		if err == nil && currentValue != "" {
 			<span>✅</span>
 		}
@@ -16,7 +16,7 @@ templ UsernameForm(currentValue string, err error) {
 templ NewPassword(currentValue string, err error) {
 	<div class="form-group" hx-target="this" hx-swap="outerHTML">
 		<label for="new-password">New Password</label>
-		<input type="password" id="new-password" name="new-password" required hx-post="/validate/password" value={ currentValue }/>
+		<input type="password" id="new-password" name="new-password" required hx-post="/validate/password" hx-encoding="multipart/form-data" value={ currentValue }/>
 		if err == nil && currentValue != "" {
 			<span>✅</span>
 		}
@@ -29,7 +29,7 @@ templ NewPassword(currentValue string, err error) {
 templ ConfirmPassword(currentValue string, err error) {
 	<div class="form-group" hx-target="this" hx-swap="outerHTML">
 		<label for="confirm-password">Confirm Password</label>
-		<input type="password" id="confirm-password" name="confirm-password" required hx-post="/validate/confirm-password" value={ currentValue }/>
+		<input type="password" id="confirm-password" name="confirm-password" required hx-post="/validate/confirm-password" hx-encoding="multipart/form-data" value={ currentValue }/>
 		if err == nil && currentValue != "" {
 			<span>✅</span>
 		}

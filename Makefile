@@ -1,13 +1,19 @@
 HTMX_VERSION = 2.0.3
 
-format::
+format:
 	@go fmt -s -w .
 
-build::
-	@templ generate
+build: generate-static generate-dynamic
+	@go build .
 
-run:: build
+run: generate-dynamic
 	DOMAIN=localhost go run main.go
 
-update::
-	@curl -s -o ./static/htmx.min.js https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js
+generate: generate-static generate-dynamic
+
+generate-static:
+	@mkdir -p ./static
+	@curl -s -o ./static/htmx.min.js https://unpkg.com/htmx.org@${HTMX_VERSION}/dist/htmx.min.js
+
+generate-dynamic:
+	@go generate .
