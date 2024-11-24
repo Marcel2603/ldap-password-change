@@ -2,6 +2,7 @@ package change_password
 
 import (
 	"fmt"
+	"ldap-password-change/internal/handler/ldap"
 	"net/http"
 )
 
@@ -16,6 +17,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	userInfo := getUserInformation(r)
 	fmt.Println(userInfo)
+	ldap.Handler()
 	w.Write([]byte("password changed"))
 }
 

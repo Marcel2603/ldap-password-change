@@ -1,0 +1,14 @@
+services:
+  # ldap_password_change:
+  #   build: .
+  #   ports:
+  #     - "3333:3333"
+  open_ldap:
+    image: "osixia/openldap:1.5.0"
+    ports:
+       - "389:389"
+       - "636:636"
+    # environment:
+    #   - LDAP_ORGANISATION="My company"
+    #   - LDAP_DOMAIN="my-company.com"
+    #   - LDAP_ADMIN_PASSWORD="JonSn0w"
