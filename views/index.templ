@@ -1,42 +1,17 @@
 package views
 
+import "ldap-password-change/views/components"
+
 templ UsernameForm(currentValue string, err error) {
-	<div class="form-group" hx-target="this" hx-swap="outerHTML">
-		<label for="username">Username</label>
-		<input type="text" id="username" name="username" required hx-post="/validate/username" hx-encoding="multipart/form-data" value={ currentValue }/>
-		if err == nil && currentValue != "" {
-			<span>✅</span>
-		}
-		if err != nil {
-			<div class="error">{ err.Error() }</div>
-		}
-	</div>
+	@components.ValidationInput("username", "Username", currentValue, "/validate/username", "text", err)
 }
 
 templ NewPassword(currentValue string, err error) {
-	<div class="form-group" hx-target="this" hx-swap="outerHTML">
-		<label for="new-password">New Password</label>
-		<input type="password" id="new-password" name="new-password" required hx-post="/validate/password" hx-encoding="multipart/form-data" value={ currentValue }/>
-		if err == nil && currentValue != "" {
-			<span>✅</span>
-		}
-		if err != nil {
-			<div class="error">{ err.Error() }</div>
-		}
-	</div>
+	@components.ValidationInput("new-password", "New Password", currentValue, "/validate/password","password", err)
 }
 
 templ ConfirmPassword(currentValue string, err error) {
-	<div class="form-group" hx-target="this" hx-swap="outerHTML">
-		<label for="confirm-password">Confirm Password</label>
-		<input type="password" id="confirm-password" name="confirm-password" required hx-post="/validate/confirm-password" hx-encoding="multipart/form-data" value={ currentValue }/>
-		if err == nil && currentValue != "" {
-			<span>✅</span>
-		}
-		if err != nil {
-			<div class="error">{ err.Error() }</div>
-		}
-	</div>
+	@components.ValidationInput("confirm-password", "Confirm Password", currentValue, "/validate/confirm-password", "password", err)
 }
 
 templ Index() {
@@ -60,11 +35,19 @@ templ Index() {
             color: #fff;
         }
 
+        .valid-icon-rtl {
+          padding-left: 30px;
+          background: url("./../static/green-check-mark.svg") no-repeat right;
+          background-size: 25px;
+          min-width: 25px;
+        }
+
         .container {
             background: rgba(0, 0, 0, 0.8);
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
             text-align: center;
             width: 100%;
             max-width: 400px;
@@ -85,6 +68,7 @@ templ Index() {
         }
 
         .form-group input {
+            box-sizing: border-box;
             width: 100%;
             padding: 0.8rem;
             border: none;

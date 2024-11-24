@@ -1,0 +1,26 @@
+package components
+
+templ standardInput(label string, currentValue string, validationUrl string, inputType string) {
+	<input type={ inputType } style="width: 100%" id={ label } name={ label } required hx-post={ validationUrl } hx-encoding="multipart/form-data" value={ currentValue }/>
+}
+
+templ validInput(label string, currentValue string, validationUrl string, inputType string) {
+	<div style="width: 100%">
+		<input type={ inputType } id={ label } name={ label } required hx-post={ validationUrl } hx-encoding="multipart/form-data" value={ currentValue }/>
+		<i class="valid-icon-rtl"></i>
+	</div>
+}
+
+templ ValidationInput(label string, displayLabel string, currentValue string, validationUrl string, inputType string, err error) {
+	<div class="form-group" hx-target="this" hx-swap="outerHTML">
+		<label for={ label }>{ displayLabel }</label>
+		if err == nil && currentValue != "" {
+			@validInput(label, currentValue, validationUrl, inputType)
+		} else {
+			@standardInput(label, currentValue, validationUrl, inputType)
+		}
+		if err != nil {
+			<div class="error">{ err.Error() }</div>
+		}
+	</div>
+}
