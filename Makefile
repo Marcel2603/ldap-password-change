@@ -7,7 +7,7 @@ build: generate-static generate-dynamic
 	@go build .
 
 run: generate-dynamic
-	DOMAIN=localhost go run main.go
+	HOST=localhost go run main.go
 
 generate: generate-static generate-dynamic
 

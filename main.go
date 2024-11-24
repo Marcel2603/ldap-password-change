@@ -36,7 +36,7 @@ func setupServerRouter(configuration config.Config) *chi.Mux {
   r := chi.NewRouter()
   r.Use(cors.Handler(cors.Options{
     // AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
-    AllowedOrigins: []string{configuration.Domain},
+    AllowedOrigins: []string{configuration.Host},
     // AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
     AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
     AllowedHeaders:   []string{"Accept", "Content-Type"},
