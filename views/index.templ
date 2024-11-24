@@ -1,0 +1,122 @@
+package views
+
+templ Index() {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>Password Change</title>
+			<script src="./../static/htmx.min.js"></script>
+			<link rel="icon" type="image/x-icon" href="./../static/favicon.ico"/>
+			<style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .container h1 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn {
+            background: #4facfe;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #00f2fe;
+        }
+
+        #result {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+		</head>
+		<body>
+			<div class="container">
+				<h1>LDAP Password Change</h1>
+				<form
+					hx-post="/change-password"
+					hx-trigger="submit"
+					hx-target="#result"
+					hx-swap="outerHTML"
+					hx-encoding="multipart/form-data"
+				>
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text" id="username" name="username" required/>
+					</div>
+					<div class="form-group">
+						<label for="current-password">Current Password</label>
+						<input type="password" id="current-password" name="current-password" required/>
+					</div>
+					<div class="form-group">
+						<label for="new-password">New Password</label>
+						<input type="password" id="new-password" name="new-password" required/>
+					</div>
+					<div class="form-group">
+						<label for="confirm-password">Confirm New Password</label>
+						<input type="password" id="confirm-password" name="confirm-password" required/>
+					</div>
+					<button type="submit" class="submit-btn">Change</button>
+				</form>
+				<div id="result"></div>
+			</div>
+		</body>
+	</html>
+}

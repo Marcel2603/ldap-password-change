@@ -1,0 +1,7 @@
+.idea
+
+# ignore static files, which get generated
+static/htmx.min.js
+
+# ignore templ autogenarted files
+views/*.go
