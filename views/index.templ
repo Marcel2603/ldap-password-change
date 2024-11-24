@@ -1,5 +1,44 @@
 package views
 
+templ UsernameForm(currentValue string, err error) {
+	<div class="form-group" hx-target="this" hx-swap="outerHTML">
+		<label for="username">Username</label>
+		<input type="text" id="username" name="username" required hx-post="/validate/username" value={ currentValue }/>
+		if err == nil && currentValue != "" {
+			<span>✅</span>
+		}
+		if err != nil {
+			<div class="error">{ err.Error() }</div>
+		}
+	</div>
+}
+
+templ NewPassword(currentValue string, err error) {
+	<div class="form-group" hx-target="this" hx-swap="outerHTML">
+		<label for="new-password">New Password</label>
+		<input type="password" id="new-password" name="new-password" required hx-post="/validate/password" value={ currentValue }/>
+		if err == nil && currentValue != "" {
+			<span>✅</span>
+		}
+		if err != nil {
+			<div class="error">{ err.Error() }</div>
+		}
+	</div>
+}
+
+templ ConfirmPassword(currentValue string, err error) {
+	<div class="form-group" hx-target="this" hx-swap="outerHTML">
+		<label for="confirm-password">Confirm Password</label>
+		<input type="password" id="confirm-password" name="confirm-password" required hx-post="/validate/confirm-password" value={ currentValue }/>
+		if err == nil && currentValue != "" {
+			<span>✅</span>
+		}
+		if err != nil {
+			<div class="error">{ err.Error() }</div>
+		}
+	</div>
+}
+
 templ Index() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -75,16 +114,9 @@ templ Index() {
             background: #00f2fe;
         }
 
-        #result {
-            margin-top: 1rem;
-            font-size: 1.2rem;
-            animation: fadeIn 1s forwards;
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+          .error {
+            color:red;
+          }
     </style>
 		</head>
 		<body>
@@ -97,23 +129,14 @@ templ Index() {
 					hx-swap="outerHTML"
 					hx-encoding="multipart/form-data"
 				>
-					<div class="form-group">
-						<label for="username">Username</label>
-						<input type="text" id="username" name="username" required/>
-					</div>
+					@UsernameForm("", nil)
 					<div class="form-group">
 						<label for="current-password">Current Password</label>
 						<input type="password" id="current-password" name="current-password" required/>
 					</div>
-					<div class="form-group">
-						<label for="new-password">New Password</label>
-						<input type="password" id="new-password" name="new-password" required/>
-					</div>
-					<div class="form-group">
-						<label for="confirm-password">Confirm New Password</label>
-						<input type="password" id="confirm-password" name="confirm-password" required/>
-					</div>
-					<button type="submit" class="submit-btn">Change</button>
+					@NewPassword("", nil)
+					@ConfirmPassword("", nil)
+					<button type="submit" class="submit-btn" hx-disable="form.valid">Change</button>
 				</form>
 				<div id="result"></div>
 			</div>

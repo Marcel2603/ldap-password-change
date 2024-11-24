@@ -27,3 +27,8 @@ func isDirectory(path string) (bool, error) {
 
 	return fileInfo.IsDir(), err
 }
+
+func HandleFavicon(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("cache-control", "public, max-age=7776000")
+	http.Redirect(writer, request, "/static/favicon.ico", http.StatusMovedPermanently)
+}
