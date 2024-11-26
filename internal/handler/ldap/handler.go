@@ -8,12 +8,36 @@ import (
 )
 
 func Handler() {
+	username := "admin"
 	bindusername := "cn=admin,dc=example,dc=org"
 	bindpassword := "admin"
-	username := "admin"
-	l, err := ldap.DialURL("ldap://localhost:389") //TODO Add TLS Function and add ldap var
+	binddomain := "ldap://localhost:389"
+	l := ldapbind(bindusername, bindpassword, binddomain)
+
+	// Search for the given username
+	searchRequest := ldap.NewSearchRequest(
+		"dc=example,dc=org",
+		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
+		fmt.Sprintf("(&(objectClass=user)(sAMAccountName={login})(!(userAccountControl:1.2.840.113556.1.4.803:=2)))(uid=%s))", ldap.EscapeFilter(username)), //TODO
+		[]string{"dn"},
+		nil,
+	)
+
+	sr, err := l.Search(searchRequest)
 	if err != nil {
 		log.Fatal(err)
+	}
+	log.Fatal(sr.Entries)
+	if len(sr.Entries) != 1 {
+		log.Fatal("User does not exist or too many entries returned")
+	}
+}
+
+func ldapbind(bindusername string, bindpassword string, binddomain string) *ldap.Conn {
+
+	l, err := ldap.DialURL(binddomain) //TODO Add TLS Function
+	if err != nil {
+		log.Fatal(err) //TODO ADD Errors from here to display in UI
 	}
 	defer l.Close()
 
@@ -28,23 +52,5 @@ func Handler() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// Search for the given username
-	searchRequest := ldap.NewSearchRequest(
-		"dc=example,dc=or",
-		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
-		fmt.Sprintf("(&(objectClass=organizationalPerson)(uid=%s))", ldap.EscapeFilter(username)),
-		[]string{"dn"},
-		nil,
-	)
-
-	sr, err := l.Search(searchRequest)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if len(sr.Entries) != 1 {
-		log.Fatal("User does not exist or too many entries returned")
-	}
-	fmt.Println(sr)
+	return (l)
 }
