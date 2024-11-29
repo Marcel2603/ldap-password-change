@@ -22,11 +22,11 @@
     <div class="card bg-dark text-light shadow-lg">
         <div class="card-body">
             <form
-                    hx-post="/foo"
-                    hx-trigger="bs-send"
+                    hx-post="/change-password"
+                    hx-trigger="submit"
                     class="col needs-validation"
                     novalidate
-                    @submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('bs-send') } $el.classList.add('was-validated')">
+                    @submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('submit') } $el.classList.add('was-validated')">
                 <div class="mb-3">
                     <label for="validationCustom01" class="form-label">Username</label>
                     <input

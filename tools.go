@@ -7,5 +7,5 @@ package tools
 // Therefore we need to hack a little bit
 // https://play-with-go.dev/tools-as-dependencies_go119_en/
 import (
-  _ "github.com/a-h/templ/cmd/templ"
+	_ "github.com/a-h/templ/cmd/templ"
 )
