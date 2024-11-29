@@ -2,6 +2,7 @@ package change_password
 
 import (
 	"fmt"
+	"ldap-password-change/views"
 	"net/http"
 )
 
@@ -16,7 +17,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	userInfo := getUserInformation(r)
 	fmt.Println(userInfo)
-	w.Write([]byte("password changed"))
+	templ := views.SuccessfulPasswordChange()
+	templ.Render(r.Context(), w)
 }
 
 func getUserInformation(r *http.Request) userInformation {

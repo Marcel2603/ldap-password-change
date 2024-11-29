@@ -1,10 +1,23 @@
 package views
 
+templ SuccessfulPasswordChange() {
+	<div class="card bg-dark text-light shadow-lg mx-auto" style="max-width: 400px;">
+		<div class="card-body">
+			<p class="lead">Your password has been successfully updated.</p>
+			<p>You can now use your new password to log in.</p>
+			<div class="d-flex justify-content-around mt-4">
+				<a href="/" class="btn btn-success">Go back</a>
+			</div>
+		</div>
+	</div>
+}
+
 templ Index() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
+			<meta name="description" content="LdapPasswordChange - This service changes your password for any ldap"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>Document</title>
 			<link rel="icon" href="./../static/favicon.png" type="image/png"/>
@@ -18,17 +31,17 @@ templ Index() {
 		>
 			<div class="container text-center w-100" x-data="{}" style="max-width: 400px">
 				<div class="mb-4">
-					<img src="../static/favicon.png" alt="LdapPasswordChange Header" class="img-fluid mb-3" style="max-width: 150px;"/>
+					<img src="../static/favicon.png" alt="LdapPasswordChange Header" class="img-fluid mb-3" style="width: 150px;height: 150px"/>
 					<h1 class="fw-bold">Password Change</h1>
 				</div>
 				<div class="card bg-dark text-light shadow-lg">
 					<div class="card-body">
 						<form
 							hx-post="/change-password"
-							hx-trigger="submit"
+							hx-trigger="change-password"
 							class="col needs-validation"
 							novalidate
-							@submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('submit') } $el.classList.add('was-validated')"
+							@submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('change-password') } $el.classList.add('was-validated')"
 						>
 							<div class="mb-3">
 								<label for="validationCustom01" class="form-label">Username</label>
@@ -89,7 +102,7 @@ templ Index() {
 									Password does not match.
 								</div>
 							</div>
-							<button class="btn btn-primary fw-bold" type="submit">Submit</button>
+							<button class="btn btn-primary fw-bold" type="submit">Change</button>
 						</form>
 					</div>
 				</div>
