@@ -17,7 +17,7 @@ import (
 
 func main() {
 	fmt.Println("Starting server")
-	configuration := config.Get()
+	configuration := config.Configuration
 	r := setupServerRouter(configuration)
 
 	r.Get("/", index.Handler)
@@ -26,15 +26,15 @@ func main() {
 	r.Get("/static/*", staticfiles.Handler)
 
 	r.Post("/change-password", changepassword.Handler)
-	fmt.Println("Listening on :" + configuration.Port)
-	http.ListenAndServe(":"+configuration.Port, r)
+	fmt.Println("Listening on :" + configuration.Server.Port)
+	http.ListenAndServe(":"+configuration.Server.Port, r)
 }
 
 func setupServerRouter(configuration config.Config) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
-		AllowedOrigins: []string{configuration.Host},
+		AllowedOrigins: []string{configuration.Server.Host},
 		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Content-Type"},

@@ -1,26 +1,12 @@
 package config
 
-import (
-	"os"
-	"strconv"
-)
-
 type Config struct {
-	Port string
-	Host string
-}
-
-func Get() Config {
-	portEnv, exists := os.LookupEnv("PORT")
-	if !exists {
-		portEnv = "3333"
-	}
-	_, err := strconv.Atoi(portEnv)
-	if err != nil {
-		panic(err)
-	}
-	return Config{
-		Port: portEnv,
-		Host: os.Getenv("HOST"),
-	}
+	Server struct {
+		Port string `yaml:"port"`
+		Host string `yaml:"host"`
+	} `yaml:"server"`
+	Validation struct {
+		UsernamePattern string `yaml:"username" envconfig:"VALIDATION_USERNAME_PATTERN"`
+		PasswordPattern string `yaml:"password" envconfig:"VALIDATION_PASSWORD_PATTERN"`
+	} `yaml:"validation"`
 }

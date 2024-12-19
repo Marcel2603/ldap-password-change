@@ -1,5 +1,7 @@
 package views
 
+import "ldap-password-change/cmd/config"
+
 templ SuccessfulPasswordChange() {
 	<div class="card bg-dark text-light shadow-lg mx-auto" style="max-width: 400px;">
 		<div class="card-body">
@@ -12,7 +14,7 @@ templ SuccessfulPasswordChange() {
 	</div>
 }
 
-templ Index() {
+templ Index(conf config.Config) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -51,16 +53,17 @@ templ Index() {
 									class="form-control"
 									id="validationCustom01"
 									value=""
-									pattern="^[a-z]\.[a-z]+$"
+									pattern={ conf.Validation.UsernamePattern }
 									required
 								/>
 								<div class="invalid-feedback">
-									Username must be a word.
+									Username does not match our policy.
 								</div>
 							</div>
 							<div class="mb-3">
 								<label for="validationCustom02" class="form-label">Current Password</label>
 								<input
+									x-ref="old_password"
 									@keyup="if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="password"
 									class="form-control"
@@ -76,13 +79,13 @@ templ Index() {
 								<label for="validationCustom03" class="form-label">New Password</label>
 								<input
 									x-ref="new_password"
-									@keyup="if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
+									@keyup="if ($el.checkValidity() && $refs.old_password.value != $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="password"
 									class="form-control"
 									id="validationCustom03"
 									value=""
 									required
-									pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+									pattern={ conf.Validation.PasswordPattern }
 								/>
 								<div class="invalid-feedback">
 									Password does not match our policy.
