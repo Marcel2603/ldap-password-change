@@ -1,13 +1,24 @@
 HTMX_VERSION = 2.0.3
+BOOTSTRAP_VERSION = 5.3.3
+ALPINE_JS_VERSION = 3.14.5
 
-format::
-	@go fmt -s -w .
+format:
+	@gofmt -s -w .
 
-build::
-	@templ generate
+build: generate-static generate-dynamic
+	@go build .
 
-run:: build
-	DOMAIN=localhost go run main.go
+run: generate-dynamic
+	SERVER_HOST=localhost SERVER_PORT=4000 go run main.go
 
-update::
-	@curl -s -o ./static/htmx.min.js https://unpkg.com/htmx.org@2.0.3/dist/htmx.min.js
+generate: generate-static generate-dynamic
+
+generate-static:
+	@mkdir -p ./static
+	@curl -s -o ./static/htmx.min.js https://unpkg.com/htmx.org@${HTMX_VERSION}/dist/htmx.min.js
+	@curl -s -o ./static/bootstrap.min.css https://unpkg.com/bootstrap@${BOOTSTRAP_VERSION}/dist/css/bootstrap.min.css
+	@curl -s -o ./static/bootstrap.min.css.map https://unpkg.com/bootstrap@${BOOTSTRAP_VERSION}/dist/css/bootstrap.min.css.map
+	@curl -s -o ./static/alpine.min.js https://unpkg.com/alpinejs@${ALPINE_JS_VERSION}/dist/cdn.min.js
+
+generate-dynamic:
+	@go generate .

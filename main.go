@@ -7,16 +7,17 @@ import (
 	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/index"
 	staticfiles "ldap-password-change/internal/handler/static-files"
-	"ldap-password-change/internal/handler/validate"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+//go:generate go run github.com/a-h/templ/cmd/templ generate
+
 func main() {
 	fmt.Println("Starting server")
-	configuration := config.Get()
+	configuration := config.Configuration
 	r := setupServerRouter(configuration)
 
 	r.Get("/", index.Handler)
@@ -25,16 +26,15 @@ func main() {
 	r.Get("/static/*", staticfiles.Handler)
 
 	r.Post("/change-password", changepassword.Handler)
-	r.Post("/validate/*", validate.Handler)
-	fmt.Println("Listening on :" + configuration.Port)
-	http.ListenAndServe(":"+configuration.Port, r)
+	fmt.Println("Listening on :" + configuration.Server.Port)
+	http.ListenAndServe(":"+configuration.Server.Port, r)
 }
 
 func setupServerRouter(configuration config.Config) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
-		AllowedOrigins: []string{configuration.Domain},
+		AllowedOrigins: []string{configuration.Server.Host},
 		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Content-Type"},

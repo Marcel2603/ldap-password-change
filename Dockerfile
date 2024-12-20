@@ -1,25 +1,16 @@
 # Fetch
-FROM golang:latest AS fetch-stage
+FROM golang:alpine AS build
 WORKDIR /app
-COPY go.mod go.sum .
-RUN go mod download
-
-# Generate
-FROM ghcr.io/a-h/templ:latest AS generate-stage
-COPY . /app
-WORKDIR /app
-RUN ["templ", "generate"]
-
-# Build
-FROM golang:latest AS build-stage
-COPY --from=generate-stage /app /app
-WORKDIR /app
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/app
+COPY . .
+RUN apk update && apk add make curl
+RUN make generate
+RUN CGO_ENABLED=0 GOOS=linux go build -o ./bin/app
 
 # Deploy
-#FROM gcr.io/distroless/base-debian12 AS deploy-stage
-#WORKDIR /
-#COPY --from=build-stage /app/app /app
-#EXPOSE 3333
-#USER nonroot:nonroot
-#ENTRYPOINT ["/app"]
+FROM gcr.io/distroless/base-debian12
+WORKDIR /
+COPY --from=build /app/static /static
+COPY --from=build /app/bin/app /app
+EXPOSE 3333
+USER nonroot:nonroot
+ENTRYPOINT ["/app"]
