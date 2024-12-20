@@ -2,10 +2,10 @@ name: Go-test
 on:
   push:
     branches:
-      - main
+      - later
   pull_request:
     branches:
-      - main
+      - later
 jobs:
   build:
     runs-on: ubuntu-latest
