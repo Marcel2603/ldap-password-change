@@ -1,7 +1,9 @@
 package change_password
 
 import (
+	"errors"
 	"fmt"
+	"ldap-password-change/internal/validation"
 	"ldap-password-change/views"
 	"net/http"
 )
@@ -16,6 +18,11 @@ type userInformation struct {
 func Handler(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(0)
 	userInfo := getUserInformation(r)
+	validationError := validateUserInfo(userInfo)
+	if validationError != nil {
+		http.Error(w, validationError.Error(), http.StatusBadRequest)
+		return
+	}
 	fmt.Println(userInfo)
 	templ := views.SuccessfulPasswordChange()
 	templ.Render(r.Context(), w)
@@ -28,4 +35,19 @@ func getUserInformation(r *http.Request) userInformation {
 		newPassword:     r.FormValue("new-password"),
 		confirmPassword: r.FormValue("confirm-password"),
 	}
+}
+
+func validateUserInfo(userInfo userInformation) error {
+	validUsername := validation.ValidateUsername(userInfo.username)
+	if !validUsername {
+		return errors.New("invalid username")
+	}
+	validPassword := validation.ValidatePassword(userInfo.newPassword)
+	if !validPassword {
+		return errors.New("invalid password")
+	}
+	if userInfo.newPassword != userInfo.confirmPassword {
+		return errors.New("passwords do not match")
+	}
+	return nil
 }

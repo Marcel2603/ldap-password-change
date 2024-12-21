@@ -20,7 +20,7 @@ func loadConfig() {
 	yamlDefaultData, err := os.ReadFile("app.default.yml")
 
 	if err != nil {
-		log.Fatal("Error while reading app config file", err)
+		log.Println("Error while reading app config file", err)
 	} else {
 		loadConfigFromYaml(yamlDefaultData, &defaultData)
 	}
