@@ -2,7 +2,6 @@ package change_password
 
 import (
 	"errors"
-	"fmt"
 	"ldap-password-change/internal/validation"
 	"ldap-password-change/views"
 	"net/http"
@@ -23,7 +22,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, validationError.Error(), http.StatusBadRequest)
 		return
 	}
-	fmt.Println(userInfo)
 	templ := views.SuccessfulPasswordChange()
 	templ.Render(r.Context(), w)
 }
