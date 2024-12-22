@@ -1,60 +1,78 @@
 package main
 
 import (
-  "fmt"
-  "log"
+	"fmt"
+	"log"
+	"os"
 
-  "github.com/go-ldap/ldap/v3"
+	"github.com/go-ldap/ldap/v3"
 )
 
-func Handler() {
-  username := "admin"
-  bindusername := "cn=admin,dc=example,dc=org"
-  bindpassword := "admin"
-  binddomain := "ldap://localhost:1389"
-  l := ldapbind(bindusername, bindpassword, binddomain)
+const (
+	bindusername = "cn=admin,dc=example,dc=org"
+	bindpassword = "password"
+	binddomain   = "ldap://localhost:1389"
+)
 
-  // Search for the given username
-  searchRequest := ldap.NewSearchRequest(
-    "dc=example,dc=org",
-    ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
-    fmt.Sprintf("(&(objectClass=user)(sAMAccountName={login})(!(userAccountControl:1.2.840.113556.1.4.803:=2)))(uid=%s))", ldap.EscapeFilter(username)), //TODO
-    []string{"dn"},
-    nil,
-  )
+func queryUser() {
 
-  sr, err := l.Search(searchRequest)
-  if err != nil {
-    log.Fatal(err)
-  }
-  log.Fatal(sr.Entries)
-  if len(sr.Entries) != 1 {
-    log.Fatal("User does not exist or too many entries returned")
-  }
+	// Search for the given username
+	// Filters must start and finish with ()!
+	searchRequest := ldap.NewSearchRequest(
+		"ou=users,dc=example,dc=org", // The base DN to search
+		ldap.ScopeWholeSubtree,       // Search the entire subtree
+		ldap.NeverDerefAliases,       // Do not dereference aliases
+		0,                            // No size limit
+		0,                            // No time limit
+		false,                        // Do not return types only
+		"(objectClass=*)",            // The search filter
+		[]string{"*"},                // The attributes to retrieve
+		nil,                          // Controls
+	)
+
+	client := createClient(bindusername, bindpassword, binddomain)
+	defer client.Close()
+	result, err := client.Search(searchRequest)
+	if err != nil {
+		log.Fatalf("Failed to perform search: %v", err)
+	}
+
+	for _, entry := range result.Entries {
+		entry.Print()
+		fmt.Println("")
+	}
 }
 
-func ldapbind(bindusername string, bindpassword string, binddomain string) *ldap.Conn {
+func createClient(username string, password string, domain string) *ldap.Conn {
+	l, err := ldap.DialURL(domain) //TODO Add TLS Function
+	//l, err := ldap.DialURL(domain, ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-  l, err := ldap.DialURL(binddomain) //TODO Add TLS Function
-  if err != nil {
-    log.Fatal(err) //TODO ADD Errors from here to display in UI
-  }
-  defer l.Close()
-
-  // Reconnect with TLS
-  // err = l.StartTLS(&tls.Config{InsecureSkipVerify: true})
-  // if err != nil {
-  // 	log.Fatal(err)
-  // }
-
-  // First bind with a read only user
-  err = l.Bind(bindusername, bindpassword)
-  if err != nil {
-    log.Fatal(err)
-  }
-  return (l)
+	err = l.Bind(username, password)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return l
 }
 
 func main() {
-  Handler()
+	args := os.Args[1:]
+	switch args[0] {
+	case "query":
+		queryUser()
+	case "change":
+		changePassword(args[1], args[2], args[3])
+	}
+}
+
+func changePassword(username string, currentPassword string, newPassword string) {
+	client := createClient(bindusername, bindpassword, binddomain)
+	defer client.Close()
+	passwdModifyRequest := ldap.NewPasswordModifyRequest(username, currentPassword, newPassword)
+	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
+		log.Fatalf("failed to modify password: %v", err)
+	}
+	fmt.Println("Password changed successfully")
 }
