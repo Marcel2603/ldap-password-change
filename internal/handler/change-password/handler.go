@@ -1,51 +1,51 @@
 package change_password
 
 import (
-	"errors"
-	"ldap-password-change/internal/validation"
-	"ldap-password-change/views"
-	"net/http"
+  "errors"
+  "ldap-password-change/internal/validation"
+  "ldap-password-change/views"
+  "net/http"
 )
 
 type userInformation struct {
-	username        string
-	currentPassword string
-	newPassword     string
-	confirmPassword string
+  username        string
+  currentPassword string
+  newPassword     string
+  confirmPassword string
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	r.ParseMultipartForm(0)
-	userInfo := getUserInformation(r)
-	validationError := validateUserInfo(userInfo)
-	if validationError != nil {
-		http.Error(w, validationError.Error(), http.StatusBadRequest)
-		return
-	}
-	templ := views.SuccessfulPasswordChange()
-	templ.Render(r.Context(), w)
+  r.ParseMultipartForm(0)
+  userInfo := getUserInformation(r)
+  validationError := validateUserInfo(userInfo)
+  if validationError != nil {
+    http.Error(w, validationError.Error(), http.StatusBadRequest)
+    return
+  }
+  templ := views.SuccessfulPasswordChange()
+  templ.Render(r.Context(), w)
 }
 
 func getUserInformation(r *http.Request) userInformation {
-	return userInformation{
-		username:        r.FormValue("username"),
-		currentPassword: r.FormValue("current-password"),
-		newPassword:     r.FormValue("new-password"),
-		confirmPassword: r.FormValue("confirm-password"),
-	}
+  return userInformation{
+    username:        r.FormValue("username"),
+    currentPassword: r.FormValue("current-password"),
+    newPassword:     r.FormValue("new-password"),
+    confirmPassword: r.FormValue("confirm-password"),
+  }
 }
 
 func validateUserInfo(userInfo userInformation) error {
-	validUsername := validation.ValidateUsername(userInfo.username)
-	if !validUsername {
-		return errors.New("invalid username")
-	}
-	validPassword := validation.ValidatePassword(userInfo.newPassword)
-	if !validPassword {
-		return errors.New("invalid password")
-	}
-	if userInfo.newPassword != userInfo.confirmPassword {
-		return errors.New("passwords do not match")
-	}
-	return nil
+  validUsername := validation.ValidateUsername(userInfo.username)
+  if !validUsername {
+    return errors.New("invalid username")
+  }
+  validPassword := validation.ValidatePassword(userInfo.newPassword)
+  if !validPassword {
+    return errors.New("invalid password")
+  }
+  if userInfo.newPassword != userInfo.confirmPassword {
+    return errors.New("passwords do not match")
+  }
+  return nil
 }
