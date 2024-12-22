@@ -52,6 +52,7 @@ templ Index(conf config.Config) {
 									type="text"
 									class="form-control"
 									id="validationCustom01"
+									name="username"
 									value=""
 									pattern={ conf.Validation.UsernamePattern }
 									required
@@ -66,6 +67,7 @@ templ Index(conf config.Config) {
 									x-ref="old_password"
 									@keyup="if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="password"
+									name="current-password"
 									class="form-control"
 									id="validationCustom02"
 									value=""
@@ -82,6 +84,7 @@ templ Index(conf config.Config) {
 									@keyup="if ($el.checkValidity() && $refs.old_password.value != $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="password"
 									class="form-control"
+									name="new-password"
 									id="validationCustom03"
 									value=""
 									required
@@ -97,6 +100,7 @@ templ Index(conf config.Config) {
 									@keyup="if ($el.checkValidity() && $refs.new_password.value == $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="password"
 									class="form-control"
+									name="confirm-password"
 									id="validationCustom04"
 									value=""
 									required
