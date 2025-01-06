@@ -19,7 +19,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	userInfo := getUserInformation(r)
 	validationError := validateUserInfo(userInfo)
 	if validationError != nil {
-		http.Error(w, validationError.Error(), http.StatusBadRequest)
+		toast := views.Toastie("Some input was not valid " + validationError.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		toast.Render(r.Context(), w)
 		return
 	}
 	templ := views.SuccessfulPasswordChange()

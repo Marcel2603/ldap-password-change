@@ -14,6 +14,29 @@ templ SuccessfulPasswordChange() {
 	</div>
 }
 
+templ Toastie(msg string) {
+	<!--div class="position-absolute top-0 end-0"-->
+	<div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-dismiss="toast">
+		<div class="toast-header">
+			<svg
+				class="bd-placeholder-img rounded me-2"
+				width="20"
+				height="20"
+				xmlns="http://www.w3.org/2000/svg"
+				aria-hidden="true"
+				preserveAspectRatio="xMidYMid slice"
+				focusable="false"
+			>
+				<rect width="100%" height="100%" fill="#BD362F"></rect>
+			</svg>
+			<strong class="me-auto">Error</strong>
+		</div>
+		<div class="toast-body text-dark">
+			{ msg }
+		</div>
+	</div>
+}
+
 templ Index(conf config.Config) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -26,11 +49,19 @@ templ Index(conf config.Config) {
 			<link href="./../static/bootstrap.min.css" rel="stylesheet"/>
 			<script defer src="./../static/alpine.min.js"></script>
 			<script defer src="./../static/htmx.min.js"></script>
+			<script defer src="./../static/htmx-response-target.js"></script>
+			<script src="./../static/bootstrap.bundle.min.js"></script>
 		</head>
 		<body
 			style="background:linear-gradient(135deg, #4facfe, #00f2fe)"
 			class="text-light d-flex align-items-center justify-content-center vh-100"
+			hx-ext="response-targets"
 		>
+			<div class="position-absolute top-0 end-0">
+				<div class="position-static toast-container">
+					<div id="error"></div>
+				</div>
+			</div>
 			<div class="container text-center w-100" x-data="{}" style="max-width: 400px">
 				<div class="mb-4">
 					<img src="../static/favicon.png" alt="LdapPasswordChange Header" class="img-fluid mb-3" style="width: 150px;height: 150px"/>
@@ -41,6 +72,7 @@ templ Index(conf config.Config) {
 						<form
 							hx-post="/change-password"
 							hx-trigger="change-password"
+							hx-target-4xx="#error"
 							class="col needs-validation"
 							novalidate
 							@submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('change-password') } $el.classList.add('was-validated')"
