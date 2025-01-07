@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"ldap-password-change/cmd/config"
 	"log"
 	"os"
 
@@ -12,25 +13,28 @@ const (
 	bindusername = "cn=admin,dc=example,dc=org"
 	bindpassword = "password"
 	binddomain   = "ldap://localhost:1389"
+	baseDn       = "ou=users,dc=example,dc=org"
 )
+
+var ldapConfig = config.Configuration.Ldap
 
 func queryUser() {
 
 	// Search for the given username
 	// Filters must start and finish with ()!
 	searchRequest := ldap.NewSearchRequest(
-		"ou=users,dc=example,dc=org", // The base DN to search
-		ldap.ScopeWholeSubtree,       // Search the entire subtree
-		ldap.NeverDerefAliases,       // Do not dereference aliases
-		0,                            // No size limit
-		0,                            // No time limit
-		false,                        // Do not return types only
-		"(objectClass=*)",            // The search filter
-		[]string{"*"},                // The attributes to retrieve
-		nil,                          // Controls
+		ldapConfig.BaseDn,      // The base DN to search
+		ldap.ScopeWholeSubtree, // Search the entire subtree
+		ldap.NeverDerefAliases, // Do not dereference aliases
+		0,                      // No size limit
+		0,                      // No time limit
+		false,                  // Do not return types only
+		ldapConfig.UserFilter,  // The search filter
+		[]string{"*"},          // The attributes to retrieve
+		nil,                    // Controls
 	)
 
-	client := createClient(bindusername, bindpassword, binddomain)
+	client := createClient(ldapConfig.UserDn, ldapConfig.Password, ldapConfig.Domain)
 	defer client.Close()
 	result, err := client.Search(searchRequest)
 	if err != nil {
@@ -68,7 +72,7 @@ func main() {
 }
 
 func changePassword(username string, currentPassword string, newPassword string) {
-	client := createClient(bindusername, bindpassword, binddomain)
+	client := createClient(ldapConfig.UserDn, ldapConfig.Password, ldapConfig.Domain)
 	defer client.Close()
 	passwdModifyRequest := ldap.NewPasswordModifyRequest(username, currentPassword, newPassword)
 	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
