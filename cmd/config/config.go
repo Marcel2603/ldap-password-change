@@ -12,11 +12,11 @@ type server struct {
 }
 
 type ldap struct {
-	Domain     string `yaml:"domain"`
-	UserDn     string `yaml:"userDn"`
-	Password   string `yaml:"password"`
-	BaseDn     string `yaml:"baseDn"`
-	UserFilter string `yaml:"userFilter"`
+	Domain       string `yaml:"domain"`
+	UserDn       string `yaml:"userDn"`
+	Password     string `yaml:"password"`
+	BaseDn       string `yaml:"baseDn"`
+	SearchFilter string `yaml:"searchFilter"`
 }
 
 type validation struct {

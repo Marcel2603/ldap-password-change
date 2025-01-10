@@ -23,15 +23,15 @@ func queryUser() {
 	// Search for the given username
 	// Filters must start and finish with ()!
 	searchRequest := ldap.NewSearchRequest(
-		ldapConfig.BaseDn,      // The base DN to search
-		ldap.ScopeWholeSubtree, // Search the entire subtree
-		ldap.NeverDerefAliases, // Do not dereference aliases
-		0,                      // No size limit
-		0,                      // No time limit
-		false,                  // Do not return types only
-		ldapConfig.UserFilter,  // The search filter
-		[]string{"*"},          // The attributes to retrieve
-		nil,                    // Controls
+		ldapConfig.BaseDn,       // The base DN to search
+		ldap.ScopeWholeSubtree,  // Search the entire subtree
+		ldap.NeverDerefAliases,  // Do not dereference aliases
+		0,                       // No size limit
+		0,                       // No time limit
+		false,                   // Do not return types only
+		ldapConfig.SearchFilter, // The search filter
+		[]string{"*"},           // The attributes to retrieve
+		nil,                     // Controls
 	)
 
 	client := createClient(ldapConfig.UserDn, ldapConfig.Password, ldapConfig.Domain)
@@ -56,6 +56,7 @@ func createClient(username string, password string, domain string) *ldap.Conn {
 
 	err = l.Bind(username, password)
 	if err != nil {
+		log.Println("Failed to bind ldap user")
 		log.Fatal(err)
 	}
 	return l
