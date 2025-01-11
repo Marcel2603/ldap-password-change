@@ -72,7 +72,7 @@ templ Index(conf config.Config) {
 						<form
 							hx-post="/change-password"
 							hx-trigger="change-password"
-							hx-target-4xx="#error"
+							hx-target-error="#error"
 							class="col needs-validation"
 							novalidate
 							@submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('change-password') } $el.classList.add('was-validated')"

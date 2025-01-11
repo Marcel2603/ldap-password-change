@@ -5,6 +5,7 @@ import (
 	"ldap-password-change/internal/service/ldap"
 	"ldap-password-change/internal/validation"
 	"ldap-password-change/views"
+	"log"
 	"net/http"
 )
 
@@ -28,7 +29,8 @@ func Handler(ldapService ldap.Service) http.HandlerFunc {
 		}
 		err := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if err != nil {
-			toast := views.Toastie(err.Error())
+			log.Println(err)
+			toast := views.Toastie("Failed to change password")
 			w.WriteHeader(http.StatusInternalServerError)
 			toast.Render(r.Context(), w)
 			return

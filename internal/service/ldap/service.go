@@ -1,6 +1,7 @@
 package ldap
 
 import (
+	"crypto/tls"
 	"fmt"
 	"github.com/go-ldap/ldap/v3"
 	"ldap-password-change/cmd/config"
@@ -37,8 +38,7 @@ func (s serviceImpl) ChangePassword(username string, currentPassword string, new
 }
 
 func createClient(username string, password string, domain string) *ldap.Conn {
-	l, err := ldap.DialURL(domain) //TODO Add TLS Function
-	//l, err := ldap.DialURL(domain, ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
+	l, err := ldap.DialURL(domain, ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
 	if err != nil {
 		log.Fatal(err)
 	}
