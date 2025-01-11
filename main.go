@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-chi/cors"
 	"ldap-password-change/cmd/config"
 	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/index"
 	staticfiles "ldap-password-change/internal/handler/static-files"
 	"ldap-password-change/internal/service/ldap"
+	"log/slog"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -17,7 +17,7 @@ import (
 //go:generate go run github.com/a-h/templ/cmd/templ generate
 
 func main() {
-	fmt.Println("Starting server")
+	slog.Info("Starting server")
 	configuration := config.Configuration
 	r := setupServerRouter(configuration)
 
@@ -27,7 +27,7 @@ func main() {
 	r.Get("/static/*", staticfiles.Handler)
 
 	r.Post("/change-password", changepassword.Handler(ldap.CreateService()))
-	fmt.Println("Listening on :" + configuration.Server.Port)
+	slog.Info("Listening on :" + configuration.Server.Port)
 	http.ListenAndServe(":"+configuration.Server.Port, r)
 }
 
