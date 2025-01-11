@@ -2,11 +2,11 @@ server:
   host: localhost
   port: 3000
 validation:
-  username: ^[a-zA-Z]+$
+  username: ^[a-zA-Z0-9]+$
   password: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$
 ldap:
   domain: ldap://localhost:1389
   userDn: cn=admin,dc=example,dc=org
-  password: password123
+  password: password
   baseDn: ou=users,dc=example,dc=org
   searchFilter: "(objectClass=*)"

@@ -2,6 +2,7 @@ package change_password
 
 import (
 	"errors"
+	"ldap-password-change/internal/service/ldap"
 	"ldap-password-change/internal/validation"
 	"ldap-password-change/views"
 	"net/http"
@@ -14,18 +15,27 @@ type userInformation struct {
 	confirmPassword string
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	r.ParseMultipartForm(0)
-	userInfo := getUserInformation(r)
-	validationError := validateUserInfo(userInfo)
-	if validationError != nil {
-		toast := views.Toastie("Some input was not valid " + validationError.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		toast.Render(r.Context(), w)
-		return
+func Handler(ldapService ldap.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseMultipartForm(0)
+		userInfo := getUserInformation(r)
+		validationError := validateUserInfo(userInfo)
+		if validationError != nil {
+			toast := views.Toastie("Some input was not valid " + validationError.Error())
+			w.WriteHeader(http.StatusBadRequest)
+			toast.Render(r.Context(), w)
+			return
+		}
+		err := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
+		if err != nil {
+			toast := views.Toastie(err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+			toast.Render(r.Context(), w)
+			return
+		}
+		templ := views.SuccessfulPasswordChange()
+		templ.Render(r.Context(), w)
 	}
-	templ := views.SuccessfulPasswordChange()
-	templ.Render(r.Context(), w)
 }
 
 func getUserInformation(r *http.Request) userInformation {

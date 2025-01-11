@@ -7,6 +7,7 @@ import (
 	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/index"
 	staticfiles "ldap-password-change/internal/handler/static-files"
+	"ldap-password-change/internal/service/ldap"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -25,7 +26,7 @@ func main() {
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 
-	r.Post("/change-password", changepassword.Handler)
+	r.Post("/change-password", changepassword.Handler(ldap.CreateService()))
 	fmt.Println("Listening on :" + configuration.Server.Port)
 	http.ListenAndServe(":"+configuration.Server.Port, r)
 }
