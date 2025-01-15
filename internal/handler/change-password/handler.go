@@ -22,7 +22,7 @@ func Handler(ldapService ldap.Service) http.HandlerFunc {
 		userInfo := getUserInformation(r)
 		validationError := validateUserInfo(userInfo)
 		if validationError != nil {
-			toast := views.Toastie("Some input was not valid " + validationError.Error())
+			toast := views.ErrorToastie("Some input was not valid " + validationError.Error())
 			w.WriteHeader(http.StatusBadRequest)
 			toast.Render(r.Context(), w)
 			return
@@ -30,7 +30,7 @@ func Handler(ldapService ldap.Service) http.HandlerFunc {
 		err := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if err != nil {
 			log.Println(err)
-			toast := views.Toastie("Failed to change password")
+			toast := views.ErrorToastie("Failed to change password")
 			w.WriteHeader(http.StatusInternalServerError)
 			toast.Render(r.Context(), w)
 			return
