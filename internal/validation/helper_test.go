@@ -1,7 +1,7 @@
 package validation_test
 
 import (
-	"ldap-password-change/cmd/config"
+	"github.com/dlclark/regexp2"
 	"ldap-password-change/internal/validation"
 	"testing"
 )
@@ -12,6 +12,7 @@ type validationArgs struct {
 }
 
 const defaultPattern = "^[a-zA-Z0-9]*$"
+const pcrePattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
 
 var validationTests = []struct {
 	name string
@@ -19,33 +20,43 @@ var validationTests = []struct {
 	want bool
 }{
 	{
-		name: "valid",
+		name: "valid only letters",
 		args: validationArgs{value: "test", pattern: defaultPattern},
 		want: true,
 	},
 	{
-		name: "invalid",
+		name: "invalid special characters",
+		args: validationArgs{value: "ínvälid", pattern: defaultPattern},
+		want: false,
+	},
+	{
+		name: "valid only numbers",
 		args: validationArgs{value: "1234", pattern: defaultPattern},
 		want: true,
 	},
 	{
-		name: "special characters",
+		name: "valid special characters",
 		args: validationArgs{value: "test@12.3", pattern: "^[a-zA-Z0-9@\\.]*$"},
 		want: true,
 	},
 	{
-		name: "pcre pattern",
-		args: validationArgs{value: "Test1234!", pattern: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"},
+		name: "valid pcre pattern",
+		args: validationArgs{value: "Test1234!", pattern: pcrePattern},
 		want: true,
+	},
+	{
+		name: "invalid pcre pattern",
+		args: validationArgs{value: "test12345", pattern: pcrePattern},
+		want: false,
 	},
 }
 
 func TestValidateUsername(t *testing.T) {
 	for _, tt := range validationTests {
 		t.Run(tt.name, func(t *testing.T) {
-			config.Configuration.Validation.UsernamePattern = tt.args.pattern
+			validation.UsernameValidator = regexp2.MustCompile(tt.args.pattern, regexp2.None)
 			if got := validation.ValidateUsername(tt.args.value); got != tt.want {
-				t.Errorf("ValidateUsername() = %v, want %v for pattern %s", got, tt.want, tt.args.pattern)
+				t.Errorf("ValidateUsername() = %v, want %v for %v with pattern %s", got, tt.want, tt.args.value, tt.args.pattern)
 			}
 		})
 	}
@@ -54,9 +65,9 @@ func TestValidateUsername(t *testing.T) {
 func TestValidatePassword(t *testing.T) {
 	for _, tt := range validationTests {
 		t.Run(tt.name, func(t *testing.T) {
-			config.Configuration.Validation.PasswordPattern = tt.args.pattern
+			validation.PasswordValidator = regexp2.MustCompile(tt.args.pattern, regexp2.None)
 			if got := validation.ValidatePassword(tt.args.value); got != tt.want {
-				t.Errorf("ValidateUsername() = %v, want %v for pattern %s", got, tt.want, tt.args.pattern)
+				t.Errorf("ValidateUsername() = %v, want %v for %v with pattern %s", got, tt.want, tt.args.value, tt.args.pattern)
 			}
 		})
 	}
