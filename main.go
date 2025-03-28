@@ -27,7 +27,10 @@ func main() {
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 
-	r.Post("/change-password", changepassword.Handler(ldap.CreateService(configuration.Ldap), validation.CreateValidator(configuration.Validation)))
+	r.Post("/change-password", changepassword.Handler(
+		ldap.CreateService(configuration.Ldap, ldap.CreateWrapper()),
+		validation.CreateValidator(configuration.Validation)))
+
 	slog.Info("Listening on :" + configuration.Server.Port)
 	http.ListenAndServe(":"+configuration.Server.Port, r)
 }
