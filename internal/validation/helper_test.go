@@ -11,14 +11,16 @@ type validationArgs struct {
 	pattern string
 }
 
-const defaultPattern = "^[a-zA-Z0-9]*$"
-const pcrePattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
-
-var validationTests = []struct {
+type validationTestCase struct {
 	name string
 	args validationArgs
 	want bool
-}{
+}
+
+const defaultPattern = "^[a-zA-Z0-9]*$"
+const pcrePattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+
+var validationTests = []validationTestCase{
 	{
 		name: "valid only letters",
 		args: validationArgs{value: "test", pattern: defaultPattern},
@@ -54,9 +56,12 @@ var validationTests = []struct {
 func TestValidateUsername(t *testing.T) {
 	for _, tt := range validationTests {
 		t.Run(tt.name, func(t *testing.T) {
-			config.Configuration.Validation.UsernamePattern = tt.args.pattern
-			validator := validation.CreateValidator(config.Configuration)
-			if got := validator.ValidateUsername(tt.args.value); got != tt.want {
+			validationConfig := config.ValidationConfig{
+				UsernamePattern: tt.args.pattern,
+				PasswordPattern: "^.*$",
+			}
+			v := validation.CreateValidator(validationConfig)
+			if got := v.ValidateUsername(tt.args.value); got != tt.want {
 				t.Errorf("ValidateUsername() = %v, want %v for %v with pattern %s", got, tt.want, tt.args.value, tt.args.pattern)
 			}
 		})
@@ -66,9 +71,12 @@ func TestValidateUsername(t *testing.T) {
 func TestValidatePassword(t *testing.T) {
 	for _, tt := range validationTests {
 		t.Run(tt.name, func(t *testing.T) {
-			config.Configuration.Validation.PasswordPattern = tt.args.pattern
-			validator := validation.CreateValidator(config.Configuration)
-			if got := validator.ValidatePassword(tt.args.value); got != tt.want {
+			validationConfig := config.ValidationConfig{
+				UsernamePattern: "^.*$",
+				PasswordPattern: tt.args.pattern,
+			}
+			v := validation.CreateValidator(validationConfig)
+			if got := v.ValidatePassword(tt.args.value); got != tt.want {
 				t.Errorf("ValidateUsername() = %v, want %v for %v with pattern %s", got, tt.want, tt.args.value, tt.args.pattern)
 			}
 		})
