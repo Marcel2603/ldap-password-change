@@ -23,52 +23,43 @@ type changePasswordTestCase struct {
 	wantErr         bool
 }
 
-// TODO #3: this implementation of mocks is quite messy, surely there is a better way
-
-type mockConnOk struct {
+type mockConn struct {
 }
 
-func (l *mockConnOk) Bind(_, _ string) error {
+func (l *mockConn) Bind(_, _ string) error {
 	return nil
 }
-func (l *mockConnOk) Close() error {
+func (l *mockConn) Close() error {
 	return nil
 }
-func (l *mockConnOk) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
+func (l *mockConn) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 	return &ldapext.PasswordModifyResult{}, nil
 }
 
 type mockConnError struct {
+	mockConn
 }
 
-func (l *mockConnError) Bind(_, _ string) error {
-	return nil
-}
-func (l *mockConnError) Close() error {
-	return nil
-}
 func (l *mockConnError) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 	return nil, errors.New("test error")
 }
 
-type ldapWrapperOk struct {
+type mockLdapWrapperDefault struct {
 }
 
-func (w *ldapWrapperOk) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
-	return &mockConnOk{}, nil
+func (w *mockLdapWrapperDefault) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+	return &mockConn{}, nil
 }
-func (w *ldapWrapperOk) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
+func (w *mockLdapWrapperDefault) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
 	return func(dc *ldapext.DialContext) {}
 }
 
-type ldapWrapperError struct {
+type mockLdapWrapperError struct {
+	mockLdapWrapperDefault
 }
 
-func (w *ldapWrapperError) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+func (w *mockLdapWrapperError) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return &mockConnError{}, nil
-}
-func (w *ldapWrapperError) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
-	return func(dc *ldapext.DialContext) {}
 }
 
 var (
@@ -85,7 +76,7 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 		{
 			name:            "change password should succeed",
 			config:          *defaultConfig,
-			ldapWrapperMock: &ldapWrapperOk{},
+			ldapWrapperMock: &mockLdapWrapperDefault{},
 			args: changePasswordArgs{
 				username:        "tester",
 				currentPassword: "123456",
@@ -96,7 +87,7 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 		{
 			name:            "change password should fail",
 			config:          *defaultConfig,
-			ldapWrapperMock: &ldapWrapperError{},
+			ldapWrapperMock: &mockLdapWrapperError{},
 			args: changePasswordArgs{
 				username:        "tester",
 				currentPassword: "123456",
