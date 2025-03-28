@@ -16,11 +16,12 @@ type changePasswordArgs struct {
 }
 
 type changePasswordTestCase struct {
-	name            string
-	config          config.LdapConfig
-	ldapWrapperMock ldap.LdapWrapper
-	args            changePasswordArgs
-	wantErr         bool
+	name              string
+	config            config.LdapConfig
+	ldapWrapperMock   ldap.LdapWrapper
+	args              changePasswordArgs
+	wantErrOnCreation bool
+	wantErrOnAction   bool
 }
 
 type mockConn struct {
@@ -36,12 +37,12 @@ func (l *mockConn) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.Pa
 	return &ldapext.PasswordModifyResult{}, nil
 }
 
-type mockConnError struct {
+type mockConnErrorOnPwModify struct {
 	mockConn
 }
 
-func (l *mockConnError) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
-	return nil, errors.New("test error")
+func (l *mockConnErrorOnPwModify) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
+	return nil, errors.New("test error on PasswordModify")
 }
 
 type mockLdapWrapperDefault struct {
@@ -54,12 +55,20 @@ func (w *mockLdapWrapperDefault) DialWithTLSConfig(_ *tls.Config) ldapext.DialOp
 	return func(dc *ldapext.DialContext) {}
 }
 
-type mockLdapWrapperError struct {
+type mockLdapWrapperErrorOnPwModify struct {
 	mockLdapWrapperDefault
 }
 
-func (w *mockLdapWrapperError) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
-	return &mockConnError{}, nil
+func (w *mockLdapWrapperErrorOnPwModify) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+	return &mockConnErrorOnPwModify{}, nil
+}
+
+type mockLdapWrapperErrorOnCreate struct {
+	mockLdapWrapperDefault
+}
+
+func (w *mockLdapWrapperErrorOnCreate) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+	return nil, errors.New("test error on DialURL")
 }
 
 var (
@@ -82,26 +91,46 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 				currentPassword: "123456",
 				newPassword:     "Test1234",
 			},
-			wantErr: false,
+			wantErrOnCreation: false,
+			wantErrOnAction:   false,
 		},
 		{
-			name:            "change password should fail",
+			name:            "change password should fail when pw modify fails",
 			config:          *defaultConfig,
-			ldapWrapperMock: &mockLdapWrapperError{},
+			ldapWrapperMock: &mockLdapWrapperErrorOnPwModify{},
 			args: changePasswordArgs{
 				username:        "tester",
 				currentPassword: "123456",
 				newPassword:     "Test1234",
 			},
-			wantErr: true,
+			wantErrOnCreation: false,
+			wantErrOnAction:   true,
+		},
+		{
+			name:            "change password should fail when client connection fails",
+			config:          *defaultConfig,
+			ldapWrapperMock: &mockLdapWrapperErrorOnCreate{},
+			args: changePasswordArgs{
+				username:        "tester",
+				currentPassword: "123456",
+				newPassword:     "Test1234",
+			},
+			wantErrOnCreation: true,
+			wantErrOnAction:   false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := ldap.CreateService(tt.config, tt.ldapWrapperMock)
-			if err := s.ChangePassword(tt.args.username, tt.args.currentPassword, tt.args.newPassword); (err != nil) != tt.wantErr {
-				t.Errorf("ChangePassword() error = %v, wantErr %v", err, tt.wantErr)
+			s, errCreation := ldap.CreateService(tt.config, tt.ldapWrapperMock)
+			if errCreation != nil {
+				if !tt.wantErrOnCreation {
+					t.Errorf("CreateService() error = %v, wantErrOnCreation %v", errCreation, tt.wantErrOnCreation)
+				}
+			} else {
+				if errAction := s.ChangePassword(tt.args.username, tt.args.currentPassword, tt.args.newPassword); (errAction != nil) != tt.wantErrOnAction {
+					t.Errorf("ChangePassword() error = %v, wantErrOnAction %v", errAction, tt.wantErrOnAction)
+				}
 			}
 		})
 	}
