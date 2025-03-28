@@ -1,7 +1,7 @@
 package validation_test
 
 import (
-	"github.com/dlclark/regexp2"
+	"ldap-password-change/cmd/config"
 	"ldap-password-change/internal/validation"
 	"testing"
 )
@@ -54,8 +54,9 @@ var validationTests = []struct {
 func TestValidateUsername(t *testing.T) {
 	for _, tt := range validationTests {
 		t.Run(tt.name, func(t *testing.T) {
-			validation.UsernameValidator = regexp2.MustCompile(tt.args.pattern, regexp2.None)
-			if got := validation.ValidateUsername(tt.args.value); got != tt.want {
+			config.Configuration.Validation.UsernamePattern = tt.args.pattern
+			validator := validation.CreateValidator(config.Configuration)
+			if got := validator.ValidateUsername(tt.args.value); got != tt.want {
 				t.Errorf("ValidateUsername() = %v, want %v for %v with pattern %s", got, tt.want, tt.args.value, tt.args.pattern)
 			}
 		})
@@ -65,8 +66,9 @@ func TestValidateUsername(t *testing.T) {
 func TestValidatePassword(t *testing.T) {
 	for _, tt := range validationTests {
 		t.Run(tt.name, func(t *testing.T) {
-			validation.PasswordValidator = regexp2.MustCompile(tt.args.pattern, regexp2.None)
-			if got := validation.ValidatePassword(tt.args.value); got != tt.want {
+			config.Configuration.Validation.PasswordPattern = tt.args.pattern
+			validator := validation.CreateValidator(config.Configuration)
+			if got := validator.ValidatePassword(tt.args.value); got != tt.want {
 				t.Errorf("ValidateUsername() = %v, want %v for %v with pattern %s", got, tt.want, tt.args.value, tt.args.pattern)
 			}
 		})

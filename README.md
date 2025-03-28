@@ -2,11 +2,15 @@
 
 ## Execute
 
+Assuming a reachable LDAP server at the URL in `app.default.yml` (see `local-dev` for a local setup):
+
 ```shell
 go mod tidy
+
+make generate  # you need to do this only once or when the framework versions change
 make run
 
-# open localhost:3333
+# open localhost:4000
 ```
 
 ## Docker

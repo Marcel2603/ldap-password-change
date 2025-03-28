@@ -7,6 +7,7 @@ import (
 	"ldap-password-change/internal/handler/index"
 	staticfiles "ldap-password-change/internal/handler/static-files"
 	"ldap-password-change/internal/service/ldap"
+	"ldap-password-change/internal/validation"
 	"log/slog"
 	"net/http"
 
@@ -26,7 +27,7 @@ func main() {
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 
-	r.Post("/change-password", changepassword.Handler(ldap.CreateService()))
+	r.Post("/change-password", changepassword.Handler(ldap.CreateService(), validation.CreateValidator(configuration)))
 	slog.Info("Listening on :" + configuration.Server.Port)
 	http.ListenAndServe(":"+configuration.Server.Port, r)
 }
