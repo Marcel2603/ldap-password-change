@@ -8,3 +8,5 @@ static/bootstrap.min.css.map
 
 # ignore templ autogenarted files
 views/*.go
+
+.vscode
