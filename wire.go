@@ -6,16 +6,12 @@ package main
 import (
 	"github.com/google/wire"
 	"ldap-password-change/cmd/config"
+	change_password "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/service/ldap"
 	"ldap-password-change/internal/validation"
 )
 
-func InitializeService(ldapConfig config.LdapConfig, validationConfig config.ValidationConfig) (ldap.ServiceImpl, error) {
-	wire.Build(ldap.CreateService, ldap.CreateWrapper)
-	return ldap.ServiceImpl{}, nil
-}
-
-func InitializeValidator(validationConfig config.ValidationConfig) (validation.ValidatorImpl, error) {
-	wire.Build(validation.CreateValidator)
-	return validation.ValidatorImpl{}, nil
+func InitChangePasswordHandler(ldapConfig config.LdapConfig, validationConfig config.ValidationConfig) (change_password.HandlerImpl, error) {
+	wire.Build(change_password.CreateHandler, ldap.CreateService, ldap.CreateWrapper, validation.CreateValidator)
+	return change_password.HandlerImpl{}, nil
 }

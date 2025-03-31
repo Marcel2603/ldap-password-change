@@ -1,10 +1,8 @@
 package main
 
 import (
-	"errors"
 	"github.com/go-chi/cors"
 	"ldap-password-change/cmd/config"
-	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/index"
 	staticfiles "ldap-password-change/internal/handler/static-files"
 	"log"
@@ -27,12 +25,11 @@ func main() {
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 
-	service, errService := InitializeService(configuration.Ldap, configuration.Validation)
-	validator, errValidator := InitializeValidator(configuration.Validation)
-	if errService != nil || errValidator != nil {
-		log.Fatal(errors.Join(errService, errValidator))
+	changePasswordHandler, err := InitChangePasswordHandler(configuration.Ldap, configuration.Validation)
+	if err != nil {
+		log.Fatal(err)
 	}
-	r.Post("/change-password", changepassword.Handler(&service, &validator))
+	r.Post("/change-password", changePasswordHandler.Handle)
 
 	slog.Info("Listening on :" + configuration.Server.Port)
 	http.ListenAndServe(":"+configuration.Server.Port, r)
