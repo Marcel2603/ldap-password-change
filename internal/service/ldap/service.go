@@ -12,23 +12,42 @@ type Service interface {
 	ChangePassword(username string, currentPassword string, newPassword string) error
 }
 
+type Conn interface {
+	Bind(username, password string) error
+	Close() error
+	PasswordModify(passwordModifyRequest *ldap.PasswordModifyRequest) (*ldap.PasswordModifyResult, error)
+}
+
 type serviceImpl struct {
+	baseDn      string
+	userDn      string
+	password    string
+	domain      string
+	ldapWrapper LdapWrapper
 }
 
-var (
-	configuration = config.Configuration.Ldap
-)
-
-func CreateService() Service {
-	testClient := createClient(configuration.UserDn, configuration.Password, configuration.Domain)
+func CreateService(config config.LdapConfig, wrapper LdapWrapper) (Service, error) {
+	testClient, err := createClient(wrapper, config.UserDn, config.Password, config.Domain)
+	if err != nil {
+		return nil, err
+	}
 	defer testClient.Close()
-	return serviceImpl{}
+	return &serviceImpl{
+		baseDn:      config.BaseDn,
+		userDn:      config.UserDn,
+		password:    config.Password,
+		domain:      config.Domain,
+		ldapWrapper: wrapper,
+	}, nil
 }
 
-func (s serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
-	client := createClient(configuration.UserDn, configuration.Password, configuration.Domain)
+func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
+	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.domain)
+	if err != nil {
+		return err
+	}
 	defer client.Close()
-	usernameDn := fmt.Sprintf("cn=%s,%s", username, configuration.BaseDn)
+	usernameDn := fmt.Sprintf("cn=%s,%s", username, s.baseDn)
 	passwdModifyRequest := ldap.NewPasswordModifyRequest(usernameDn, currentPassword, newPassword)
 	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
 		return err
@@ -37,16 +56,16 @@ func (s serviceImpl) ChangePassword(username string, currentPassword string, new
 	return nil
 }
 
-func createClient(username string, password string, domain string) *ldap.Conn {
-	l, err := ldap.DialURL(domain, ldap.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
+func createClient(wrapper LdapWrapper, username string, password string, domain string) (Conn, error) {
+	conn, err := wrapper.DialURL(domain, wrapper.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	err = l.Bind(username, password)
+	err = conn.Bind(username, password)
 	if err != nil {
 		log.Println("Failed to bind ldap user")
-		log.Fatal(err)
+		return nil, err
 	}
-	return l
+	return conn, nil
 }
