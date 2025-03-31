@@ -1,7 +1,7 @@
 services:
   openldap:
     container_name: openldap
-    image: bitnami/openldap:2.5.19
+    image: bitnami/openldap:2.6.9
     ports:
       - '1389:1389'
       - '1636:1636'
