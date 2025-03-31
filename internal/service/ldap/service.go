@@ -18,7 +18,7 @@ type Conn interface {
 	PasswordModify(passwordModifyRequest *ldap.PasswordModifyRequest) (*ldap.PasswordModifyResult, error)
 }
 
-type serviceImpl struct {
+type ServiceImpl struct {
 	baseDn      string
 	userDn      string
 	password    string
@@ -26,13 +26,13 @@ type serviceImpl struct {
 	ldapWrapper LdapWrapper
 }
 
-func CreateService(config config.LdapConfig, wrapper LdapWrapper) (Service, error) {
+func CreateService(config config.LdapConfig, wrapper LdapWrapper) (ServiceImpl, error) {
 	testClient, err := createClient(wrapper, config.UserDn, config.Password, config.Domain)
 	if err != nil {
-		return nil, err
+		return ServiceImpl{}, err
 	}
 	defer testClient.Close()
-	return &serviceImpl{
+	return ServiceImpl{
 		baseDn:      config.BaseDn,
 		userDn:      config.UserDn,
 		password:    config.Password,
@@ -41,7 +41,7 @@ func CreateService(config config.LdapConfig, wrapper LdapWrapper) (Service, erro
 	}, nil
 }
 
-func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
+func (s *ServiceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
 	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.domain)
 	if err != nil {
 		return err

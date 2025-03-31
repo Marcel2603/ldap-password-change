@@ -10,9 +10,11 @@ test: generate-dynamic
 	@go clean -testcache
 	@go test ./...
 
-build: generate-static generate-dynamic
-	@go build .
+# TODO: re-add generate-static when unpkg works again
+build: generate-dynamic
+	@go build -v -o bin .
 
+# TODO: find out how to make this work with wire-di
 run: generate-dynamic
 	SERVER_HOST=localhost SERVER_PORT=4000 go run main.go
 

@@ -11,30 +11,30 @@ type Validator interface {
 	ValidatePassword(password string) bool
 }
 
-type validator struct {
+type ValidatorImpl struct {
 	usernameValidator *regexp2.Regexp
 	passwordValidator *regexp2.Regexp
 }
 
-func CreateValidator(config config.ValidationConfig) (Validator, error) {
+func CreateValidator(config config.ValidationConfig) (ValidatorImpl, error) {
 	usernameValidatorRegexp, err1 := regexp2.Compile(config.UsernamePattern, regexp2.None)
 	passwortValidatorRegexp, err2 := regexp2.Compile(config.PasswordPattern, regexp2.None)
 	if err1 != nil || err2 != nil {
-		return nil, errors.Join(err1, err2)
+		return ValidatorImpl{}, errors.Join(err1, err2)
 	}
 
-	return &validator{
+	return ValidatorImpl{
 		usernameValidator: usernameValidatorRegexp,
 		passwordValidator: passwortValidatorRegexp,
 	}, nil
 }
 
-func (v *validator) ValidateUsername(username string) bool {
+func (v *ValidatorImpl) ValidateUsername(username string) bool {
 	isValid, _ := v.usernameValidator.MatchString(username)
 	return isValid
 }
 
-func (v *validator) ValidatePassword(password string) bool {
+func (v *ValidatorImpl) ValidatePassword(password string) bool {
 	isValid, _ := v.passwordValidator.MatchString(password)
 	return isValid
 }
