@@ -1,17 +1,17 @@
 package config
 
 type Config struct {
-	Server     server     `yaml:"server"`
-	Validation validation `yaml:"validation"`
-	Ldap       ldap       `yaml:"ldap"`
+	Server     ServerConfig     `yaml:"server"`
+	Validation ValidationConfig `yaml:"validation"`
+	Ldap       LdapConfig       `yaml:"ldap"`
 }
 
-type server struct {
+type ServerConfig struct {
 	Port string `yaml:"port"`
 	Host string `yaml:"host"`
 }
 
-type ldap struct {
+type LdapConfig struct {
 	Domain       string `yaml:"domain"`
 	UserDn       string `yaml:"userDn"`
 	Password     string `yaml:"password"`
@@ -19,7 +19,7 @@ type ldap struct {
 	SearchFilter string `yaml:"searchFilter"`
 }
 
-type validation struct {
+type ValidationConfig struct {
 	UsernamePattern string `yaml:"username"`
 	PasswordPattern string `yaml:"password"`
 }
