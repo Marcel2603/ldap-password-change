@@ -25,7 +25,7 @@ func main() {
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 
-	changePasswordHandler, err := InitChangePasswordHandler(configuration.Ldap, configuration.Validation)
+	changePasswordHandler, err := InitChangePasswordHandler(configuration)
 	if err != nil {
 		log.Fatal(err)
 	}

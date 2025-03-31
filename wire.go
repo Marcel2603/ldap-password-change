@@ -11,7 +11,11 @@ import (
 	"ldap-password-change/internal/validation"
 )
 
-func InitChangePasswordHandler(ldapConfig config.LdapConfig, validationConfig config.ValidationConfig) (change_password.HandlerImpl, error) {
+func InitChangePasswordHandler(config config.Config) (change_password.HandlerImpl, error) {
+	return initChangePasswordHandlerInternal(config.Ldap, config.Validation)
+}
+
+func initChangePasswordHandlerInternal(ldapConfig config.LdapConfig, validationConfig config.ValidationConfig) (change_password.HandlerImpl, error) {
 	wire.Build(change_password.CreateHandler, ldap.CreateService, ldap.CreateWrapper, validation.CreateValidator)
 	return change_password.HandlerImpl{}, nil
 }
