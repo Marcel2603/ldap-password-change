@@ -6,7 +6,7 @@ ALPINE_JS_VERSION = 3.14.5
 format:
 	@gofmt -s -w .
 
-test:
+test: generate-dynamic
 	@go clean -testcache
 	@go test ./...
 
