@@ -25,8 +25,8 @@ func Handler(ldapService ldap.Service, validator validation.Validator) http.Hand
 			toast := views.ErrorToastie("Some input was not valid " + validationError.Error())
 			w.WriteHeader(http.StatusBadRequest)
 			toast.Render(r.Context(), w)
-			return
-		}
+			return}
+
 		err := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if err != nil {
 			log.Println(err)
@@ -40,8 +40,8 @@ func Handler(ldapService ldap.Service, validator validation.Validator) http.Hand
 	}
 }
 
-func getUserInformation(r *http.Request) userInformation {
-	return userInformation{
+func getUserInformation(r *http.Request) *userInformation {
+	return &userInformation{
 		username:        r.FormValue("username"),
 		currentPassword: r.FormValue("current-password"),
 		newPassword:     r.FormValue("new-password"),
@@ -49,7 +49,7 @@ func getUserInformation(r *http.Request) userInformation {
 	}
 }
 
-func validateUserInfo(validator validation.Validator, userInfo userInformation) error {
+func validateUserInfo(validator validation.Validator, userInfo *userInformation) error {
 	validUsername := validator.ValidateUsername(userInfo.username)
 	if !validUsername {
 		return errors.New("invalid username")
