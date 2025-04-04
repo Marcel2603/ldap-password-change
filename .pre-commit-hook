@@ -2,12 +2,12 @@
 
 files_changed=$(make format)
 
-if [ -z $files_changed ]
+if [ -z "${files_changed}" ]
 then
 	echo "✅ Files correctly formatted"
 	exit 0
 else
 	echo "❌ Files changed by pre-commit hook, please check, add and commit again"
-	echo -e "${files_changed}"
+	echo "${files_changed}"
 	exit 1
 fi
