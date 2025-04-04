@@ -25,7 +25,8 @@ func Handler(ldapService ldap.Service, validator validation.Validator) http.Hand
 			toast := views.ErrorToastie("Some input was not valid " + validationError.Error())
 			w.WriteHeader(http.StatusBadRequest)
 			toast.Render(r.Context(), w)
-			return}
+			return
+		}
 
 		err := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if err != nil {
