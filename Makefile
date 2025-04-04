@@ -11,7 +11,7 @@ test: generate-dynamic
 	@go test ./...
 
 build: generate-static generate-dynamic
-	@go build .
+	@go build -v -o bin .
 
 run: generate-dynamic
 	SERVER_HOST=localhost SERVER_PORT=4000 go run main.go
