@@ -1,6 +1,6 @@
 #!/bin/sh
 
-files_changed=$(gofmt -l -s -w .)
+files_changed=$(make format)
 
 if [ -z $files_changed ]
 then
@@ -8,5 +8,6 @@ then
 	exit 0
 else
 	echo "❌ Files changed by pre-commit hook, please check, add and commit again"
+	echo -e "${files_changed}"
 	exit 1
 fi
