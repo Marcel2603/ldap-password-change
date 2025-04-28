@@ -52,7 +52,7 @@ func (s *serviceImpl) ChangePassword(username string, currentPassword string, ne
 	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
 		return err
 	}
-	fmt.Println("Password changed successfully")
+	log.Println("Password changed successfully")
 	return nil
 }
 

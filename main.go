@@ -32,12 +32,15 @@ func main() {
 	service, errService := ldap.CreateService(configuration.Ldap, ldap.CreateWrapper())
 	validator, errValidator := validation.CreateValidator(configuration.Validation)
 	if errService != nil || errValidator != nil {
-		log.Fatal(errors.Join(errService, errValidator))
+		log.Fatalf("Error creating services: %s\n", errors.Join(errService, errValidator).Error())
 	}
 	r.Post("/change-password", changepassword.Handler(service, validator))
 
 	slog.Info("Listening on :" + configuration.Server.Port)
-	http.ListenAndServe(":"+configuration.Server.Port, r)
+	err := http.ListenAndServe(":"+configuration.Server.Port, r)
+	if err != nil {
+		log.Fatalf("Error starting server: %s\n", err.Error())
+	}
 }
 
 func setupServerRouter(configuration config.Config) *chi.Mux {

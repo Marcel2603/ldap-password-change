@@ -27,3 +27,5 @@ Add the pre-commit hook:
 ```shell
 cp .pre-commit-hook .git/hooks/pre-commit
 ```
+
+See Makefile for development commands.

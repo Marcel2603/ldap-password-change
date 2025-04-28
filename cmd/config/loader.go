@@ -2,7 +2,6 @@ package config
 
 import (
 	"dario.cat/mergo"
-	"fmt"
 	"github.com/kelseyhightower/envconfig"
 	"gopkg.in/yaml.v3"
 	"log"
@@ -28,7 +27,7 @@ func loadConfig() {
 	var appData Config
 	appConfig, err := os.ReadFile("app.yml")
 	if err == nil {
-		fmt.Println("Loading app config from app.yml")
+		log.Println("Loading app config from app.yml")
 		loadConfigFromYaml(appConfig, &appData)
 		mergo.Merge(&defaultData, appData, mergo.WithOverride)
 	}
