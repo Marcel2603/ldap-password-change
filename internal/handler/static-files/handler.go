@@ -1,4 +1,4 @@
-package static_files
+package static
 
 import (
 	"compress/gzip"

@@ -18,7 +18,7 @@ type changePasswordArgs struct {
 type changePasswordTestCase struct {
 	name              string
 	config            config.LdapConfig
-	ldapWrapperMock   ldap.LdapWrapper
+	ldapWrapperMock   ldap.Wrapper
 	args              changePasswordArgs
 	wantErrOnCreation bool
 	wantErrOnAction   bool
@@ -27,13 +27,13 @@ type changePasswordTestCase struct {
 type mockConn struct {
 }
 
-func (l *mockConn) Bind(_, _ string) error {
+func (*mockConn) Bind(_, _ string) error {
 	return nil
 }
-func (l *mockConn) Close() error {
+func (*mockConn) Close() error {
 	return nil
 }
-func (l *mockConn) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
+func (*mockConn) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 	return &ldapext.PasswordModifyResult{}, nil
 }
 
@@ -41,17 +41,17 @@ type mockConnErrorOnPwModify struct {
 	mockConn
 }
 
-func (l *mockConnErrorOnPwModify) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
+func (*mockConnErrorOnPwModify) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 	return nil, errors.New("test error on PasswordModify")
 }
 
 type mockLdapWrapperDefault struct {
 }
 
-func (w *mockLdapWrapperDefault) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+func (*mockLdapWrapperDefault) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return &mockConn{}, nil
 }
-func (w *mockLdapWrapperDefault) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
+func (*mockLdapWrapperDefault) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
 	return func(dc *ldapext.DialContext) {}
 }
 
@@ -59,7 +59,7 @@ type mockLdapWrapperErrorOnPwModify struct {
 	mockLdapWrapperDefault
 }
 
-func (w *mockLdapWrapperErrorOnPwModify) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+func (*mockLdapWrapperErrorOnPwModify) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return &mockConnErrorOnPwModify{}, nil
 }
 
@@ -67,7 +67,7 @@ type mockLdapWrapperErrorOnCreate struct {
 	mockLdapWrapperDefault
 }
 
-func (w *mockLdapWrapperErrorOnCreate) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+func (*mockLdapWrapperErrorOnCreate) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return nil, errors.New("test error on DialURL")
 }
 

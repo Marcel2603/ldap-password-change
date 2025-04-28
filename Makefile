@@ -6,6 +6,10 @@ ALPINE_JS_VERSION = 3.14.9
 format:
 	@gofmt -l -s -w .
 
+lint: format
+	@which revive > /dev/null || go install github.com/mgechev/revive@latest
+	@revive -config config.toml -formatter friendly ./...
+
 test: generate-dynamic
 	@go clean -testcache
 	@go test ./...

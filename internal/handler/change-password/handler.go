@@ -1,4 +1,4 @@
-package change_password
+package changepassword
 
 import (
 	"errors"
