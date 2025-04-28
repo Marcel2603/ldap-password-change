@@ -4,14 +4,14 @@ BOOTSTRAP_VERSION = 5.3.3
 ALPINE_JS_VERSION = 3.14.9
 
 format:
-	@gofmt -s -w .
+	@gofmt -l -s -w .
 
 test: generate-dynamic
 	@go clean -testcache
 	@go test ./...
 
 build: generate-static generate-dynamic
-	@go build .
+	@go build -v -o bin .
 
 run: generate-dynamic
 	SERVER_HOST=localhost SERVER_PORT=4000 go run main.go

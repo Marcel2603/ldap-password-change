@@ -19,3 +19,11 @@ make run
 docker build . -t ldap-password-change
 docker run -p 3333:3333 -e HOST=localhost ldap-password-change
 ```
+
+## Contribute
+
+Add the pre-commit hook:
+
+```shell
+cp .pre-commit-hook .git/hooks/pre-commit
+```
