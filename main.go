@@ -17,7 +17,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-//go:generate go run github.com/a-h/templ/cmd/templ generate
+//go:generate go tool github.com/a-h/templ/cmd/templ generate
 
 func main() {
 	slog.Info("Starting server")

@@ -1,6 +1,6 @@
 module ldap-password-change
 
-go 1.23.3
+go 1.24.0
 
 require github.com/go-chi/chi/v5 v5.2.1
 
@@ -39,3 +39,5 @@ require (
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/tools v0.31.0 // indirect
 )
+
+tool github.com/a-h/templ/cmd/templ
