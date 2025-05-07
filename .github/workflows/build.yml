@@ -1,5 +1,8 @@
 name: Test and build
 on:
+  push:
+    branches:
+      - linting  # TODO change me later
   pull_request:
     branches:
       - linting  # TODO change me later
