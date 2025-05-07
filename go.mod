@@ -1,6 +1,6 @@
 module ldap-password-change
 
-go 1.23.3
+go 1.24.0
 
 require github.com/go-chi/chi/v5 v5.2.1
 
@@ -8,7 +8,7 @@ require github.com/go-chi/cors v1.2.1
 
 require (
 	dario.cat/mergo v1.0.1
-	github.com/a-h/templ v0.3.857
+	github.com/a-h/templ v0.3.865
 	github.com/go-ldap/ldap/v3 v3.4.11
 )
 
@@ -39,3 +39,5 @@ require (
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/tools v0.32.0 // indirect
 )
+
+tool github.com/a-h/templ/cmd/templ
