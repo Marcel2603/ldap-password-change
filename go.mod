@@ -8,7 +8,7 @@ require github.com/go-chi/cors v1.2.1
 
 require (
 	dario.cat/mergo v1.0.2
-	github.com/a-h/templ v0.3.865
+	github.com/a-h/templ v0.3.887
 	github.com/go-ldap/ldap/v3 v3.4.11
 )
 
