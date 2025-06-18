@@ -1,7 +1,8 @@
-package change_password
+package changepassword
 
 import (
 	"errors"
+	"fmt"
 	"ldap-password-change/internal/service/ldap"
 	"ldap-password-change/internal/validation"
 	"ldap-password-change/views"
@@ -18,26 +19,22 @@ type userInformation struct {
 
 func Handler(ldapService ldap.Service, validator validation.Validator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		r.ParseMultipartForm(0)
 		userInfo := getUserInformation(r)
 		validationError := validateUserInfo(validator, userInfo)
 		if validationError != nil {
-			toast := views.ErrorToastie("Some input was not valid " + validationError.Error())
-			w.WriteHeader(http.StatusBadRequest)
-			toast.Render(r.Context(), w)
+			renderErrorToastie(w, r, http.StatusBadRequest, "Some input was not valid", validationError)
 			return
 		}
 
-		err := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
-		if err != nil {
-			log.Println(err)
-			toast := views.ErrorToastie("Failed to change password")
-			w.WriteHeader(http.StatusInternalServerError)
-			toast.Render(r.Context(), w)
+		changePasswordError := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
+		if changePasswordError != nil {
+			log.Printf("Could not change password: %s\n", changePasswordError.Error())
+			renderErrorToastie(w, r, http.StatusInternalServerError, "Failed to change password", changePasswordError)
 			return
 		}
+
 		templ := views.SuccessfulPasswordChange()
-		templ.Render(r.Context(), w)
+		logRenderError(templ.Render(r.Context(), w))
 	}
 }
 
@@ -63,4 +60,16 @@ func validateUserInfo(validator validation.Validator, userInfo *userInformation)
 		return errors.New("passwords do not match")
 	}
 	return nil
+}
+
+func renderErrorToastie(w http.ResponseWriter, r *http.Request, statusCode int, errorTitle string, err error) {
+	toast := views.ErrorToastie(fmt.Sprintf("%s: %s", errorTitle, err.Error()))
+	w.WriteHeader(statusCode)
+	logRenderError(toast.Render(r.Context(), w))
+}
+
+func logRenderError(err error) {
+	if err != nil {
+		log.Printf("Could not render: %s\n", err.Error())
+	}
 }

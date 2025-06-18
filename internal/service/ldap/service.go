@@ -23,20 +23,20 @@ type serviceImpl struct {
 	userDn      string
 	password    string
 	domain      string
-	ldapWrapper LdapWrapper
+	ldapWrapper Wrapper
 }
 
-func CreateService(config config.LdapConfig, wrapper LdapWrapper) (Service, error) {
-	testClient, err := createClient(wrapper, config.UserDn, config.Password, config.Domain)
+func CreateService(c config.LdapConfig, wrapper Wrapper) (Service, error) {
+	testClient, err := createClient(wrapper, c.UserDn, c.Password, c.Domain)
 	if err != nil {
 		return nil, err
 	}
 	defer testClient.Close()
 	return &serviceImpl{
-		baseDn:      config.BaseDn,
-		userDn:      config.UserDn,
-		password:    config.Password,
-		domain:      config.Domain,
+		baseDn:      c.BaseDn,
+		userDn:      c.UserDn,
+		password:    c.Password,
+		domain:      c.Domain,
 		ldapWrapper: wrapper,
 	}, nil
 }
@@ -52,11 +52,11 @@ func (s *serviceImpl) ChangePassword(username string, currentPassword string, ne
 	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
 		return err
 	}
-	fmt.Println("Password changed successfully")
+	log.Println("Password changed successfully")
 	return nil
 }
 
-func createClient(wrapper LdapWrapper, username string, password string, domain string) (Conn, error) {
+func createClient(wrapper Wrapper, username string, password string, domain string) (Conn, error) {
 	conn, err := wrapper.DialURL(domain, wrapper.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
 	if err != nil {
 		return nil, err

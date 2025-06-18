@@ -1,0 +1,30 @@
+name: Test and build
+on:
+  push:
+    branches:
+      - linting  # TODO change me later
+  pull_request:
+    branches:
+      - linting  # TODO change me later
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+
+      - name: Generate view
+        run: make generate
+
+      - name: Check Linting
+        run: make lint
+
+      - name: Run tests
+        run: make test
+
+      - name: Build app
+        run: make build
