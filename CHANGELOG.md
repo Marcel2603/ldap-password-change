@@ -9,6 +9,7 @@
 
 ### Bug Fixes
 
+- *(docker)* Fix image build process - ([9230a08](https://github.com/Marcel2603/ldap-password-change/commit/9230a08a95a398a304db21c975747b0f0bc95b59))  by @Marcel2603
 - *(style)* Add prio to custom css - ([55b2c56](https://github.com/Marcel2603/ldap-password-change/commit/55b2c56bf823ddd515ad62647767c3fb2163fdcc))  by @Marcel2603
 - Form on submit - ([cc47da9](https://github.com/Marcel2603/ldap-password-change/commit/cc47da9b7ab17137af725f792aa7f61bc56ea9ab))  by @Marcel2603
 ## New Contributors ❤️
