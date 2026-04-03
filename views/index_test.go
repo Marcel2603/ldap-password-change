@@ -90,7 +90,7 @@ func TestIndex(t *testing.T) {
 	if doc.Find("form[hx-post='/change-password']").Length() == 0 {
 		t.Errorf("expected form not found")
 	}
-	
+
 	if doc.Find("input[name='username']").AttrOr("pattern", "") != conf.Validation.UsernamePattern {
 		t.Errorf("expected username pattern not found")
 	}

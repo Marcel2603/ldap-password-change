@@ -6,8 +6,10 @@ import (
 	"ldap-password-change/internal/service/ldap"
 	"ldap-password-change/internal/validation"
 	"ldap-password-change/views"
-	"log"
+	"log/slog"
 	"net/http"
+
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 type userInformation struct {
@@ -17,24 +19,27 @@ type userInformation struct {
 	confirmPassword string
 }
 
-func Handler(ldapService ldap.Service, validator validation.Validator) http.HandlerFunc {
+func Handler(ldapService ldap.Service, validator validation.Validator, logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		reqID := middleware.GetReqID(r.Context())
+		l := logger.With(slog.String("req_id", reqID), slog.String("class", "handler_change_password"))
+
 		userInfo := getUserInformation(r)
 		validationError := validateUserInfo(validator, userInfo)
 		if validationError != nil {
-			renderErrorToastie(w, r, http.StatusBadRequest, "Some input was not valid", validationError)
+			renderErrorToastie(w, r, http.StatusBadRequest, "Some input was not valid", validationError, l)
 			return
 		}
 
 		changePasswordError := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if changePasswordError != nil {
-			log.Printf("Could not change password: %s\n", changePasswordError.Error())
-			renderErrorToastie(w, r, http.StatusInternalServerError, "Failed to change password", changePasswordError)
+			l.Error("Could not change password", slog.String("error", changePasswordError.Error()))
+			renderErrorToastie(w, r, http.StatusInternalServerError, "Failed to change password", changePasswordError, l)
 			return
 		}
 
 		templ := views.SuccessfulPasswordChange()
-		logRenderError(templ.Render(r.Context(), w))
+		logRenderError(templ.Render(r.Context(), w), l)
 	}
 }
 
@@ -62,14 +67,14 @@ func validateUserInfo(validator validation.Validator, userInfo *userInformation)
 	return nil
 }
 
-func renderErrorToastie(w http.ResponseWriter, r *http.Request, statusCode int, errorTitle string, err error) {
+func renderErrorToastie(w http.ResponseWriter, r *http.Request, statusCode int, errorTitle string, err error, l *slog.Logger) {
 	toast := views.ErrorToastie(fmt.Sprintf("%s: %s", errorTitle, err.Error()))
 	w.WriteHeader(statusCode)
-	logRenderError(toast.Render(r.Context(), w))
+	logRenderError(toast.Render(r.Context(), w), l)
 }
 
-func logRenderError(err error) {
+func logRenderError(err error, l *slog.Logger) {
 	if err != nil {
-		log.Printf("Could not render: %s\n", err.Error())
+		l.Error("Could not render", slog.String("error", err.Error()))
 	}
 }

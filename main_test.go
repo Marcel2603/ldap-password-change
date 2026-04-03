@@ -2,6 +2,8 @@ package main
 
 import (
 	"crypto/tls"
+	"io"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -36,7 +38,8 @@ func TestServerStarts(t *testing.T) {
 		PasswordPattern: "^.*$",
 	}
 
-	app, err := setupApp(c, &mockWrapper{})
+	mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
+	app, err := setupApp(c, &mockWrapper{}, mockLogger)
 	if err != nil {
 		t.Fatalf("Failed to setup app: %v", err)
 	}

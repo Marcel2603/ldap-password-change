@@ -5,7 +5,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"ldap-password-change/cmd/config"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/go-ldap/ldap/v3"
@@ -28,11 +28,12 @@ type serviceImpl struct {
 	host        string
 	ignoreTLS   bool
 	tlsCert     string
+	logger      *slog.Logger
 	ldapWrapper Wrapper
 }
 
-func CreateService(c config.LdapConfig, wrapper Wrapper) (Service, error) {
-	testClient, err := createClient(wrapper, c.UserDn, c.Password, c.Host, c.IgnoreTLS, c.TlsCert)
+func CreateService(c config.LdapConfig, wrapper Wrapper, logger *slog.Logger) (Service, error) {
+	testClient, err := createClient(wrapper, c.UserDn, c.Password, c.Host, c.IgnoreTLS, c.TlsCert, logger)
 	if err != nil {
 		return nil, err
 	}
@@ -44,12 +45,13 @@ func CreateService(c config.LdapConfig, wrapper Wrapper) (Service, error) {
 		host:        c.Host,
 		ignoreTLS:   c.IgnoreTLS,
 		tlsCert:     c.TlsCert,
+		logger:      logger.With(slog.String("class", "service_ldap")),
 		ldapWrapper: wrapper,
 	}, nil
 }
 
 func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
-	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert)
+	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
 		return err
 	}
@@ -59,11 +61,11 @@ func (s *serviceImpl) ChangePassword(username string, currentPassword string, ne
 	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
 		return err
 	}
-	log.Println("Password changed successfully")
+	s.logger.Info("Password changed successfully", slog.String("username", username))
 	return nil
 }
 
-func createClient(wrapper Wrapper, username string, password string, host string, ignoreTLS bool, tlsCert string) (Conn, error) {
+func createClient(wrapper Wrapper, username string, password string, host string, ignoreTLS bool, tlsCert string, logger *slog.Logger) (Conn, error) {
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: ignoreTLS,
 	}
@@ -91,7 +93,7 @@ func createClient(wrapper Wrapper, username string, password string, host string
 
 	err = conn.Bind(username, password)
 	if err != nil {
-		log.Println("Failed to bind ldap user")
+		logger.Error("Failed to bind ldap user", slog.String("error", err.Error()))
 		return nil, err
 	}
 	return conn, nil

@@ -12,3 +12,5 @@ ldap:
   searchFilter: "(objectClass=*)"
   ignoreTLS: true
   tlsCert: ""
+log:
+  level: info

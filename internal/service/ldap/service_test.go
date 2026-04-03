@@ -3,8 +3,10 @@ package ldap_test
 import (
 	"crypto/tls"
 	"errors"
+	"io"
 	"ldap-password-change/cmd/config"
 	"ldap-password-change/internal/service/ldap"
+	"log/slog"
 	"testing"
 
 	ldapext "github.com/go-ldap/ldap/v3"
@@ -152,7 +154,8 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s, errCreation := ldap.CreateService(tt.config, tt.ldapWrapperMock)
+			mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
+			s, errCreation := ldap.CreateService(tt.config, tt.ldapWrapperMock, mockLogger)
 			if errCreation != nil {
 				if !tt.wantErrOnCreation {
 					t.Errorf("CreateService() error = %v, wantErrOnCreation %v", errCreation, tt.wantErrOnCreation)

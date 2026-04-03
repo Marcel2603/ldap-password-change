@@ -25,32 +25,32 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-    t.Run("File exists br encoding", func(t *testing.T) {
+	t.Run("File exists br encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
-        req.Header.Add("Accept-Encoding", "br")
+		req.Header.Add("Accept-Encoding", "br")
 		rr := httptest.NewRecorder()
 		Handler(rr, req)
 
 		if rr.Code != http.StatusOK {
 			t.Errorf("Expected 200, got %v", rr.Code)
 		}
-        if rr.Header().Get("content-encoding") != "br" {
-            t.Errorf("Expected br encoding")
-        }
+		if rr.Header().Get("content-encoding") != "br" {
+			t.Errorf("Expected br encoding")
+		}
 	})
 
-    t.Run("File exists gzip encoding", func(t *testing.T) {
+	t.Run("File exists gzip encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
-        req.Header.Add("Accept-Encoding", "gzip")
+		req.Header.Add("Accept-Encoding", "gzip")
 		rr := httptest.NewRecorder()
 		Handler(rr, req)
 
 		if rr.Code != http.StatusOK {
 			t.Errorf("Expected 200, got %v", rr.Code)
 		}
-        if rr.Header().Get("content-encoding") != "gzip" {
-            t.Errorf("Expected gzip encoding")
-        }
+		if rr.Header().Get("content-encoding") != "gzip" {
+			t.Errorf("Expected gzip encoding")
+		}
 	})
 
 	t.Run("Directory", func(t *testing.T) {

@@ -4,6 +4,11 @@ type Config struct {
 	Server     ServerConfig     `yaml:"server"`
 	Validation ValidationConfig `yaml:"validation"`
 	Ldap       LdapConfig       `yaml:"ldap"`
+	Log        LogConfig        `yaml:"log"`
+}
+
+type LogConfig struct {
+	Level string `yaml:"level"`
 }
 
 type ServerConfig struct {

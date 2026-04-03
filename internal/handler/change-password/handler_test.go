@@ -2,6 +2,8 @@ package changepassword
 
 import (
 	"errors"
+	"io"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -87,7 +89,8 @@ func TestHandler(t *testing.T) {
 			ldapSvc := &mockLdapService{returnsError: tc.ldapError}
 			validator := &mockValidator{usernameValid: tc.usernameValid, passwordValid: tc.passwordValid}
 
-			handler := Handler(ldapSvc, validator)
+			mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
+			handler := Handler(ldapSvc, validator, mockLogger)
 
 			form := url.Values{}
 			form.Add("username", "testuser")
