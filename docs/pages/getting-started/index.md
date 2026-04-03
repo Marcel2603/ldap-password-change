@@ -11,8 +11,8 @@ brew install ldap-password-change
 
 ### From release
 
-Download the latest binary from the [Releases](https://github.com/Marcel2603/ldap-password-change/releases) page and place it in your
-`$PATH`.
+Download the latest binary from the [Releases](https://github.com/Marcel2603/ldap-password-change/releases) page and place
+it in your `$PATH`.
 
 ### From docker
 

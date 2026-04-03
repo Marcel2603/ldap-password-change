@@ -4,12 +4,6 @@
 bin
 !bin/.gitkeep
 
-# ignore static files, which get generated
-static/htmx.min.js
-static/alpine.min.js
-static/bootstrap.min.css
-static/bootstrap.min.css.map
-
 .vscode
 
 coverage*.out

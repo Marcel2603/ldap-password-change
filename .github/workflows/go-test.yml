@@ -1,13 +1,15 @@
-name: Go-test
+name: Test & Lint
 on:
   push:
     branches:
-      - later
-  pull_request:
-    branches:
-      - later
+      - main
+    paths-ignore:
+      - 'docs/**'
+  pull_request :
+    paths-ignore:
+      - 'docs/**'
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -15,9 +17,15 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: '1.26.x'
-
-      - name: Generate view
-        run: go generate ./
-
+      - name: Lint
+        run: make lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.x'
       - name: Test with the Go CLI
-        run: go test ./... 
+        run: make cover

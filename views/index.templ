@@ -45,12 +45,12 @@ templ Index(conf config.Config) {
 			} else {
 				<link rel="icon" href="./../static/favicon.png" type="image/png"/>
 			}
-			
+
 			<!-- Google Fonts: Outfit -->
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 			<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-			
+
 			<link href="./../static/bootstrap.min.css" rel="stylesheet"/>
 			if conf.UI.CustomCss != "" {
 				<link href={ conf.UI.CustomCss } rel="stylesheet"/>
@@ -107,7 +107,7 @@ templ Index(conf config.Config) {
 					padding: 2.5rem 1.5rem;
 					transition: all 0.3s ease;
 				}
-				
+
 				/* Dark mode overrides for glass card text */
 				[data-bs-theme="dark"] .glass-card {
 					color: var(--glass-text-color) !important;
@@ -239,7 +239,7 @@ templ Index(conf config.Config) {
 					<h1 class="fw-bold" style="font-size: 2.25rem;">Change Password</h1>
 					<p class="opacity-75">Securely manage your credentials</p>
 				</div>
-				
+
 				<div class="card glass-card fade-in-up" style="animation-delay: 0.2s;">
 					<div class="card-body p-0">
 						<form
@@ -264,7 +264,7 @@ templ Index(conf config.Config) {
 								<label for="validationCustom01">Username</label>
 								<div class="invalid-feedback ps-2">Username does not match policy.</div>
 							</div>
-							
+
 							<div class="form-floating mb-3">
 								<input
 									x-ref="old_password"
@@ -279,7 +279,7 @@ templ Index(conf config.Config) {
 								<label for="validationCustom02">Current Password</label>
 								<div class="invalid-feedback ps-2">Please provide your password.</div>
 							</div>
-							
+
 							<div class="form-floating mb-3">
 								<input
 									x-ref="new_password"
@@ -295,7 +295,7 @@ templ Index(conf config.Config) {
 								<label for="validationCustom03">New Password</label>
 								<div class="invalid-feedback ps-2">Password does not match system policy.</div>
 							</div>
-							
+
 							<div class="form-floating mb-4">
 								<input
 									@keyup="if ($el.checkValidity() && $refs.new_password.value == $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
@@ -309,7 +309,7 @@ templ Index(conf config.Config) {
 								<label for="validationCustom04">Confirm New Password</label>
 								<div class="invalid-feedback ps-2">Passwords do not match.</div>
 							</div>
-							
+
 							<div class="d-grid mt-2">
 								<button class="btn btn-primary btn-pill hover-scale" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-shield-lock-fill me-2 mb-1" viewBox="0 0 16 16">

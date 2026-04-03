@@ -7,8 +7,10 @@ format:
 	@gofmt -l -s -w .
 
 lint: format
-	@which revive > /dev/null || go install github.com/mgechev/revive@latest
-	@revive -config config.toml -formatter friendly ./...
+	@go run github.com/mgechev/revive@latest -config config.toml -formatter friendly ./...
+
+init-precommit:
+	@pre-commit install
 
 test: generate-dynamic
 	@go clean -testcache

@@ -1,0 +1,87 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+
+# The lines below are called `modelines`. See `:help modeline`
+# Feel free to remove those if you don't want/need to use them.
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+
+version: 2
+
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+project_name: ldap-password-change
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    id: ldap-password-change
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/Marcel2603/ldap-password-change/cmd.BuildVersion=v{{.Version}}
+      - -s -w -X github.com/Marcel2603/ldap-password-change/cmd.BuildCommit={{.Commit}}
+
+archives:
+  - id: homebrew-tar
+    formats: [tar.gz]
+    name_template: "{{.ProjectName}}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+
+  - id: binary-release
+    formats: [binary]
+    name_template: "{{.ProjectName}}_{{ .Os }}_{{ .Arch }}"
+    builds_info:
+      mode: 0755
+
+dockers_v2:
+  - images:
+      - ghcr.io/marcel2603/ldap-password-change/ldap-password-change
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    dockerfile: Dockerfile
+    tags:
+      - latest
+      - "{{ .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+release:
+  mode: keep-existing
+
+homebrew_casks:
+  - ids:
+      - homebrew-tar
+
+    repository:
+      owner: Marcel2603
+      name: homebrew-tap
+
+    directory: Casks
+
+    homepage: "https://marcel2603.github.io/ldap-password-change"
+    description: "Tiny Terraform coach"
+    license: "Apache-2.0"
+
+    binaries:
+      - ldap-password-change
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/ldap-password-change"]
+          end

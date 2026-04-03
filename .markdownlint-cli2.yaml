@@ -1,0 +1,7 @@
+ignores:
+  - .gemini/styleguide.md
+  - CHANGELOG.md
+config:
+  MD013:
+    line_length: 120
+    tables: false
