@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"ldap-password-change/cmd/config"
 	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/health"
@@ -54,18 +53,21 @@ func main() {
 func setupApp(configuration config.Config, wrapper ldap.Wrapper, logger *slog.Logger) (*chi.Mux, error) {
 	r := setupServerRouter(configuration, logger)
 
-	r.Get("/health", health.Handler)
+	service := ldap.CreateService(configuration.Ldap, wrapper, logger)
+	validator, errValidator := validation.CreateValidator(configuration.Validation)
+	if errValidator != nil {
+		return nil, errValidator
+	}
+
 	r.Get("/", index.Handler)
+	r.Get("/health", health.LivenessHandler)
+	r.Get("/health/live", health.LivenessHandler)
+	r.Get("/health/ready", health.ReadinessHandler(service))
 
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 	r.Get("/custom/*", staticfiles.Handler)
 
-	service, errService := ldap.CreateService(configuration.Ldap, wrapper, logger)
-	validator, errValidator := validation.CreateValidator(configuration.Validation)
-	if errService != nil || errValidator != nil {
-		return nil, errors.Join(errService, errValidator)
-	}
 	r.Post("/change-password", changepassword.Handler(service, validator, logger))
 
 	return r, nil

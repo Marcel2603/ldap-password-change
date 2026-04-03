@@ -11,56 +11,89 @@ import (
 	"github.com/go-ldap/ldap/v3"
 )
 
+var ErrUserNotFound = fmt.Errorf("user not found")
+
 type Service interface {
 	ChangePassword(username string, currentPassword string, newPassword string) error
+	Ping() error
 }
 
 type Conn interface {
 	Bind(username, password string) error
 	Close() error
+	Search(searchRequest *ldap.SearchRequest) (*ldap.SearchResult, error)
 	PasswordModify(passwordModifyRequest *ldap.PasswordModifyRequest) (*ldap.PasswordModifyResult, error)
 }
 
 type serviceImpl struct {
-	baseDn      string
-	userDn      string
-	password    string
-	host        string
-	ignoreTLS   bool
-	tlsCert     string
-	logger      *slog.Logger
-	ldapWrapper Wrapper
+	baseDn       string
+	userDn       string
+	password     string
+	host         string
+	ignoreTLS    bool
+	tlsCert      string
+	searchFilter string
+	logger       *slog.Logger
+	ldapWrapper  Wrapper
 }
 
-func CreateService(c config.LdapConfig, wrapper Wrapper, logger *slog.Logger) (Service, error) {
-	testClient, err := createClient(wrapper, c.UserDn, c.Password, c.Host, c.IgnoreTLS, c.TlsCert, logger)
-	if err != nil {
-		return nil, err
-	}
-	defer testClient.Close()
+func CreateService(c config.LdapConfig, wrapper Wrapper, logger *slog.Logger) Service {
 	return &serviceImpl{
-		baseDn:      c.BaseDn,
-		userDn:      c.UserDn,
-		password:    c.Password,
-		host:        c.Host,
-		ignoreTLS:   c.IgnoreTLS,
-		tlsCert:     c.TlsCert,
-		logger:      logger.With(slog.String("class", "service_ldap")),
-		ldapWrapper: wrapper,
-	}, nil
+		baseDn:       c.BaseDn,
+		userDn:       c.UserDn,
+		password:     c.Password,
+		host:         c.Host,
+		ignoreTLS:    c.IgnoreTLS,
+		tlsCert:      c.TlsCert,
+		searchFilter: c.SearchFilter,
+		logger:       logger.With(slog.String("class", "service_ldap")),
+		ldapWrapper:  wrapper,
+	}
 }
 
-func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
+func (s *serviceImpl) Ping() error {
 	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
 		return err
 	}
-	defer client.Close()
-	usernameDn := fmt.Sprintf("cn=%s,%s", username, s.baseDn)
-	passwdModifyRequest := ldap.NewPasswordModifyRequest(usernameDn, currentPassword, newPassword)
-	if _, err := client.PasswordModify(passwdModifyRequest); err != nil {
+	return client.Close()
+}
+
+func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
+	svcClient, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert, s.logger)
+	if err != nil {
 		return err
 	}
+	defer svcClient.Close()
+
+	filter := fmt.Sprintf("(&%s(cn=%s))", s.searchFilter, ldap.EscapeFilter(username))
+	searchReq := ldap.NewSearchRequest(
+		s.baseDn,
+		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 1, 0, false,
+		filter,
+		[]string{"dn"},
+		nil,
+	)
+	result, err := svcClient.Search(searchReq)
+	if err != nil {
+		return fmt.Errorf("ldap search failed: %w", err)
+	}
+	if len(result.Entries) == 0 {
+		return ErrUserNotFound
+	}
+	userDN := result.Entries[0].DN
+
+	userClient, err := createClient(s.ldapWrapper, userDN, currentPassword, s.host, s.ignoreTLS, s.tlsCert, s.logger)
+	if err != nil {
+		return fmt.Errorf("invalid credentials: %w", err)
+	}
+	defer userClient.Close()
+
+	passwdModifyRequest := ldap.NewPasswordModifyRequest(userDN, currentPassword, newPassword)
+	if _, err := userClient.PasswordModify(passwdModifyRequest); err != nil {
+		return fmt.Errorf("password modify failed: %w", err)
+	}
+
 	s.logger.Info("Password changed successfully", slog.String("username", username))
 	return nil
 }
@@ -79,6 +112,7 @@ func createClient(wrapper Wrapper, username string, password string, host string
 		caCertPool.AppendCertsFromPEM(cert)
 		tlsConfig.RootCAs = caCertPool
 	}
+
 	var connectionURL string
 	if ignoreTLS {
 		connectionURL = fmt.Sprintf("ldap://%s", host)
@@ -91,8 +125,7 @@ func createClient(wrapper Wrapper, username string, password string, host string
 		return nil, err
 	}
 
-	err = conn.Bind(username, password)
-	if err != nil {
+	if err = conn.Bind(username, password); err != nil {
 		logger.Error("Failed to bind ldap user", slog.String("error", err.Error()))
 		return nil, err
 	}

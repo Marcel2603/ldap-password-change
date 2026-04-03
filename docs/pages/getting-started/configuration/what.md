@@ -1,49 +1,105 @@
 # What to configure
 
-## Disable or fine-tune rules
+All options are nested under their respective top-level YAML keys. Below is a full annotated reference.
 
-Rules can be disabled at will with `rules.<rule_id>.enabled: false`.
+## Server
 
-Some rules may allow for further configuration using the `rules.<rule_id>.spec` map, please refer to the rule-specific
-documentation for more information.
-
-## Output format
-
-Several output formats are supported under `output.format`:
-
-- `educational` (default): issues grouped by rule in a colorful human-friendly format including explanation
-- `pretty`: issues grouped by file in a colorful human-friendly format
-- `compact`: one line per issue with location information for quick scanning, sorted by severity
-- `json`: detailed output optimized for machine-parsing
-
-Color can be disabled with `output.color: false`.
-
-Emojis can be disabled with `output.emojis: false` (they get replaced with equivalent text).
-
-Issues found in `.terragrunt-cache` directories are usually not wanted so disabled by default. These directories can be
-scanned by setting the property `output.include_terragrunt_cache: true`.
-
-## Example
-
-Example `.tfcoach.yml` (same options available with the JSON format):
-
-<!-- markdownlint-disable MD013 -->
+Controls the HTTP listener.
 
 ```yaml
-rules: # map to restrict rule configurations
-  core.example_rule: # rule_id of the rule you want to configure
-    enabled: false  # decide to enable or disable the rule (enabled by default)
-    spec: { }  # config specific configuration, see rule documentation
-output:
-  format: pretty  # see "--help" for supported output formats
-  color: true  # enable or disable color; if set to false, equivalent to the "--no-color" flag
-  emojis: true  # enable or disable emojis; if set to false, equivalent to the "--no-emojis" flag
-  include_terragrunt_cache: false  # enable or disable terragrunt-cache scanning; if set to true, equivalent to the "--include-terragrunt-cache" flag
+server:
+  host: localhost   # Hostname used for CORS allowed origins
+  port: 3000        # Port the service listens on
 ```
 
-## Exclude whole files from scanning or reporting
+| Key            | Type   | Default     | Description                        |
+|----------------|--------|-------------|------------------------------------|
+| `server.host`  | string | `localhost` | Allowed CORS origin hostname       |
+| `server.port`  | string | `3000`      | HTTP port to listen on             |
 
-Additionally, it is possible to exclude complete paths from reporting issues.
+---
 
-This can be configured via the `.tfcoachignore` file. It uses the `.gitignore` convention (see
-[Git docs](https://git-scm.com/docs/gitignore)) for listing files and directories to ignore.
+## LDAP
+
+!!! warning
+    Always set `ignoreTLS: false` in production and supply a valid `tlsCert` or use a trusted CA.
+
+Configures the connection to your directory server.
+
+```yaml
+ldap:
+  host: localhost:1389
+  userDn: cn=admin,dc=example,dc=org
+  password: password
+  baseDn: ou=users,dc=example,dc=org
+  searchFilter: "(objectClass=*)"
+  ignoreTLS: true
+  tlsCert: ""
+```
+
+| Key                   | Type    | Default                        | Description                                              |
+|-----------------------|---------|--------------------------------|----------------------------------------------------------|
+| `ldap.host`           | string  | `localhost:1389`               | LDAP host and port (`host:port`)                         |
+| `ldap.userDn`         | string  | `cn=admin,dc=example,dc=org`   | Bind DN used to search for the user                      |
+| `ldap.password`       | string  | `password`                     | Bind password for the search account                     |
+| `ldap.baseDn`         | string  | `ou=users,dc=example,dc=org`   | Search base for user lookups                             |
+| `ldap.searchFilter`   | string  | `(objectClass=*)`              | Additional LDAP filter applied during user search        |
+| `ldap.ignoreTLS`      | bool    | `true`                         | Disable TLS (only for local dev — never in production!)  |
+| `ldap.tlsCert`        | string  | `""`                           | Path to a custom CA certificate for TLS verification     |
+
+---
+
+## Validation
+
+Controls the client- and server-side input validation rules.
+
+```yaml
+validation:
+  username: ^[a-zA-Z0-9]+$
+  password: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$
+```
+
+| Key                    | Type   | Description                                    |
+|------------------------|--------|------------------------------------------------|
+| `validation.username`  | string | Regex pattern the username must fully match    |
+| `validation.password`  | string | Regex pattern the new password must fully match|
+
+---
+
+## Log
+
+Controls the log level.
+
+```yaml
+log:
+  level: info
+```
+
+| Key         | Type   | Default | Values                            |
+|-------------|--------|---------|-----------------------------------|
+| `log.level` | string | `info`  | `debug`, `info`, `warn`, `error`  |
+
+All logs are emitted as **structured JSON** to stdout with source file and request ID (`req_id`) fields attached.
+
+---
+
+## UI
+
+Controls visual customisation. All values are optional — defaults fall back to the bundled assets.
+
+```yaml
+ui:
+  backgroundImage: ""
+  customCss: ""
+  favicon: ""
+  icon: ""
+```
+
+| Key                    | Type   | Description                                                  |
+|------------------------|--------|--------------------------------------------------------------|
+| `ui.backgroundImage`   | string | URL or filename of a background image                        |
+| `ui.customCss`         | string | URL or filename of an additional CSS stylesheet              |
+| `ui.favicon`           | string | URL or filename to replace the browser favicon               |
+| `ui.icon`              | string | URL or filename to replace the logo shown above the form     |
+
+See [Customisation](../customisation.md) for more detail.

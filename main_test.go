@@ -17,6 +17,13 @@ type mockConn struct{}
 
 func (m *mockConn) Bind(username, password string) error { return nil }
 func (m *mockConn) Close() error                         { return nil }
+func (m *mockConn) Search(_ *goldap.SearchRequest) (*goldap.SearchResult, error) {
+	return &goldap.SearchResult{
+		Entries: []*goldap.Entry{
+			{DN: "cn=test,ou=users,dc=example,dc=org"},
+		},
+	}, nil
+}
 func (m *mockConn) PasswordModify(req *goldap.PasswordModifyRequest) (*goldap.PasswordModifyResult, error) {
 	return nil, nil
 }

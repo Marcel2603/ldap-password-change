@@ -33,6 +33,8 @@ func (m *mockLdapService) ChangePassword(username string, currentPassword string
 	return m.returnsError
 }
 
+func (*mockLdapService) Ping() error { return nil }
+
 func TestHandler(t *testing.T) {
 	tests := []struct {
 		name               string

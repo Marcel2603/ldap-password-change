@@ -1,31 +1,69 @@
 # LDAP Password Change
 
-## Execute
+A lightweight, self-hosted web service that allows users to change their LDAP password
+through a secure, modern browser interface — no admin intervention required.
 
-Assuming a reachable LDAP server at the URL in `app.default.yml` (see `local-dev` for a local setup):
+[![Test & Lint](https://github.com/Marcel2603/ldap-password-change/actions/workflows/go-test.yml/badge.svg)](https://github.com/Marcel2603/ldap-password-change/actions/workflows/go-test.yml)
 
-```shell
-go mod tidy
+## Features
 
-make generate  # you need to do this only once or when the framework versions change
-make run
-
-# open localhost:4000
-```
+- Self-service password change via Material Design V3 web UI
+- Dark / Light / System theme switching
+- Fully configurable via YAML or environment variables
+- Custom branding: background image, favicon, logo, CSS
+- Structured JSON logging with request IDs
 
 ## Docker
 
-```shell
-docker build . -t ldap-password-change
-docker run -p 3333:3333 -e HOST=localhost ldap-password-change
+```bash
+docker pull ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
+
+docker run \
+  -p 3000:3000 \
+  -v $PWD/app.yml:/app/app.yml \
+  ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 ```
 
-## Contribute
+## Configuration
 
-Add the pre-commit hook:
+Copy and edit `app.default.yml`:
 
-```shell
-cp .pre-commit-hook .git/hooks/pre-commit
+```yaml
+ldap:
+  host: ldap.mycompany.com:636
+  userDn: cn=svc-ldap,dc=mycompany,dc=com
+  password: s3cr3t
+  baseDn: ou=employees,dc=mycompany,dc=com
+  ignoreTLS: false
 ```
 
-See Makefile for development commands.
+> **Tip:** Avoid storing the bind password in `app.yml`. Use the `LDAP_PASSWORD` environment variable instead:
+>
+> ```bash
+> docker run -e LDAP_PASSWORD=s3cr3t ...
+> ```
+
+Full reference → [docs/Configuration](https://marcel2603.github.io/ldap-password-change/getting-started/configuration/)
+
+## Contributing
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and the [docs](https://marcel2603.github.io/ldap-password-change/development/).
+
+```bash
+# Install pre-commit hooks
+make init-precommit
+
+# Run tests
+make test
+
+# Run linter
+make lint
+```
+
+## Documentation
+
+Full documentation is available at: <https://marcel2603.github.io/ldap-password-change/>
+
+## Acknowledgements
+
+Project default images are generated using Gemini 3 Pro.

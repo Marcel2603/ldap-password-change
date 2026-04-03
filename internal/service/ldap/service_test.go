@@ -12,159 +12,169 @@ import (
 	ldapext "github.com/go-ldap/ldap/v3"
 )
 
-type changePasswordArgs struct {
-	username        string
-	currentPassword string
-	newPassword     string
-}
+type mockConn struct{}
 
-type changePasswordTestCase struct {
-	name              string
-	config            config.LdapConfig
-	ldapWrapperMock   ldap.Wrapper
-	args              changePasswordArgs
-	wantErrOnCreation bool
-	wantErrOnAction   bool
-}
-
-type mockConn struct {
-}
-
-func (*mockConn) Bind(_, _ string) error {
-	return nil
-}
-func (*mockConn) Close() error {
-	return nil
+func (*mockConn) Bind(_, _ string) error { return nil }
+func (*mockConn) Close() error           { return nil }
+func (*mockConn) Search(_ *ldapext.SearchRequest) (*ldapext.SearchResult, error) {
+	return &ldapext.SearchResult{
+		Entries: []*ldapext.Entry{
+			{DN: "cn=tester,ou=users,dc=example,dc=org"},
+		},
+	}, nil
 }
 func (*mockConn) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 	return &ldapext.PasswordModifyResult{}, nil
 }
 
-type mockConnErrorOnPwModify struct {
-	mockConn
+type mockConnNoUser struct{ mockConn }
+
+func (*mockConnNoUser) Search(_ *ldapext.SearchRequest) (*ldapext.SearchResult, error) {
+	return &ldapext.SearchResult{Entries: []*ldapext.Entry{}}, nil
 }
+
+type mockConnErrorOnPwModify struct{ mockConn }
 
 func (*mockConnErrorOnPwModify) PasswordModify(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 	return nil, errors.New("test error on PasswordModify")
 }
 
-type mockLdapWrapperDefault struct {
-}
+type mockConnErrorOnBind struct{ mockConn }
+
+func (*mockConnErrorOnBind) Bind(_, _ string) error { return errors.New("test error on Bind") }
+
+type mockLdapWrapperDefault struct{}
 
 func (*mockLdapWrapperDefault) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return &mockConn{}, nil
 }
 func (*mockLdapWrapperDefault) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
-	return func(dc *ldapext.DialContext) {}
+	return func(_ *ldapext.DialContext) {}
 }
 
-type mockLdapWrapperErrorOnPwModify struct {
-	mockLdapWrapperDefault
+type mockLdapWrapperNoUser struct{ mockLdapWrapperDefault }
+
+func (*mockLdapWrapperNoUser) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+	return &mockConnNoUser{}, nil
 }
+
+type mockLdapWrapperErrorOnPwModify struct{ mockLdapWrapperDefault }
 
 func (*mockLdapWrapperErrorOnPwModify) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return &mockConnErrorOnPwModify{}, nil
 }
 
-type mockLdapWrapperErrorOnCreate struct {
-	mockLdapWrapperDefault
-}
+type mockLdapWrapperErrorOnCreate struct{ mockLdapWrapperDefault }
 
 func (*mockLdapWrapperErrorOnCreate) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return nil, errors.New("test error on DialURL")
 }
 
-type mockConnErrorOnBind struct {
-	mockConn
-}
-
-func (*mockConnErrorOnBind) Bind(_, _ string) error {
-	return errors.New("test error on Bind")
-}
-
-type mockLdapWrapperErrorOnBind struct {
-	mockLdapWrapperDefault
-}
+type mockLdapWrapperErrorOnBind struct{ mockLdapWrapperDefault }
 
 func (*mockLdapWrapperErrorOnBind) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 	return &mockConnErrorOnBind{}, nil
 }
 
-var (
-	defaultConfig = &config.LdapConfig{
-		BaseDn:    "ou=users,dc=example,dc=org",
-		UserDn:    "cn=admin,dc=example,dc=org",
-		Password:  "123456",
-		Host:      "unit.test:1389",
-		IgnoreTLS: true,
-	}
-)
+var defaultConfig = &config.LdapConfig{
+	BaseDn:       "ou=users,dc=example,dc=org",
+	UserDn:       "cn=admin,dc=example,dc=org",
+	Password:     "123456",
+	Host:         "unit.test:1389",
+	IgnoreTLS:    true,
+	SearchFilter: "(objectClass=*)",
+}
 
 func Test_serviceImpl_ChangePassword(t *testing.T) {
-	tests := []changePasswordTestCase{
+	tests := []struct {
+		name            string
+		config          config.LdapConfig
+		ldapWrapperMock ldap.Wrapper
+		username        string
+		currentPassword string
+		newPassword     string
+		wantErr         bool
+	}{
 		{
-			name:            "change password should succeed",
+			name:            "success",
 			config:          *defaultConfig,
 			ldapWrapperMock: &mockLdapWrapperDefault{},
-			args: changePasswordArgs{
-				username:        "tester",
-				currentPassword: "123456",
-				newPassword:     "Test1234",
-			},
-			wantErrOnCreation: false,
-			wantErrOnAction:   false,
+			username:        "tester",
+			currentPassword: "123456",
+			newPassword:     "Test1234",
+			wantErr:         false,
 		},
 		{
-			name:            "change password should fail when pw modify fails",
+			name:            "user not found",
 			config:          *defaultConfig,
-			ldapWrapperMock: &mockLdapWrapperErrorOnPwModify{},
-			args: changePasswordArgs{
-				username:        "tester",
-				currentPassword: "123456",
-				newPassword:     "Test1234",
-			},
-			wantErrOnCreation: false,
-			wantErrOnAction:   true,
+			ldapWrapperMock: &mockLdapWrapperNoUser{},
+			username:        "ghost",
+			currentPassword: "123456",
+			newPassword:     "Test1234",
+			wantErr:         true,
 		},
 		{
-			name:            "change password should fail when client connection fails",
+			name:            "dial fails",
 			config:          *defaultConfig,
 			ldapWrapperMock: &mockLdapWrapperErrorOnCreate{},
-			args: changePasswordArgs{
-				username:        "tester",
-				currentPassword: "123456",
-				newPassword:     "Test1234",
-			},
-			wantErrOnCreation: true,
-			wantErrOnAction:   false,
+			username:        "tester",
+			currentPassword: "123456",
+			newPassword:     "Test1234",
+			wantErr:         true,
 		},
 		{
-			name:            "change password should fail when bind fails",
+			name:            "bind fails (wrong credentials)",
 			config:          *defaultConfig,
 			ldapWrapperMock: &mockLdapWrapperErrorOnBind{},
-			args: changePasswordArgs{
-				username:        "tester",
-				currentPassword: "123456",
-				newPassword:     "Test1234",
-			},
-			wantErrOnCreation: true,
-			wantErrOnAction:   false,
+			username:        "tester",
+			currentPassword: "wrong",
+			newPassword:     "Test1234",
+			wantErr:         true,
+		},
+		{
+			name:            "password modify fails",
+			config:          *defaultConfig,
+			ldapWrapperMock: &mockLdapWrapperErrorOnPwModify{},
+			username:        "tester",
+			currentPassword: "123456",
+			newPassword:     "Test1234",
+			wantErr:         true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
-			s, errCreation := ldap.CreateService(tt.config, tt.ldapWrapperMock, mockLogger)
-			if errCreation != nil {
-				if !tt.wantErrOnCreation {
-					t.Errorf("CreateService() error = %v, wantErrOnCreation %v", errCreation, tt.wantErrOnCreation)
-				}
-			} else {
-				if errAction := s.ChangePassword(tt.args.username, tt.args.currentPassword, tt.args.newPassword); (errAction != nil) != tt.wantErrOnAction {
-					t.Errorf("ChangePassword() error = %v, wantErrOnAction %v", errAction, tt.wantErrOnAction)
-				}
+			svc := ldap.CreateService(tt.config, tt.ldapWrapperMock, mockLogger)
+			err := svc.ChangePassword(tt.username, tt.currentPassword, tt.newPassword)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ChangePassword() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
+}
+
+func Test_serviceImpl_Ping(t *testing.T) {
+	mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
+
+	t.Run("ping succeeds", func(t *testing.T) {
+		svc := ldap.CreateService(*defaultConfig, &mockLdapWrapperDefault{}, mockLogger)
+		if err := svc.Ping(); err != nil {
+			t.Errorf("expected no error, got %v", err)
+		}
+	})
+
+	t.Run("ping fails when dial fails", func(t *testing.T) {
+		svc := ldap.CreateService(*defaultConfig, &mockLdapWrapperErrorOnCreate{}, mockLogger)
+		if err := svc.Ping(); err == nil {
+			t.Error("expected error, got nil")
+		}
+	})
+
+	t.Run("ping fails when bind fails", func(t *testing.T) {
+		svc := ldap.CreateService(*defaultConfig, &mockLdapWrapperErrorOnBind{}, mockLogger)
+		if err := svc.Ping(); err == nil {
+			t.Error("expected error, got nil")
+		}
+	})
 }

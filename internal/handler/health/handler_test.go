@@ -2,32 +2,68 @@ package health
 
 import (
 	"encoding/json"
+	"errors"
+	"ldap-password-change/internal/service/ldap"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
-func TestHandler(t *testing.T) {
-	req, err := http.NewRequest("GET", "/health", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
+type mockServiceOK struct{}
 
+func (*mockServiceOK) ChangePassword(_, _, _ string) error { return nil }
+func (*mockServiceOK) Ping() error                         { return nil }
+
+type mockServiceDown struct{}
+
+func (*mockServiceDown) ChangePassword(_, _, _ string) error { return nil }
+func (*mockServiceDown) Ping() error                         { return errors.New("connection refused") }
+
+func TestLivenessHandler(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/health/live", nil)
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(Handler)
-	handler.ServeHTTP(rr, req)
+	http.HandlerFunc(LivenessHandler).ServeHTTP(rr, req)
 
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	if rr.Code != http.StatusOK {
+		t.Errorf("expected 200, got %d", rr.Code)
 	}
 
 	var resp Response
-	err = json.Unmarshal(rr.Body.Bytes(), &resp)
-	if err != nil {
-		t.Fatalf("failed to unmarshal JSON: %v", err)
+	if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+		t.Fatalf("failed to unmarshal: %v", err)
+	}
+	if resp.Status != "ok" {
+		t.Errorf("expected status 'ok', got %q", resp.Status)
+	}
+}
+
+func TestReadinessHandler(t *testing.T) {
+	tests := []struct {
+		name           string
+		svc            ldap.Service
+		expectedStatus int
+		expectedBody   string
+	}{
+		{"ldap reachable", &mockServiceOK{}, http.StatusOK, "ok"},
+		{"ldap unreachable", &mockServiceDown{}, http.StatusServiceUnavailable, "unavailable"},
 	}
 
-	if resp.Status != "ok" {
-		t.Errorf("handler returned unexpected body: got %v want %v", resp.Status, "ok")
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			req, _ := http.NewRequest("GET", "/health/ready", nil)
+			rr := httptest.NewRecorder()
+			ReadinessHandler(tc.svc).ServeHTTP(rr, req)
+
+			if rr.Code != tc.expectedStatus {
+				t.Errorf("expected %d, got %d", tc.expectedStatus, rr.Code)
+			}
+			var resp Response
+			if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+				t.Fatalf("failed to unmarshal: %v", err)
+			}
+			if resp.Status != tc.expectedBody {
+				t.Errorf("expected status %q, got %q", tc.expectedBody, resp.Status)
+			}
+		})
 	}
 }
