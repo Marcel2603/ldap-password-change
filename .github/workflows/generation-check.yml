@@ -1,4 +1,4 @@
-name: Validate Doc Generation
+name: Validate Generation
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ jobs:
         with:
           go-version: '1.26.x'
 
-      - name: Validate CLI docs
+      - name: Validate Generation
         run: |
-          make generate-documentation
-          git diff --exit-code -- **/*.md || echo "Generate Documentation locally using 'make generate-documentation'"
+          make generate
+          git diff --exit-code -- **/*.md || echo "Generate Documentation locally using 'make generate'"

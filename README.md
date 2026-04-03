@@ -4,6 +4,9 @@ A lightweight, self-hosted web service that allows users to change their LDAP pa
 through a secure, modern browser interface — no admin intervention required.
 
 [![Test & Lint](https://github.com/Marcel2603/ldap-password-change/actions/workflows/go-test.yml/badge.svg)](https://github.com/Marcel2603/ldap-password-change/actions/workflows/go-test.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Marcel2603/ldap-password-change)](https://goreportcard.com/report/github.com/Marcel2603/ldap-password-change)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/Marcel2603/ldap-password-change)](https://github.com/Marcel2603/ldap-password-change/releases/latest)
 
 ## Features
 

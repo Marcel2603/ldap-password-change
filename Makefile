@@ -12,9 +12,18 @@ lint: format
 init-precommit:
 	@pre-commit install
 
-test: generate-dynamic
-	@go clean -testcache
-	@go test ./...
+
+test:
+	go test $(GOFLAGS) $(PKGS) -cover
+
+cover:
+	go test $(GOFLAGS) $(PKGS)
+	@echo
+	@go tool cover -func=$(COVERFILE) | tail -n1
+
+cover-html: cover
+	go tool cover -html=$(COVERFILE) -o $(HTMLFILE)
+	@echo "Wrote $(HTMLFILE)"
 
 build: generate-static generate-dynamic
 	@go build -v -o bin .
