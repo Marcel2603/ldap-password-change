@@ -2,7 +2,7 @@ ARG TARGETPLATFORM
 
 FROM scratch
 ARG TARGETPLATFORM
-ENTRYPOINT ["/usr/bin/ldap-password-change"]
+WORKDIR /opt/ldap-password-change
+ENTRYPOINT ["/opt/ldap-password-change/service"]
 EXPOSE 8080
-COPY static /usr/bin/static
-COPY $TARGETPLATFORM/ldap-password-change /usr/bin/
+COPY ldap-password-change /opt/ldap-password-change/service

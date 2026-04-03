@@ -9,3 +9,5 @@ bin
 coverage*.out
 
 app.yml
+custom
+ldap-password-change

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"ldap-password-change/cmd/config"
 	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/health"
@@ -21,6 +22,9 @@ import (
 
 //go:generate go tool github.com/a-h/templ/cmd/templ generate
 
+//go:embed static
+var staticFiles embed.FS
+
 func main() {
 	configuration := config.Configuration
 
@@ -35,6 +39,8 @@ func main() {
 	slog.SetDefault(logger)
 
 	logger.Info("Starting server")
+
+	staticfiles.NewHandler(staticFiles)
 
 	r, err := setupApp(configuration, ldap.CreateWrapper(), logger)
 	if err != nil {

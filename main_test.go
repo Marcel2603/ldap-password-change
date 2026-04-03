@@ -8,9 +8,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	goldap "github.com/go-ldap/ldap/v3"
 	"ldap-password-change/cmd/config"
+	staticfiles "ldap-password-change/internal/handler/static-files"
 	"ldap-password-change/internal/service/ldap"
+
+	goldap "github.com/go-ldap/ldap/v3"
 )
 
 type mockConn struct{}
@@ -46,6 +48,9 @@ func TestServerStarts(t *testing.T) {
 	}
 
 	mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
+
+	staticfiles.NewHandler(staticFiles)
+
 	app, err := setupApp(c, &mockWrapper{}, mockLogger)
 	if err != nil {
 		t.Fatalf("Failed to setup app: %v", err)

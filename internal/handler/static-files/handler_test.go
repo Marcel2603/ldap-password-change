@@ -6,19 +6,17 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"testing/fstest"
 )
 
+func init() {
+	NewHandler(fstest.MapFS{
+		"static/test.txt": &fstest.MapFile{Data: []byte("embedded content")},
+	})
+}
+
 func TestHandler(t *testing.T) {
-	tmpDir := t.TempDir()
-	_ = os.Chdir(tmpDir)
-
-	_ = os.MkdirAll("static", 0755)
-	_ = os.WriteFile(filepath.Join("static", "test.txt"), []byte("test content"), 0644)
-
-	_ = os.MkdirAll("custom", 0755)
-	_ = os.WriteFile(filepath.Join("custom", "test.txt"), []byte("custom content"), 0644)
-
-	t.Run("File exists no encoding", func(t *testing.T) {
+	t.Run("Embedded static file — no encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
 		rr := httptest.NewRecorder()
 		Handler(rr, req)
@@ -26,22 +24,12 @@ func TestHandler(t *testing.T) {
 		if rr.Code != http.StatusOK {
 			t.Errorf("Expected 200, got %v", rr.Code)
 		}
-	})
-
-	t.Run("File exists in custom folder", func(t *testing.T) {
-		req := httptest.NewRequest("GET", "/custom/test.txt", nil)
-		rr := httptest.NewRecorder()
-		Handler(rr, req)
-
-		if rr.Code != http.StatusOK {
-			t.Errorf("Expected 200, got %v", rr.Code)
-		}
-		if rr.Body.String() != "custom content" {
-			t.Errorf("Expected 'custom content', got %v", rr.Body.String())
+		if rr.Body.String() != "embedded content" {
+			t.Errorf("Expected 'embedded content', got %q", rr.Body.String())
 		}
 	})
 
-	t.Run("File exists br encoding", func(t *testing.T) {
+	t.Run("Embedded static file — br encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
 		req.Header.Add("Accept-Encoding", "br")
 		rr := httptest.NewRecorder()
@@ -55,7 +43,7 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("File exists gzip encoding", func(t *testing.T) {
+	t.Run("Embedded static file — gzip encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
 		req.Header.Add("Accept-Encoding", "gzip")
 		rr := httptest.NewRecorder()
@@ -69,8 +57,8 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("Directory", func(t *testing.T) {
-		req := httptest.NewRequest("GET", "/static", nil)
+	t.Run("Embedded static file — not found", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/static/nonexistent.xyz", nil)
 		rr := httptest.NewRecorder()
 		Handler(rr, req)
 
@@ -79,8 +67,36 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("Not found", func(t *testing.T) {
-		req := httptest.NewRequest("GET", "/static/notfound.txt", nil)
+	t.Run("Custom file from filesystem", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		_ = os.Chdir(tmpDir)
+		_ = os.MkdirAll("custom", 0755)
+		_ = os.WriteFile(filepath.Join("custom", "test.txt"), []byte("custom content"), 0644)
+
+		req := httptest.NewRequest("GET", "/custom/test.txt", nil)
+		rr := httptest.NewRecorder()
+		Handler(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Errorf("Expected 200, got %v", rr.Code)
+		}
+		if rr.Body.String() != "custom content" {
+			t.Errorf("Expected 'custom content', got %v", rr.Body.String())
+		}
+	})
+
+	t.Run("Custom file — not found", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/custom/nonexistent.txt", nil)
+		rr := httptest.NewRecorder()
+		Handler(rr, req)
+
+		if rr.Code != http.StatusNotFound {
+			t.Errorf("Expected 404, got %v", rr.Code)
+		}
+	})
+
+	t.Run("Directory path — not found", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/custom", nil)
 		rr := httptest.NewRecorder()
 		Handler(rr, req)
 

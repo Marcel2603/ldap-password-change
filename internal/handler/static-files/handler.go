@@ -2,46 +2,88 @@ package static
 
 import (
 	"compress/gzip"
-	"github.com/andybalholm/brotli"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
+
+	"github.com/andybalholm/brotli"
 )
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	wd, _ := os.Getwd()
+var staticFS fs.FS
 
-	staticPath := wd + r.URL.Path
-	isDir, err := isDirectory(staticPath)
-	if err != nil || isDir {
-		log.Println(err)
+func NewHandler(root fs.FS) {
+	sub, err := fs.Sub(root, "static")
+	if err != nil {
+		log.Fatalf("static: failed to sub embedded FS: %v", err)
+	}
+	staticFS = sub
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	urlPath := r.URL.Path
+
+	if strings.HasPrefix(urlPath, "/static/") {
+		serveEmbedded(w, r, urlPath)
+		return
+	}
+
+	serveFilesystem(w, r, urlPath)
+}
+
+func serveEmbedded(w http.ResponseWriter, r *http.Request, urlPath string) {
+	name := strings.TrimPrefix(urlPath, "/static/")
+
+	data, err := fs.ReadFile(staticFS, name)
+	if err != nil {
 		http.Error(w, "404 page not found", http.StatusNotFound)
 		return
 	}
+
 	w.Header().Set("cache-control", "public, max-age=36000")
-	writeFile(w, r, staticPath)
+	writeBytes(w, r, data)
 }
 
-func writeFile(w http.ResponseWriter, r *http.Request, path string) {
+func serveFilesystem(w http.ResponseWriter, r *http.Request, urlPath string) {
+	wd, _ := os.Getwd()
+	relPath := strings.TrimPrefix(filepath.Clean(urlPath), "/")
+	fullPath := filepath.Join(wd, relPath)
+
+	isDir, err := isDirectory(fullPath)
+	if err != nil || isDir {
+		log.Printf("stat %s: no such file or directory\n", fullPath)
+		http.Error(w, "404 page not found", http.StatusNotFound)
+		return
+	}
+
+	data, err := os.ReadFile(fullPath)
+	if err != nil {
+		http.Error(w, "404 page not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("cache-control", "public, max-age=36000")
+	writeBytes(w, r, data)
+}
+
+func writeBytes(w http.ResponseWriter, r *http.Request, data []byte) {
 	encodings := r.Header.Get("accept-encoding")
 	switch {
 	case strings.Contains(encodings, "br"):
 		w.Header().Set("content-encoding", "br")
 		writer := brotli.NewWriter(w)
 		defer writer.Close()
-		file, _ := os.ReadFile(path)
-		_, _ = writer.Write(file)
+		_, _ = writer.Write(data)
 	case strings.Contains(encodings, "gzip"):
 		w.Header().Set("content-encoding", "gzip")
 		writer := gzip.NewWriter(w)
 		defer writer.Close()
-		file, _ := os.ReadFile(path)
-		_, _ = writer.Write(file)
+		_, _ = writer.Write(data)
 		writer.Flush()
 	default:
-		file, _ := os.ReadFile(path)
-		_, _ = w.Write(file)
+		_, _ = w.Write(data)
 	}
 }
 
@@ -50,7 +92,6 @@ func isDirectory(path string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
 	return fileInfo.IsDir(), err
 }
 
