@@ -5,6 +5,14 @@ type Config struct {
 	Validation ValidationConfig `yaml:"validation"`
 	Ldap       LdapConfig       `yaml:"ldap"`
 	Log        LogConfig        `yaml:"log"`
+	UI         UIConfig         `yaml:"ui"`
+}
+
+type UIConfig struct {
+	BackgroundImage string `yaml:"backgroundImage"`
+	CustomCss       string `yaml:"customCss"`
+	Favicon         string `yaml:"favicon"`
+	Icon            string `yaml:"icon"`
 }
 
 type LogConfig struct {

@@ -40,7 +40,11 @@ templ Index(conf config.Config) {
 			<meta name="description" content="LdapPasswordChange - This service changes your password for any ldap"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>Password Change Workspace</title>
-			<link rel="icon" href="./../static/favicon.png" type="image/png"/>
+			if conf.UI.Favicon != "" {
+				<link rel="icon" href={ conf.UI.Favicon }/>
+			} else {
+				<link rel="icon" href="./../static/favicon.png" type="image/png"/>
+			}
 			
 			<!-- Google Fonts: Outfit -->
 			<link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -48,6 +52,9 @@ templ Index(conf config.Config) {
 			<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 			
 			<link href="./../static/bootstrap.min.css" rel="stylesheet"/>
+			if conf.UI.CustomCss != "" {
+				<link href={ conf.UI.CustomCss } rel="stylesheet"/>
+			}
 			<script defer src="./../static/alpine.min.js"></script>
 			<script defer src="./../static/htmx.min.js"></script>
 			<script defer src="./../static/htmx-response-target.js"></script>
@@ -176,6 +183,9 @@ templ Index(conf config.Config) {
 					background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
 				}
 			</style>
+			if conf.UI.BackgroundImage != "" {
+				@templ.Raw("<style>body { background: url('" + conf.UI.BackgroundImage + "') no-repeat center center fixed !important; background-size: cover !important; animation: none !important; }</style>")
+			}
 		</head>
 		<body
 			x-data="{
@@ -221,7 +231,11 @@ templ Index(conf config.Config) {
 
 			<div class="container text-center w-100" x-data="{}" style="max-width: 420px">
 				<div class="mb-4 fade-in-up" style="animation-delay: 0.1s;">
-					<img src="../static/favicon.png" alt="Identifier Header" class="img-fluid mb-2 drop-shadow" style="width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));"/>
+					if conf.UI.Icon != "" {
+						<img src={ conf.UI.Icon } alt="Identifier Header" class="img-fluid mb-2 drop-shadow" style="width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));"/>
+					} else {
+						<img src="../static/favicon.png" alt="Identifier Header" class="img-fluid mb-2 drop-shadow" style="width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));"/>
+					}
 					<h1 class="fw-bold" style="font-size: 2.25rem;">Change Password</h1>
 					<p class="opacity-75">Securely manage your credentials</p>
 				</div>

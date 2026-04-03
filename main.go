@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"github.com/go-chi/cors"
 	"ldap-password-change/cmd/config"
 	changepassword "ldap-password-change/internal/handler/change-password"
 	"ldap-password-change/internal/handler/health"
@@ -14,6 +13,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+
+	"github.com/go-chi/cors"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -58,6 +59,7 @@ func setupApp(configuration config.Config, wrapper ldap.Wrapper, logger *slog.Lo
 
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
+	r.Get("/custom/*", staticfiles.Handler)
 
 	service, errService := ldap.CreateService(configuration.Ldap, wrapper, logger)
 	validator, errValidator := validation.CreateValidator(configuration.Validation)

@@ -15,6 +15,9 @@ func TestHandler(t *testing.T) {
 	_ = os.MkdirAll("static", 0755)
 	_ = os.WriteFile(filepath.Join("static", "test.txt"), []byte("test content"), 0644)
 
+	_ = os.MkdirAll("custom", 0755)
+	_ = os.WriteFile(filepath.Join("custom", "test.txt"), []byte("custom content"), 0644)
+
 	t.Run("File exists no encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
 		rr := httptest.NewRecorder()
@@ -22,6 +25,19 @@ func TestHandler(t *testing.T) {
 
 		if rr.Code != http.StatusOK {
 			t.Errorf("Expected 200, got %v", rr.Code)
+		}
+	})
+
+	t.Run("File exists in custom folder", func(t *testing.T) {
+		req := httptest.NewRequest("GET", "/custom/test.txt", nil)
+		rr := httptest.NewRecorder()
+		Handler(rr, req)
+
+		if rr.Code != http.StatusOK {
+			t.Errorf("Expected 200, got %v", rr.Code)
+		}
+		if rr.Body.String() != "custom content" {
+			t.Errorf("Expected 'custom content', got %v", rr.Body.String())
 		}
 	})
 

@@ -54,3 +54,35 @@ server:
 		t.Errorf("Expected port 8080, got %v", Configuration.Server.Port)
 	}
 }
+
+func TestFormatUIConfig(t *testing.T) {
+	c := Config{
+		UI: UIConfig{
+			BackgroundImage: "bg.jpg",
+			CustomCss:       "custom/mycss.css",
+			Favicon:         "/custom/favicon.ico",
+			Icon:            "https://example.com/logo.png",
+		},
+	}
+
+	formatUIConfig(&c)
+
+	if c.UI.BackgroundImage != "/custom/bg.jpg" {
+		t.Errorf("Expected /custom/bg.jpg, got %v", c.UI.BackgroundImage)
+	}
+	if c.UI.CustomCss != "/custom/mycss.css" {
+		t.Errorf("Expected /custom/mycss.css, got %v", c.UI.CustomCss)
+	}
+	if c.UI.Favicon != "/custom/favicon.ico" {
+		t.Errorf("Expected /custom/favicon.ico, got %v", c.UI.Favicon)
+	}
+	if c.UI.Icon != "https://example.com/logo.png" {
+		t.Errorf("Expected https://example.com/logo.png, got %v", c.UI.Icon)
+	}
+
+	cEmpty := Config{}
+	formatUIConfig(&cEmpty)
+	if cEmpty.UI.BackgroundImage != "" {
+		t.Errorf("Expected empty string, got %v", cEmpty.UI.BackgroundImage)
+	}
+}

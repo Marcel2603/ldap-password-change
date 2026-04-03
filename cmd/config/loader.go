@@ -6,6 +6,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+	"strings"
 )
 
 var Configuration Config
@@ -35,7 +36,25 @@ func loadConfig() {
 	loadConfigFromEnv(&envData)
 
 	_ = mergo.Merge(&defaultData, envData, mergo.WithOverride)
+	formatUIConfig(&defaultData)
 	Configuration = defaultData
+}
+
+func formatUIConfig(c *Config) {
+	prefix := func(path string) string {
+		if path == "" || strings.HasPrefix(path, "http://") || strings.HasPrefix(path, "https://") || strings.HasPrefix(path, "/") {
+			return path
+		}
+		if strings.HasPrefix(path, "custom/") {
+			return "/" + path
+		}
+		return "/custom/" + path
+	}
+
+	c.UI.BackgroundImage = prefix(c.UI.BackgroundImage)
+	c.UI.CustomCss = prefix(c.UI.CustomCss)
+	c.UI.Favicon = prefix(c.UI.Favicon)
+	c.UI.Icon = prefix(c.UI.Icon)
 }
 
 func loadConfigFromEnv(mapData *Config) {
