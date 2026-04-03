@@ -1,6 +1,6 @@
 server:
   host: localhost
-  port: 3000
+  port: 8080
 validation:
   username: ^[a-zA-Z0-9]+$
   password: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$

@@ -25,9 +25,6 @@ builds:
     goarch:
       - amd64
       - arm64
-    ldflags:
-      - -s -w -X github.com/Marcel2603/ldap-password-change/cmd.BuildVersion=v{{.Version}}
-      - -s -w -X github.com/Marcel2603/ldap-password-change/cmd.BuildCommit={{.Commit}}
 
 archives:
   - id: homebrew-tar
