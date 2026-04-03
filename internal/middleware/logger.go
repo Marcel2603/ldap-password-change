@@ -31,7 +31,7 @@ func SlogLogger(logger *slog.Logger) func(next http.Handler) http.Handler {
 					slog.Int("size", ww.BytesWritten()),
 					slog.Duration("duration", time.Since(t1)),
 				)
-				if ww.Status() >= 500 {
+				if ww.Status() >= 400 {
 					l.Error("Request completed")
 				} else {
 					l.Info("Request completed")

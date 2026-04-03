@@ -83,7 +83,7 @@ func TestIndex(t *testing.T) {
 		t.Fatalf("failed to parse html: %v", err)
 	}
 
-	if doc.Find("title").Text() != "LdapPasswordChange" {
+	if doc.Find("title").Text() != "Password Change Workspace" {
 		t.Errorf("expected title not found")
 	}
 

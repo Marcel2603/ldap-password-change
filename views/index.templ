@@ -3,21 +3,28 @@ package views
 import "ldap-password-change/cmd/config"
 
 templ SuccessfulPasswordChange() {
-	<div class="card bg-dark text-light shadow-lg mx-auto" style="max-width: 400px;">
+	<div class="card glass-card text-center mx-auto fade-in-up" style="max-width: 400px; padding: 2rem;">
 		<div class="card-body">
-			<p class="lead">Your password has been successfully updated.</p>
-			<p>You can now use your new password to log in.</p>
-			<div class="d-flex justify-content-around mt-4">
-				<a data-testid="back-btn" href="/" class="btn btn-success">Go back</a>
+			<div class="mb-4">
+				<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-check-circle text-success" viewBox="0 0 16 16">
+					<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+					<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+				</svg>
+			</div>
+			<h3 class="fw-bold mb-3">Success!</h3>
+			<p class="lead" style="font-size: 1.1rem;">Your password has been successfully updated.</p>
+			<p class="text-muted mb-4">You can now use your new password to log in securely.</p>
+			<div class="d-grid mt-4">
+				<a data-testid="back-btn" href="/" class="btn btn-success btn-lg rounded-pill fw-bold hover-scale">Return to Home</a>
 			</div>
 		</div>
 	</div>
 }
 
 templ ErrorToastie(msg string) {
-	<div class="toast fade show align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-dismiss="toast">
-		<div class="d-flex">
-			<div class="toast-body">
+	<div class="toast fade show align-items-center mb-3 border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" data-bs-dismiss="toast" style="border-radius: 16px; background-color: var(--bs-danger); color: white;">
+		<div class="d-flex p-1">
+			<div class="toast-body fw-medium" style="font-size: 1.05rem;">
 				{ msg }
 			</div>
 			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -32,57 +39,219 @@ templ Index(conf config.Config) {
 			<meta charset="UTF-8"/>
 			<meta name="description" content="LdapPasswordChange - This service changes your password for any ldap"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>LdapPasswordChange</title>
+			<title>Password Change Workspace</title>
 			<link rel="icon" href="./../static/favicon.png" type="image/png"/>
+			
+			<!-- Google Fonts: Outfit -->
+			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+			<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+			
 			<link href="./../static/bootstrap.min.css" rel="stylesheet"/>
 			<script defer src="./../static/alpine.min.js"></script>
 			<script defer src="./../static/htmx.min.js"></script>
 			<script defer src="./../static/htmx-response-target.js"></script>
 			<script src="./../static/bootstrap.bundle.min.js"></script>
+
+			<style>
+				:root {
+					--app-bg: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+					--glass-bg: rgba(255, 255, 255, 0.4);
+					--glass-border: rgba(255, 255, 255, 0.4);
+					--glass-text-color: #212529;
+					--input-bg: rgba(255, 255, 255, 0.8);
+				}
+
+				[data-bs-theme="dark"] {
+					--app-bg: linear-gradient(135deg, #151b29 0%, #301934 100%);
+					--glass-bg: rgba(20, 20, 20, 0.5);
+					--glass-border: rgba(255, 255, 255, 0.08);
+					--glass-text-color: #f8f9fa;
+					--input-bg: rgba(0, 0, 0, 0.6);
+				}
+
+				body {
+					font-family: 'Outfit', sans-serif;
+					background: var(--app-bg);
+					background-size: 200% 200%;
+					animation: bgAnimate 15s ease infinite;
+					min-height: 100vh;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: var(--glass-text-color);
+					transition: background 0.5s ease;
+				}
+
+				@keyframes bgAnimate {
+					0% { background-position: 0% 50%; }
+					50% { background-position: 100% 50%; }
+					100% { background-position: 0% 50%; }
+				}
+
+				.glass-card {
+					background: var(--glass-bg);
+					backdrop-filter: blur(24px);
+					-webkit-backdrop-filter: blur(24px);
+					border: 1px solid var(--glass-border);
+					border-radius: 28px;
+					box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+					color: var(--glass-text-color);
+					padding: 2.5rem 1.5rem;
+					transition: all 0.3s ease;
+				}
+				
+				/* Dark mode overrides for glass card text */
+				[data-bs-theme="dark"] .glass-card {
+					color: var(--glass-text-color) !important;
+				}
+				[data-bs-theme="dark"] .form-floating > label {
+					color: #adb5bd;
+				}
+
+				.form-control {
+					background-color: var(--input-bg);
+					border: none;
+					border-bottom: 2px solid transparent;
+					border-radius: 16px;
+					color: var(--glass-text-color);
+					transition: all 0.2s ease;
+					box-shadow: none !important;
+				}
+
+				.form-control:focus {
+					background-color: var(--input-bg);
+					border-bottom: 2px solid #0d6efd;
+					color: var(--glass-text-color);
+				}
+
+				[data-bs-theme="dark"] .form-control {
+					color: #f8f9fa;
+				}
+
+				.form-floating > .form-control:focus ~ label,
+				.form-floating > .form-control:not(:placeholder-shown) ~ label {
+					color: #0d6efd;
+					transform: scale(0.85) translateY(-0.75rem) translateX(0.15rem);
+				}
+
+				.btn-pill {
+					border-radius: 50px;
+					padding-top: 0.75rem;
+					padding-bottom: 0.75rem;
+					font-weight: 600;
+					letter-spacing: 0.5px;
+					transition: all 0.2s ease-in-out;
+				}
+
+				.hover-scale:hover {
+					transform: translateY(-2px);
+					box-shadow: 0 8px 20px rgba(13,110,253, 0.4);
+				}
+
+				.fade-in-up {
+					animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+					opacity: 0;
+					transform: translateY(20px);
+				}
+
+				@keyframes fadeInUp {
+					to {
+						opacity: 1;
+						transform: translateY(0);
+					}
+				}
+
+				.theme-selector {
+					position: absolute;
+					top: 1.5rem;
+					right: 1.5rem;
+					z-index: 1000;
+				}
+
+				/* Fix form validation icon rendering correctly on rounded borders */
+				.was-validated .form-control:valid, .form-control.is-valid {
+					border-color: #198754;
+					padding-right: calc(1.5em + 0.75rem);
+					background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+				}
+			</style>
 		</head>
 		<body
-			style="background:linear-gradient(135deg, #4facfe, #00f2fe)"
-			class="text-light d-flex align-items-center justify-content-center vh-100"
+			x-data="{
+				theme: localStorage.getItem('theme') || 'system',
+				init() {
+					this.applyTheme();
+					$watch('theme', value => this.applyTheme());
+					window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+						if (this.theme === 'system') this.applyTheme();
+					});
+				},
+				applyTheme() {
+					localStorage.setItem('theme', this.theme);
+					if (this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+						document.documentElement.setAttribute('data-bs-theme', 'dark');
+					} else {
+						document.documentElement.setAttribute('data-bs-theme', 'light');
+					}
+				}
+			}"
 			hx-ext="response-targets"
 		>
-			<div class="position-absolute top-0 end-0">
-				<div class="position-static toast-container">
-					<div id="error" class="m-3"></div>
+			<div class="theme-selector">
+				<div class="dropdown">
+					<button class="btn btn-outline-secondary dropdown-toggle rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: var(--glass-bg); backdrop-filter: blur(10px); border-color: var(--glass-border); color: var(--glass-text-color);">
+						<span x-show="theme === 'system'">💻 System</span>
+						<span x-show="theme === 'light'">☀️ Light</span>
+						<span x-show="theme === 'dark'">🌙 Dark</span>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 16px; background: var(--glass-bg); backdrop-filter: blur(24px);">
+						<li><a class="dropdown-item" href="#" @click.prevent="theme = 'light'">☀️ Light</a></li>
+						<li><a class="dropdown-item" href="#" @click.prevent="theme = 'dark'">🌙 Dark</a></li>
+						<li><a class="dropdown-item" href="#" @click.prevent="theme = 'system'">💻 System</a></li>
+					</ul>
 				</div>
 			</div>
-			<div class="container text-center w-100" x-data="{}" style="max-width: 400px">
-				<div class="mb-4">
-					<img src="../static/favicon.png" alt="LdapPasswordChange Header" class="img-fluid mb-3" style="width: 150px;height: 150px"/>
-					<h1 class="fw-bold">Password Change</h1>
+
+			<div class="position-absolute top-0 start-50 translate-middle-x mt-3 w-100" style="max-width: 400px; z-index: 1050;">
+				<div class="toast-container position-static w-100 px-3">
+					<div id="error"></div>
 				</div>
-				<div class="card bg-dark text-light shadow-lg">
-					<div class="card-body">
+			</div>
+
+			<div class="container text-center w-100" x-data="{}" style="max-width: 420px">
+				<div class="mb-4 fade-in-up" style="animation-delay: 0.1s;">
+					<img src="../static/favicon.png" alt="Identifier Header" class="img-fluid mb-2 drop-shadow" style="width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));"/>
+					<h1 class="fw-bold" style="font-size: 2.25rem;">Change Password</h1>
+					<p class="opacity-75">Securely manage your credentials</p>
+				</div>
+				
+				<div class="card glass-card fade-in-up" style="animation-delay: 0.2s;">
+					<div class="card-body p-0">
 						<form
 							hx-post="/change-password"
 							hx-trigger="change-password"
 							hx-target-error="#error"
-							class="col needs-validation"
+							class="needs-validation text-start"
 							novalidate
 							@submit.prevent="if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('change-password') } $el.classList.add('was-validated')"
 						>
-							<div class="mb-3">
-								<label for="validationCustom01" class="form-label">Username</label>
+							<div class="form-floating mb-3">
 								<input
 									@keyup="if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="text"
 									class="form-control"
 									id="validationCustom01"
 									name="username"
-									value=""
+									placeholder="Username"
 									pattern={ conf.Validation.UsernamePattern }
 									required
 								/>
-								<div class="invalid-feedback">
-									Username does not match our policy.
-								</div>
+								<label for="validationCustom01">Username</label>
+								<div class="invalid-feedback ps-2">Username does not match policy.</div>
 							</div>
-							<div class="mb-3">
-								<label for="validationCustom02" class="form-label">Current Password</label>
+							
+							<div class="form-floating mb-3">
 								<input
 									x-ref="old_password"
 									@keyup="if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
@@ -90,15 +259,14 @@ templ Index(conf config.Config) {
 									name="current-password"
 									class="form-control"
 									id="validationCustom02"
-									value=""
+									placeholder="Current Password"
 									required
 								/>
-								<div class="invalid-feedback">
-									Please provide a password.
-								</div>
+								<label for="validationCustom02">Current Password</label>
+								<div class="invalid-feedback ps-2">Please provide your password.</div>
 							</div>
-							<div class="mb-3">
-								<label for="validationCustom03" class="form-label">New Password</label>
+							
+							<div class="form-floating mb-3">
 								<input
 									x-ref="new_password"
 									@keyup="if ($el.checkValidity() && $refs.old_password.value != $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
@@ -106,30 +274,36 @@ templ Index(conf config.Config) {
 									class="form-control"
 									name="new-password"
 									id="validationCustom03"
-									value=""
+									placeholder="New Password"
 									required
 									pattern={ conf.Validation.PasswordPattern }
 								/>
-								<div class="invalid-feedback">
-									Password does not match our policy.
-								</div>
+								<label for="validationCustom03">New Password</label>
+								<div class="invalid-feedback ps-2">Password does not match system policy.</div>
 							</div>
-							<div class="mb-3">
-								<label for="validationCustom04" class="form-label">Confirm New Password</label>
+							
+							<div class="form-floating mb-4">
 								<input
 									@keyup="if ($el.checkValidity() && $refs.new_password.value == $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }"
 									type="password"
 									class="form-control"
 									name="confirm-password"
 									id="validationCustom04"
-									value=""
+									placeholder="Confirm New Password"
 									required
 								/>
-								<div class="invalid-feedback">
-									Password does not match.
-								</div>
+								<label for="validationCustom04">Confirm New Password</label>
+								<div class="invalid-feedback ps-2">Passwords do not match.</div>
 							</div>
-							<button class="btn btn-primary fw-bold" type="submit">Change</button>
+							
+							<div class="d-grid mt-2">
+								<button class="btn btn-primary btn-pill hover-scale" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-shield-lock-fill me-2 mb-1" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24c.304-.143.662-.352 1.048-.625a11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5"/>
+                                    </svg>
+                                    Change Password
+                                </button>
+							</div>
 						</form>
 					</div>
 				</div>
