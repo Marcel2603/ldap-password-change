@@ -1,0 +1,6 @@
+nav:
+  - Home: index.md
+  - getting-started
+  - development
+  - about
+  - ...
