@@ -1,7 +1,13 @@
+PKGS        := $(shell go list ./...)
 HTMX_VERSION = 2.0.4
 HTMX_RESPONSE_TARGET_VERSION = 2.0.3
 BOOTSTRAP_VERSION = 5.3.3
 ALPINE_JS_VERSION = 3.14.9
+
+COVERMODE   := atomic
+COVERFILE   := coverage.out
+HTMLFILE    := coverage.html
+GOFLAGS     := -race -shuffle=on -tags=test -covermode=$(COVERMODE) -coverprofile=$(COVERFILE)
 
 format:
 	@gofmt -l -s -w .

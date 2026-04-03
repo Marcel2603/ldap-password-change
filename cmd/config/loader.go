@@ -1,15 +1,21 @@
 package config
 
 import (
-	"dario.cat/mergo"
-	"github.com/kelseyhightower/envconfig"
-	"gopkg.in/yaml.v3"
+	_ "embed"
 	"log"
 	"os"
 	"strings"
+
+	"dario.cat/mergo"
+	"github.com/kelseyhightower/envconfig"
+	"gopkg.in/yaml.v3"
 )
 
-var Configuration Config
+var (
+	//go:embed app.default.yml
+	yamlDefaultData []byte
+	Configuration   Config
+)
 
 func init() {
 	loadConfig()
@@ -17,13 +23,7 @@ func init() {
 
 func loadConfig() {
 	var defaultData Config
-	yamlDefaultData, err := os.ReadFile("app.default.yml")
-
-	if err != nil {
-		log.Println("Error while reading app config file", err)
-	} else {
-		loadConfigFromYaml(yamlDefaultData, &defaultData)
-	}
+	loadConfigFromYaml(yamlDefaultData, &defaultData)
 
 	var appData Config
 	appConfig, err := os.ReadFile("app.yml")

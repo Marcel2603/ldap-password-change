@@ -29,7 +29,7 @@ docker run \
 
 ## Configuration
 
-Copy and edit `app.default.yml`:
+Copy and edit `cmd/config/app.default.yml`:
 
 ```yaml
 ldap:
