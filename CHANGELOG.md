@@ -13,6 +13,7 @@
 - Form on submit - ([cc47da9](https://github.com/Marcel2603/ldap-password-change/commit/cc47da9b7ab17137af725f792aa7f61bc56ea9ab))  by @Marcel2603
 ## New Contributors ❤️
 
+* @semantic-release-bot made their first contribution
 * @renovate[bot] made their first contribution
 * @Erkenbend made their first contribution in [#17](https://github.com/Marcel2603/ldap-password-change/pull/17)
 * @dependabot[bot] made their first contribution
