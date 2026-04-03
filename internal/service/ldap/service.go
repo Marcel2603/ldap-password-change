@@ -2,10 +2,13 @@ package ldap
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
-	"github.com/go-ldap/ldap/v3"
 	"ldap-password-change/cmd/config"
 	"log"
+	"os"
+
+	"github.com/go-ldap/ldap/v3"
 )
 
 type Service interface {
@@ -22,12 +25,14 @@ type serviceImpl struct {
 	baseDn      string
 	userDn      string
 	password    string
-	domain      string
+	host        string
+	ignoreTLS   bool
+	tlsCert     string
 	ldapWrapper Wrapper
 }
 
 func CreateService(c config.LdapConfig, wrapper Wrapper) (Service, error) {
-	testClient, err := createClient(wrapper, c.UserDn, c.Password, c.Domain)
+	testClient, err := createClient(wrapper, c.UserDn, c.Password, c.Host, c.IgnoreTLS, c.TlsCert)
 	if err != nil {
 		return nil, err
 	}
@@ -36,13 +41,15 @@ func CreateService(c config.LdapConfig, wrapper Wrapper) (Service, error) {
 		baseDn:      c.BaseDn,
 		userDn:      c.UserDn,
 		password:    c.Password,
-		domain:      c.Domain,
+		host:        c.Host,
+		ignoreTLS:   c.IgnoreTLS,
+		tlsCert:     c.TlsCert,
 		ldapWrapper: wrapper,
 	}, nil
 }
 
 func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
-	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.domain)
+	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert)
 	if err != nil {
 		return err
 	}
@@ -56,8 +63,28 @@ func (s *serviceImpl) ChangePassword(username string, currentPassword string, ne
 	return nil
 }
 
-func createClient(wrapper Wrapper, username string, password string, domain string) (Conn, error) {
-	conn, err := wrapper.DialURL(domain, wrapper.DialWithTLSConfig(&tls.Config{InsecureSkipVerify: true}))
+func createClient(wrapper Wrapper, username string, password string, host string, ignoreTLS bool, tlsCert string) (Conn, error) {
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: ignoreTLS,
+	}
+
+	if tlsCert != "" {
+		cert, err := os.ReadFile(tlsCert)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read tls cert: %w", err)
+		}
+		caCertPool := x509.NewCertPool()
+		caCertPool.AppendCertsFromPEM(cert)
+		tlsConfig.RootCAs = caCertPool
+	}
+	var connectionURL string
+	if ignoreTLS {
+		connectionURL = fmt.Sprintf("ldap://%s", host)
+	} else {
+		connectionURL = fmt.Sprintf("ldaps://%s", host)
+	}
+
+	conn, err := wrapper.DialURL(connectionURL, wrapper.DialWithTLSConfig(tlsConfig))
 	if err != nil {
 		return nil, err
 	}

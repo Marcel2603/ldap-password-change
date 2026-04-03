@@ -3,10 +3,11 @@ package ldap_test
 import (
 	"crypto/tls"
 	"errors"
-	ldapext "github.com/go-ldap/ldap/v3"
 	"ldap-password-change/cmd/config"
 	"ldap-password-change/internal/service/ldap"
 	"testing"
+
+	ldapext "github.com/go-ldap/ldap/v3"
 )
 
 type changePasswordArgs struct {
@@ -89,10 +90,11 @@ func (*mockLdapWrapperErrorOnBind) DialURL(_ string, _ ...ldapext.DialOpt) (ldap
 
 var (
 	defaultConfig = &config.LdapConfig{
-		BaseDn:   "ou=users,dc=example,dc=org",
-		UserDn:   "cn=admin,dc=example,dc=org",
-		Password: "123456",
-		Domain:   "ldap://unit.test:1389",
+		BaseDn:    "ou=users,dc=example,dc=org",
+		UserDn:    "cn=admin,dc=example,dc=org",
+		Password:  "123456",
+		Host:      "unit.test:1389",
+		IgnoreTLS: true,
 	}
 )
 

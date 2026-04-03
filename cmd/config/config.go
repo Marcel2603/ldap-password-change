@@ -12,11 +12,13 @@ type ServerConfig struct {
 }
 
 type LdapConfig struct {
-	Domain       string `yaml:"domain"`
+	Host         string `yaml:"host"`
 	UserDn       string `yaml:"userDn"`
 	Password     string `yaml:"password"`
 	BaseDn       string `yaml:"baseDn"`
 	SearchFilter string `yaml:"searchFilter"`
+	IgnoreTLS    bool   `yaml:"ignoreTLS"`
+	TlsCert      string `yaml:"tlsCert"`
 }
 
 type ValidationConfig struct {

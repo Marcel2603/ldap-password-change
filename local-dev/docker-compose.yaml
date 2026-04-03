@@ -1,13 +1,33 @@
 services:
   openldap:
     container_name: openldap
-    image: bitnami/openldap:2.6.10
+    image: osixia/openldap:1.5.0
+    command: --copy-service
     ports:
-      - '1389:1389'
-      - '1636:1636'
+      - '1389:389'
+    volumes:
+      - ./bootstrap:/container/service/slapd/assets/config/bootstrap/ldif/custom
     environment:
-      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ORGANISATION=Example Inc.
+      - LDAP_DOMAIN=example.org
       - LDAP_ADMIN_PASSWORD=password
-      - LDAP_USERS=user01,user02
-      - LDAP_PASSWORDS=password1,password2
-      #- LDAP_ROOT='dc=example,dc=org'
+      - LDAP_TLS=false
+
+  openldap-tls:
+    container_name: openldap-tls
+    image: osixia/openldap:1.5.0
+    command: --copy-service
+    ports:
+      - '1636:636'
+    volumes:
+      - ./bootstrap:/container/service/slapd/assets/config/bootstrap/ldif/custom
+      - ./certs:/container/service/slapd/assets/certs
+    environment:
+      - LDAP_ORGANISATION=Example Inc.
+      - LDAP_DOMAIN=example.org
+      - LDAP_ADMIN_PASSWORD=password
+      - LDAP_TLS=true
+      - LDAP_TLS_CRT_FILENAME=server.crt
+      - LDAP_TLS_KEY_FILENAME=server.key
+      - LDAP_TLS_CA_CRT_FILENAME=server.crt
+      - LDAP_TLS_VERIFY_CLIENT=never
