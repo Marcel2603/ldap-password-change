@@ -71,6 +71,22 @@ func (*mockLdapWrapperErrorOnCreate) DialURL(_ string, _ ...ldapext.DialOpt) (ld
 	return nil, errors.New("test error on DialURL")
 }
 
+type mockConnErrorOnBind struct {
+	mockConn
+}
+
+func (*mockConnErrorOnBind) Bind(_, _ string) error {
+	return errors.New("test error on Bind")
+}
+
+type mockLdapWrapperErrorOnBind struct {
+	mockLdapWrapperDefault
+}
+
+func (*mockLdapWrapperErrorOnBind) DialURL(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
+	return &mockConnErrorOnBind{}, nil
+}
+
 var (
 	defaultConfig = &config.LdapConfig{
 		BaseDn:   "ou=users,dc=example,dc=org",
@@ -110,6 +126,18 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 			name:            "change password should fail when client connection fails",
 			config:          *defaultConfig,
 			ldapWrapperMock: &mockLdapWrapperErrorOnCreate{},
+			args: changePasswordArgs{
+				username:        "tester",
+				currentPassword: "123456",
+				newPassword:     "Test1234",
+			},
+			wantErrOnCreation: true,
+			wantErrOnAction:   false,
+		},
+		{
+			name:            "change password should fail when bind fails",
+			config:          *defaultConfig,
+			ldapWrapperMock: &mockLdapWrapperErrorOnBind{},
 			args: changePasswordArgs{
 				username:        "tester",
 				currentPassword: "123456",

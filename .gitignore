@@ -11,3 +11,5 @@ static/bootstrap.min.css
 static/bootstrap.min.css.map
 
 .vscode
+
+coverage*.out

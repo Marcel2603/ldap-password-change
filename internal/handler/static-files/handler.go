@@ -21,12 +21,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("cache-control", "public, max-age=36000")
 	writeFile(w, r, staticPath)
-	writer := brotli.NewWriter(w)
-	defer writer.Close()
-	w.Header().Set("content-encoding", "br")
-	file, _ := os.ReadFile(staticPath)
-	writer.Write(file)
-	writer.Flush()
 }
 
 func writeFile(w http.ResponseWriter, r *http.Request, path string) {
@@ -37,18 +31,17 @@ func writeFile(w http.ResponseWriter, r *http.Request, path string) {
 		writer := brotli.NewWriter(w)
 		defer writer.Close()
 		file, _ := os.ReadFile(path)
-		writer.Write(file)
-		writer.Flush()
+		_, _ = writer.Write(file)
 	case strings.Contains(encodings, "gzip"):
 		w.Header().Set("content-encoding", "gzip")
 		writer := gzip.NewWriter(w)
 		defer writer.Close()
 		file, _ := os.ReadFile(path)
-		writer.Write(file)
+		_, _ = writer.Write(file)
 		writer.Flush()
 	default:
 		file, _ := os.ReadFile(path)
-		w.Write(file)
+		_, _ = w.Write(file)
 	}
 }
 

@@ -8,5 +8,8 @@ import (
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	component := views.Index(config.Configuration)
-	component.Render(r.Context(), w)
+	err := component.Render(r.Context(), w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }

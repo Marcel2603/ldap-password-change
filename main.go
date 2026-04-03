@@ -22,6 +22,20 @@ import (
 func main() {
 	slog.Info("Starting server")
 	configuration := config.Configuration
+	
+	r, err := setupApp(configuration, ldap.CreateWrapper())
+	if err != nil {
+		log.Fatalf("Error starting server: %s\n", err.Error())
+	}
+
+	slog.Info("Listening on :" + configuration.Server.Port)
+	err = http.ListenAndServe(":"+configuration.Server.Port, r)
+	if err != nil {
+		log.Fatalf("Error starting server: %s\n", err.Error())
+	}
+}
+
+func setupApp(configuration config.Config, wrapper ldap.Wrapper) (*chi.Mux, error) {
 	r := setupServerRouter(configuration)
 
 	r.Get("/", index.Handler)
@@ -29,18 +43,14 @@ func main() {
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
 
-	service, errService := ldap.CreateService(configuration.Ldap, ldap.CreateWrapper())
+	service, errService := ldap.CreateService(configuration.Ldap, wrapper)
 	validator, errValidator := validation.CreateValidator(configuration.Validation)
 	if errService != nil || errValidator != nil {
-		log.Fatalf("Error creating services: %s\n", errors.Join(errService, errValidator).Error())
+		return nil, errors.Join(errService, errValidator)
 	}
 	r.Post("/change-password", changepassword.Handler(service, validator))
 
-	slog.Info("Listening on :" + configuration.Server.Port)
-	err := http.ListenAndServe(":"+configuration.Server.Port, r)
-	if err != nil {
-		log.Fatalf("Error starting server: %s\n", err.Error())
-	}
+	return r, nil
 }
 
 func setupServerRouter(configuration config.Config) *chi.Mux {
