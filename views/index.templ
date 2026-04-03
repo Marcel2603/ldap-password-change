@@ -186,6 +186,9 @@ templ Index(conf config.Config) {
 			if conf.UI.BackgroundImage != "" {
 				@templ.Raw("<style>body { background: url('" + conf.UI.BackgroundImage + "') no-repeat center center fixed !important; background-size: cover !important; animation: none !important; }</style>")
 			}
+			if conf.UI.CustomCss != "" {
+				<link href={ conf.UI.CustomCss } rel="stylesheet"/>
+			}
 		</head>
 		<body
 			x-data="{

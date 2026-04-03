@@ -163,61 +163,80 @@ func Index(conf config.Config) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</head><body x-data=\"{\n\t\t\t\ttheme: localStorage.getItem('theme') || 'system',\n\t\t\t\tinit() {\n\t\t\t\t\tthis.applyTheme();\n\t\t\t\t\t$watch('theme', value => this.applyTheme());\n\t\t\t\t\twindow.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {\n\t\t\t\t\t\tif (this.theme === 'system') this.applyTheme();\n\t\t\t\t\t});\n\t\t\t\t},\n\t\t\t\tapplyTheme() {\n\t\t\t\t\tlocalStorage.setItem('theme', this.theme);\n\t\t\t\t\tif (this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\t\tdocument.documentElement.setAttribute('data-bs-theme', 'dark');\n\t\t\t\t\t} else {\n\t\t\t\t\t\tdocument.documentElement.setAttribute('data-bs-theme', 'light');\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\" hx-ext=\"response-targets\"><div class=\"theme-selector\"><div class=\"dropdown\"><button class=\"btn btn-outline-secondary dropdown-toggle rounded-pill\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" style=\"background: var(--glass-bg); backdrop-filter: blur(10px); border-color: var(--glass-border); color: var(--glass-text-color);\"><span x-show=\"theme === 'system'\">💻 System</span> <span x-show=\"theme === 'light'\">☀️ Light</span> <span x-show=\"theme === 'dark'\">🌙 Dark</span></button><ul class=\"dropdown-menu dropdown-menu-end shadow border-0\" style=\"border-radius: 16px; background: var(--glass-bg); backdrop-filter: blur(24px);\"><li><a class=\"dropdown-item\" href=\"#\" @click.prevent=\"theme = 'light'\">☀️ Light</a></li><li><a class=\"dropdown-item\" href=\"#\" @click.prevent=\"theme = 'dark'\">🌙 Dark</a></li><li><a class=\"dropdown-item\" href=\"#\" @click.prevent=\"theme = 'system'\">💻 System</a></li></ul></div></div><div class=\"position-absolute top-0 start-50 translate-middle-x mt-3 w-100\" style=\"max-width: 400px; z-index: 1050;\"><div class=\"toast-container position-static w-100 px-3\"><div id=\"error\"></div></div></div><div class=\"container text-center w-100\" x-data=\"{}\" style=\"max-width: 420px\"><div class=\"mb-4 fade-in-up\" style=\"animation-delay: 0.1s;\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if conf.UI.Icon != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "<img src=\"")
+		if conf.UI.CustomCss != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<link href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var7 string
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(conf.UI.Icon)
+			var templ_7745c5c3_Var7 templ.SafeURL
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs(conf.UI.CustomCss)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 235, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 190, Col: 34}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "\" alt=\"Identifier Header\" class=\"img-fluid mb-2 drop-shadow\" style=\"width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "\" rel=\"stylesheet\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "</head><body x-data=\"{\n\t\t\t\ttheme: localStorage.getItem('theme') || 'system',\n\t\t\t\tinit() {\n\t\t\t\t\tthis.applyTheme();\n\t\t\t\t\t$watch('theme', value => this.applyTheme());\n\t\t\t\t\twindow.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {\n\t\t\t\t\t\tif (this.theme === 'system') this.applyTheme();\n\t\t\t\t\t});\n\t\t\t\t},\n\t\t\t\tapplyTheme() {\n\t\t\t\t\tlocalStorage.setItem('theme', this.theme);\n\t\t\t\t\tif (this.theme === 'dark' || (this.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {\n\t\t\t\t\t\tdocument.documentElement.setAttribute('data-bs-theme', 'dark');\n\t\t\t\t\t} else {\n\t\t\t\t\t\tdocument.documentElement.setAttribute('data-bs-theme', 'light');\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\" hx-ext=\"response-targets\"><div class=\"theme-selector\"><div class=\"dropdown\"><button class=\"btn btn-outline-secondary dropdown-toggle rounded-pill\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" style=\"background: var(--glass-bg); backdrop-filter: blur(10px); border-color: var(--glass-border); color: var(--glass-text-color);\"><span x-show=\"theme === 'system'\">💻 System</span> <span x-show=\"theme === 'light'\">☀️ Light</span> <span x-show=\"theme === 'dark'\">🌙 Dark</span></button><ul class=\"dropdown-menu dropdown-menu-end shadow border-0\" style=\"border-radius: 16px; background: var(--glass-bg); backdrop-filter: blur(24px);\"><li><a class=\"dropdown-item\" href=\"#\" @click.prevent=\"theme = 'light'\">☀️ Light</a></li><li><a class=\"dropdown-item\" href=\"#\" @click.prevent=\"theme = 'dark'\">🌙 Dark</a></li><li><a class=\"dropdown-item\" href=\"#\" @click.prevent=\"theme = 'system'\">💻 System</a></li></ul></div></div><div class=\"position-absolute top-0 start-50 translate-middle-x mt-3 w-100\" style=\"max-width: 400px; z-index: 1050;\"><div class=\"toast-container position-static w-100 px-3\"><div id=\"error\"></div></div></div><div class=\"container text-center w-100\" x-data=\"{}\" style=\"max-width: 420px\"><div class=\"mb-4 fade-in-up\" style=\"animation-delay: 0.1s;\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if conf.UI.Icon != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<img src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(conf.UI.Icon)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 238, Col: 29}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "\" alt=\"Identifier Header\" class=\"img-fluid mb-2 drop-shadow\" style=\"width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "<img src=\"../static/favicon.png\" alt=\"Identifier Header\" class=\"img-fluid mb-2 drop-shadow\" style=\"width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<img src=\"../static/favicon.png\" alt=\"Identifier Header\" class=\"img-fluid mb-2 drop-shadow\" style=\"width: 100px; height: 100px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 16, "<h1 class=\"fw-bold\" style=\"font-size: 2.25rem;\">Change Password</h1><p class=\"opacity-75\">Securely manage your credentials</p></div><div class=\"card glass-card fade-in-up\" style=\"animation-delay: 0.2s;\"><div class=\"card-body p-0\"><form hx-post=\"/change-password\" hx-trigger=\"change-password\" hx-target-error=\"#error\" class=\"needs-validation text-start\" novalidate @submit.prevent=\"if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('change-password') } $el.classList.add('was-validated')\"><div class=\"form-floating mb-3\"><input @keyup=\"if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"text\" class=\"form-control\" id=\"validationCustom01\" name=\"username\" placeholder=\"Username\" pattern=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(conf.Validation.UsernamePattern)
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 261, Col: 50}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "\" required> <label for=\"validationCustom01\">Username</label><div class=\"invalid-feedback ps-2\">Username does not match policy.</div></div><div class=\"form-floating mb-3\"><input x-ref=\"old_password\" @keyup=\"if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"password\" name=\"current-password\" class=\"form-control\" id=\"validationCustom02\" placeholder=\"Current Password\" required> <label for=\"validationCustom02\">Current Password</label><div class=\"invalid-feedback ps-2\">Please provide your password.</div></div><div class=\"form-floating mb-3\"><input x-ref=\"new_password\" @keyup=\"if ($el.checkValidity() && $refs.old_password.value != $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"password\" class=\"form-control\" name=\"new-password\" id=\"validationCustom03\" placeholder=\"New Password\" required pattern=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<h1 class=\"fw-bold\" style=\"font-size: 2.25rem;\">Change Password</h1><p class=\"opacity-75\">Securely manage your credentials</p></div><div class=\"card glass-card fade-in-up\" style=\"animation-delay: 0.2s;\"><div class=\"card-body p-0\"><form hx-post=\"/change-password\" hx-trigger=\"change-password\" hx-target-error=\"#error\" class=\"needs-validation text-start\" novalidate @submit.prevent=\"if (!$el.checkValidity()) { event.stopPropagation() } else { $dispatch('change-password') } $el.classList.add('was-validated')\"><div class=\"form-floating mb-3\"><input @keyup=\"if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"text\" class=\"form-control\" id=\"validationCustom01\" name=\"username\" placeholder=\"Username\" pattern=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
-		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(conf.Validation.PasswordPattern)
+		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(conf.Validation.UsernamePattern)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 293, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 264, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\"> <label for=\"validationCustom03\">New Password</label><div class=\"invalid-feedback ps-2\">Password does not match system policy.</div></div><div class=\"form-floating mb-4\"><input @keyup=\"if ($el.checkValidity() && $refs.new_password.value == $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"password\" class=\"form-control\" name=\"confirm-password\" id=\"validationCustom04\" placeholder=\"Confirm New Password\" required> <label for=\"validationCustom04\">Confirm New Password</label><div class=\"invalid-feedback ps-2\">Passwords do not match.</div></div><div class=\"d-grid mt-2\"><button class=\"btn btn-primary btn-pill hover-scale\" type=\"submit\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" fill=\"currentColor\" class=\"bi bi-shield-lock-fill me-2 mb-1\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" d=\"M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24c.304-.143.662-.352 1.048-.625a11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5\"></path></svg> Change Password</button></div></form></div></div></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "\" required> <label for=\"validationCustom01\">Username</label><div class=\"invalid-feedback ps-2\">Username does not match policy.</div></div><div class=\"form-floating mb-3\"><input x-ref=\"old_password\" @keyup=\"if ($el.checkValidity()) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"password\" name=\"current-password\" class=\"form-control\" id=\"validationCustom02\" placeholder=\"Current Password\" required> <label for=\"validationCustom02\">Current Password</label><div class=\"invalid-feedback ps-2\">Please provide your password.</div></div><div class=\"form-floating mb-3\"><input x-ref=\"new_password\" @keyup=\"if ($el.checkValidity() && $refs.old_password.value != $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"password\" class=\"form-control\" name=\"new-password\" id=\"validationCustom03\" placeholder=\"New Password\" required pattern=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var10 string
+		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(conf.Validation.PasswordPattern)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 296, Col: 50}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "\"> <label for=\"validationCustom03\">New Password</label><div class=\"invalid-feedback ps-2\">Password does not match system policy.</div></div><div class=\"form-floating mb-4\"><input @keyup=\"if ($el.checkValidity() && $refs.new_password.value == $el.value) { $el.classList.add('is-valid'); $el.classList.remove('is-invalid') } else { $el.classList.add('is-invalid') }\" type=\"password\" class=\"form-control\" name=\"confirm-password\" id=\"validationCustom04\" placeholder=\"Confirm New Password\" required> <label for=\"validationCustom04\">Confirm New Password</label><div class=\"invalid-feedback ps-2\">Passwords do not match.</div></div><div class=\"d-grid mt-2\"><button class=\"btn btn-primary btn-pill hover-scale\" type=\"submit\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" fill=\"currentColor\" class=\"bi bi-shield-lock-fill me-2 mb-1\" viewBox=\"0 0 16 16\"><path fill-rule=\"evenodd\" d=\"M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24c.304-.143.662-.352 1.048-.625a11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5\"></path></svg> Change Password</button></div></form></div></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
