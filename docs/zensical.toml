@@ -5,6 +5,29 @@ repo_url = "https://github.com/Marcel2603/ldap-password-change"
 repo_name = "Marcel2603/ldap-password-change"
 docs_dir = "pages"
 extra_css = ["stylesheets/max_width.css"]
+nav = [
+  { "Home" = "index.md" },
+  { "Getting Started" = [
+    { "Overview" = "getting-started/index.md" },
+    { "Customisation" = "getting-started/customisation.md" },
+    { "Architecture" = "getting-started/architecture.md" },
+    { "Health" = "getting-started/health.md" },
+    { "Usage" = "getting-started/usage.md" },
+    { "Configuration" = [
+      { "Overview" = "getting-started/configuration/index.md" },
+      { "What" = "getting-started/configuration/what.md" },
+      { "Where" = "getting-started/configuration/where.md" }
+    ]}
+  ]},
+  { "Development" = [
+    { "Overview" = "development/index.md" },
+    { "Release" = "development/release.md" }
+  ]},
+  { "About" = [
+    { "Security" = "about/security.md" },
+    { "License" = "about/license.md" }
+  ]}
+]
 
 [project.theme]
 variant = "modern"
@@ -13,9 +36,11 @@ features = [
     "navigation.instant",
     "navigation.tracking",
     "navigation.path",
+    "search.suggest",
+    "search.highlight",
     "content.code.copy",
     "content.code.annotate",
-    "content.tabs.link"
+    "content.tabs.link",
 ]
 
 [project.theme.font]
@@ -54,7 +79,6 @@ permalink = true
 [project.plugins]
 search = {}
 autolinks = {}
-awesome-pages = {}
 
 [project.plugins.git-revision-date-localized]
 fallback_to_build_date = true
