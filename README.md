@@ -46,11 +46,11 @@ ldap:
 > docker run -e LDAP_PASSWORD=s3cr3t ...
 > ```
 
-Full reference → [docs/Configuration](https://marcel2603.github.io//Marcel2603/ldap-password-change/getting-started/configuration/)
+Full reference → [docs/Configuration](https://marcel2603.github.io/ldap-password-change/getting-started/configuration/)
 
 ## Contributing
 
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and the [docs](https://marcel2603.github.io//Marcel2603/ldap-password-change/development/).
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and the [docs](https://marcel2603.github.io/ldap-password-change/development/).
 
 ```bash
 # Install pre-commit hooks
@@ -65,7 +65,7 @@ make lint
 
 ## Documentation
 
-Full documentation is available at: <https://marcel2603.github.io//Marcel2603/ldap-password-change/>
+Full documentation is available at: <https://marcel2603.github.io/ldap-password-change/>
 
 ## Acknowledgements
 
