@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.0.1](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.0..1.0.1) - 2026-04-07
+## [1.0.2](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.1..1.0.2) - 2026-04-07
+
+### Bug Fixes
+
+- *(error)* Return generic error - ([2691e6f](https://github.com/Marcel2603/ldap-password-change/commit/2691e6fe7214a6610874e8ef39eae5fa4b81a29c))  by @Marcel2603
+
+## [1.0.1](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.0..v1.0.1) - 2026-04-07
 
 ### Bug Fixes
 
