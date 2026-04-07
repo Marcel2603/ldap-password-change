@@ -1,6 +1,6 @@
 [project]
 site_name = "LDAP Password Change"
-site_url = "https://marcel2603.github.io/github.com/Marcel2603/ldap-password-change/"
+site_url = "https://marcel2603.github.io//Marcel2603/ldap-password-change/"
 repo_url = "https://github.com/Marcel2603/ldap-password-change"
 repo_name = "Marcel2603/ldap-password-change"
 docs_dir = "pages"
