@@ -5,13 +5,27 @@ import (
 	"crypto/x509"
 	"fmt"
 	"ldap-password-change/cmd/config"
+	"ldap-password-change/internal/types"
 	"log/slog"
 	"os"
+	"time"
 
 	"github.com/go-ldap/ldap/v3"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
-var ErrUserNotFound = fmt.Errorf("user not found")
+var (
+	ldapOperationDuration = promauto.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "ldap_operation_duration_seconds",
+			Help:    "Duration of LDAP operations",
+			Buckets: prometheus.DefBuckets,
+		},
+		[]string{"operation", "status"},
+	)
+	ErrUserNotFound = fmt.Errorf("user not found")
+)
 
 type Service interface {
 	SearchUser(username string) (*ldap.Entry, error)
@@ -53,14 +67,18 @@ func CreateService(c config.LdapConfig, wrapper Wrapper, logger *slog.Logger) Se
 }
 
 func (s *serviceImpl) Ping() error {
+	start := time.Now()
 	client, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
+		ldapOperationDuration.WithLabelValues("ping", string(types.StatusError)).Observe(time.Since(start).Seconds())
 		return err
 	}
+	ldapOperationDuration.WithLabelValues("ping", string(types.StatusSuccess)).Observe(time.Since(start).Seconds())
 	return client.Close()
 }
 
 func (s *serviceImpl) SearchUser(username string) (*ldap.Entry, error) {
+	start := time.Now()
 	svcClient, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
 		return nil, err
@@ -82,15 +100,19 @@ func (s *serviceImpl) SearchUser(username string) (*ldap.Entry, error) {
 	)
 	result, err := svcClient.Search(searchReq)
 	if err != nil {
+		ldapOperationDuration.WithLabelValues("search_user", string(types.StatusError)).Observe(time.Since(start).Seconds())
 		return nil, fmt.Errorf("ldap search failed: %w", err)
 	}
 	if len(result.Entries) == 0 {
+		ldapOperationDuration.WithLabelValues("search_user", string(types.StatusError)).Observe(time.Since(start).Seconds())
 		return nil, ErrUserNotFound
 	}
+	ldapOperationDuration.WithLabelValues("search_user", string(types.StatusSuccess)).Observe(time.Since(start).Seconds())
 	return result.Entries[0], nil
 }
 
 func (s *serviceImpl) ChangePassword(userDN string, username string, currentPassword string, newPassword string) error {
+	start := time.Now()
 	userClient, err := createClient(s.ldapWrapper, userDN, currentPassword, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
 		return fmt.Errorf("invalid credentials: %w", err)
@@ -104,9 +126,11 @@ func (s *serviceImpl) ChangePassword(userDN string, username string, currentPass
 
 	passwdModifyRequest := ldap.NewPasswordModifyRequest(userDN, currentPassword, newPassword)
 	if _, err := userClient.PasswordModify(passwdModifyRequest); err != nil {
+		ldapOperationDuration.WithLabelValues("change_password", string(types.StatusError)).Observe(time.Since(start).Seconds())
 		return fmt.Errorf("password modify failed: %w", err)
 	}
 
+	ldapOperationDuration.WithLabelValues("change_password", string(types.StatusSuccess)).Observe(time.Since(start).Seconds())
 	s.logger.Info("Password changed successfully", slog.String("username", username))
 	return nil
 }

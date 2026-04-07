@@ -13,8 +13,10 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/go-chi/cors"
+	"github.com/go-chi/metrics"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -69,6 +71,7 @@ func setupApp(configuration config.Config, wrapper ldap.Wrapper, logger *slog.Lo
 	r.Get("/health", health.LivenessHandler)
 	r.Get("/health/live", health.LivenessHandler)
 	r.Get("/health/ready", health.ReadinessHandler(service))
+	r.Handle("/metrics", metrics.Handler())
 
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
@@ -82,14 +85,22 @@ func setupApp(configuration config.Config, wrapper ldap.Wrapper, logger *slog.Lo
 func setupServerRouter(configuration config.Config, logger *slog.Logger) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
-		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
-		AllowedOrigins: []string{configuration.Server.Host},
-		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedOrigins:   []string{configuration.Server.Host},
 		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Content-Type"},
 		ExposedHeaders:   []string{},
 		AllowCredentials: false,
-		MaxAge:           600, // Maximum value not ignored by any of major browsers
+		MaxAge:           600,
+	}))
+	r.Use(metrics.Collector(metrics.CollectorOpts{
+		Host:  false,
+		Proto: true,
+		Skip: func(r *http.Request) bool {
+			if strings.HasPrefix(r.URL.Path, "/health") || r.URL.Path == "/metrics" {
+				return true
+			}
+			return r.Method == http.MethodOptions
+		},
 	}))
 	r.Use(middleware.RequestID)
 	r.Use(custommw.SlogLogger(logger))
