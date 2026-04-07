@@ -12,6 +12,7 @@ nav = [
     { "Customisation" = "getting-started/customisation.md" },
     { "Architecture" = "getting-started/architecture.md" },
     { "Health" = "getting-started/health.md" },
+    { "Metrics" = "getting-started/metrics.md" },
     { "Usage" = "getting-started/usage.md" },
     { "Configuration" = [
       { "Overview" = "getting-started/configuration/index.md" },

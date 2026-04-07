@@ -12,7 +12,7 @@ import (
 func SlogLogger(logger *slog.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/health") || r.URL.Path == "/favicon.ico" || strings.HasPrefix(r.URL.Path, "/static/") {
+			if strings.HasPrefix(r.URL.Path, "/health") || r.URL.Path == "/metrics" || r.URL.Path == "/favicon.ico" || strings.HasPrefix(r.URL.Path, "/static/") {
 				next.ServeHTTP(w, r)
 				return
 			}
