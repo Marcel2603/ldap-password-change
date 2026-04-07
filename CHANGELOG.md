@@ -1,6 +1,21 @@
 # Changelog
 
-## [0.1.0](https://github.com/Marcel2603/ldap-password-change/compare/v0.0.0..0.1.0) - 2026-04-03
+## [1.0.0](https://github.com/Marcel2603/ldap-password-change/compare/v0.1.0..1.0.0) - 2026-04-07
+
+### Features
+
+- *(metrics)* Add prometheus metrics endpoint ([#50](https://github.com/marcel2603/ldap-password-change/issues/50)) - ([8e2c6bc](https://github.com/Marcel2603/ldap-password-change/commit/8e2c6bc0eb1491b1cd0653333a2391f0066658c5))  by @Marcel2603
+- [**breaking**] Initial stable release - ([416b83a](https://github.com/Marcel2603/ldap-password-change/commit/416b83a016d09ed7cebe925b36cf1e1495b0993b))  by @Marcel2603
+### Refactor
+
+- *(ldap-service)* Separate search and PW Change ([#49](https://github.com/marcel2603/ldap-password-change/issues/49)) - ([3b251e3](https://github.com/Marcel2603/ldap-password-change/commit/3b251e3b7da69137b15974af18086039ccae297c))  by @Marcel2603
+
+### Documentation
+
+- *(where)* Define mount path for docker - ([285b369](https://github.com/Marcel2603/ldap-password-change/commit/285b369122b9c2b1308891784272adbfae8e6f5e))  by @Marcel2603
+- *(zensical)* Drop mkdocs and use zensical ([#47](https://github.com/marcel2603/ldap-password-change/issues/47)) - ([e5c302e](https://github.com/Marcel2603/ldap-password-change/commit/e5c302ed0917d695d39914266e923352581cc38d))  by @Marcel2603
+
+## [0.1.0](https://github.com/Marcel2603/ldap-password-change/compare/v0.0.0..v0.1.0) - 2026-04-03
 
 ### Features
 
