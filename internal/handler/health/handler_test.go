@@ -55,7 +55,7 @@ func TestReadinessHandler(t *testing.T) {
 		{"ldap reachable", &mockServiceOK{}, http.StatusOK, "ok"},
 		{"ldap unreachable", &mockServiceDown{}, http.StatusServiceUnavailable, "unavailable"},
 	}
-
+	t.Parallel()
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			req, _ := http.NewRequest("GET", "/health/ready", nil)

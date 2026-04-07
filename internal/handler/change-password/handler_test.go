@@ -91,7 +91,7 @@ func TestHandler(t *testing.T) {
 			expectedStatusCode: http.StatusInternalServerError,
 		},
 	}
-
+	t.Parallel()
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ldapSvc := &mockLdapService{returnsError: tc.ldapError}
