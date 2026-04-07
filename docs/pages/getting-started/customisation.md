@@ -38,7 +38,7 @@ on the host filesystem.
 # docker-compose.yml
 services:
   ldap-password-change:
-    image: ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+    image: ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
     ports:
       - "3000:3000"
     volumes:

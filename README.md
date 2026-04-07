@@ -19,12 +19,12 @@ through a secure, modern browser interface — no admin intervention required.
 ## Docker
 
 ```bash
-docker pull ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+docker pull ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 
 docker run \
   -p 3000:3000 \
   -v $PWD/app.yml:/app/app.yml \
-  ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+  ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 ```
 
 ## Configuration

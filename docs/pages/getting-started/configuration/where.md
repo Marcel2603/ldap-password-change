@@ -66,5 +66,5 @@ docker run \
   -e LDAP_PASSWORD=s3cr3t \
   -e LDAP_BASEDN="ou=employees,dc=mycompany,dc=com" \
   -e LDAP_IGNORETLS=false \
-  ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+  ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 ```

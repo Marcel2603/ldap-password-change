@@ -19,7 +19,7 @@ page and place it in your `$PATH`.
 The recommended way to run the service in production is via Docker:
 
 ```bash
-docker pull ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+docker pull ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 ```
 
 Run with a custom config file:
@@ -28,7 +28,7 @@ Run with a custom config file:
 docker run \
   -p 3000:3000 \
   -v $PWD/app.yml:/app/app.yml \
-  ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+  ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 ```
 
 Or with custom branding assets mounted:
@@ -38,7 +38,7 @@ docker run \
   -p 3000:3000 \
   -v $PWD/app.yml:/app/app.yml \
   -v $PWD/custom:/app/custom \
-  ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
+  ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 ```
 
 ### From Source
