@@ -8,7 +8,6 @@ import (
 )
 
 func TestHandler(t *testing.T) {
-	// Set up basic config required by views.Index
 	config.Configuration = config.Config{
 		Validation: config.ValidationConfig{
 			UsernamePattern: "^[a-zA-Z0-9]+$",
