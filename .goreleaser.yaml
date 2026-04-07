@@ -24,6 +24,9 @@ builds:
     goarch:
       - amd64
       - arm64
+    ldflags:
+      - -s -w -X main.BuildVersion=v{{.Version}}
+      - -s -w -X main.BuildCommit={{.Commit}}
 
 archives:
   - id: homebrew-tar
@@ -41,7 +44,7 @@ archives:
 
 dockers_v2:
   - images:
-      - ghcr.io/marcel2603/ldap-password-change/ldap-password-change
+      - ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change
     platforms:
       - linux/amd64
       - linux/arm64

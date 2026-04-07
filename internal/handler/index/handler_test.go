@@ -1,10 +1,11 @@
 package index
 
 import (
-	"ldap-password-change/cmd/config"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
 )
 
 func TestHandler(t *testing.T) {

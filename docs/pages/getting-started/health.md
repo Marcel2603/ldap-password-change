@@ -72,7 +72,7 @@ readinessProbe:
 ```yaml
 services:
   ldap-password-change:
-    image: ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
+    image: ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/health/live"]
       interval: 30s

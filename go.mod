@@ -1,4 +1,4 @@
-module ldap-password-change
+module github.com/Marcel2603/ldap-password-change
 
 go 1.25.0
 
@@ -10,7 +10,9 @@ require (
 	dario.cat/mergo v1.0.2
 	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/a-h/templ v0.3.1001
+	github.com/go-chi/metrics v0.1.1
 	github.com/go-ldap/ldap/v3 v3.4.13
+	github.com/prometheus/client_golang v1.22.0
 )
 
 require (
@@ -33,12 +35,11 @@ require (
 	github.com/cli/browser v1.3.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/go-chi/metrics v0.1.1 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/atomic v1.0.1 // indirect
-	github.com/prometheus/client_golang v1.22.0 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect

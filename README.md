@@ -19,12 +19,12 @@ through a secure, modern browser interface — no admin intervention required.
 ## Docker
 
 ```bash
-docker pull ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
+docker pull ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
 
 docker run \
   -p 3000:3000 \
   -v $PWD/app.yml:/app/app.yml \
-  ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
+  ghcr.io/marcel2603/github.com/Marcel2603/ldap-password-change/ldap-password-change:latest
 ```
 
 ## Configuration
@@ -46,11 +46,11 @@ ldap:
 > docker run -e LDAP_PASSWORD=s3cr3t ...
 > ```
 
-Full reference → [docs/Configuration](https://marcel2603.github.io/ldap-password-change/getting-started/configuration/)
+Full reference → [docs/Configuration](https://marcel2603.github.io/github.com/Marcel2603/ldap-password-change/getting-started/configuration/)
 
 ## Contributing
 
-See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and the [docs](https://marcel2603.github.io/ldap-password-change/development/).
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and the [docs](https://marcel2603.github.io/github.com/Marcel2603/ldap-password-change/development/).
 
 ```bash
 # Install pre-commit hooks
@@ -65,7 +65,7 @@ make lint
 
 ## Documentation
 
-Full documentation is available at: <https://marcel2603.github.io/ldap-password-change/>
+Full documentation is available at: <https://marcel2603.github.io/github.com/Marcel2603/ldap-password-change/>
 
 ## Acknowledgements
 

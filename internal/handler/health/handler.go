@@ -2,8 +2,9 @@ package health
 
 import (
 	"encoding/json"
-	"ldap-password-change/internal/service/ldap"
 	"net/http"
+
+	"github.com/Marcel2603/ldap-password-change/internal/service/ldap"
 )
 
 type Response struct {

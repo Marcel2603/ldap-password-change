@@ -1,9 +1,10 @@
 package index
 
 import (
-	"ldap-password-change/cmd/config"
-	"ldap-password-change/views"
 	"net/http"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
+	"github.com/Marcel2603/ldap-password-change/views"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {

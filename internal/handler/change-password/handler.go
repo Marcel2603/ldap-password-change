@@ -3,11 +3,12 @@ package changepassword
 import (
 	"errors"
 	"fmt"
-	"ldap-password-change/internal/service/ldap"
-	"ldap-password-change/internal/validation"
-	"ldap-password-change/views"
 	"log/slog"
 	"net/http"
+
+	"github.com/Marcel2603/ldap-password-change/internal/service/ldap"
+	"github.com/Marcel2603/ldap-password-change/internal/validation"
+	"github.com/Marcel2603/ldap-password-change/views"
 
 	"github.com/go-chi/chi/v5/middleware"
 )
