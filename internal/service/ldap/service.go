@@ -100,14 +100,14 @@ func (s *serviceImpl) SearchUser(username string) (*ldap.Entry, error) {
 	)
 	result, err := svcClient.Search(searchReq)
 	if err != nil {
-		ldapOperationDuration.WithLabelValues("search_user", string(types.StatusError)).Observe(time.Since(start).Seconds())
+		ldapOperationDuration.WithLabelValues("search", string(types.StatusError)).Observe(time.Since(start).Seconds())
 		return nil, fmt.Errorf("ldap search failed: %w", err)
 	}
 	if len(result.Entries) == 0 {
-		ldapOperationDuration.WithLabelValues("search_user", string(types.StatusError)).Observe(time.Since(start).Seconds())
+		ldapOperationDuration.WithLabelValues("search", string(types.StatusError)).Observe(time.Since(start).Seconds())
 		return nil, ErrUserNotFound
 	}
-	ldapOperationDuration.WithLabelValues("search_user", string(types.StatusSuccess)).Observe(time.Since(start).Seconds())
+	ldapOperationDuration.WithLabelValues("search", string(types.StatusSuccess)).Observe(time.Since(start).Seconds())
 	return result.Entries[0], nil
 }
 
