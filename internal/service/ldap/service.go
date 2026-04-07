@@ -14,7 +14,8 @@ import (
 var ErrUserNotFound = fmt.Errorf("user not found")
 
 type Service interface {
-	ChangePassword(username string, currentPassword string, newPassword string) error
+	SearchUser(username string) (*ldap.Entry, error)
+	ChangePassword(userDN string, username string, currentPassword string, newPassword string) error
 	Ping() error
 }
 
@@ -59,12 +60,17 @@ func (s *serviceImpl) Ping() error {
 	return client.Close()
 }
 
-func (s *serviceImpl) ChangePassword(username string, currentPassword string, newPassword string) error {
+func (s *serviceImpl) SearchUser(username string) (*ldap.Entry, error) {
 	svcClient, err := createClient(s.ldapWrapper, s.userDn, s.password, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	defer svcClient.Close()
+	defer func(svcClient Conn) {
+		err := svcClient.Close()
+		if err != nil {
+			s.logger.Error("Failed to close ldap service client", slog.String("error", err.Error()))
+		}
+	}(svcClient)
 
 	filter := fmt.Sprintf("(&%s(cn=%s))", s.searchFilter, ldap.EscapeFilter(username))
 	searchReq := ldap.NewSearchRequest(
@@ -76,18 +82,25 @@ func (s *serviceImpl) ChangePassword(username string, currentPassword string, ne
 	)
 	result, err := svcClient.Search(searchReq)
 	if err != nil {
-		return fmt.Errorf("ldap search failed: %w", err)
+		return nil, fmt.Errorf("ldap search failed: %w", err)
 	}
 	if len(result.Entries) == 0 {
-		return ErrUserNotFound
+		return nil, ErrUserNotFound
 	}
-	userDN := result.Entries[0].DN
+	return result.Entries[0], nil
+}
 
+func (s *serviceImpl) ChangePassword(userDN string, username string, currentPassword string, newPassword string) error {
 	userClient, err := createClient(s.ldapWrapper, userDN, currentPassword, s.host, s.ignoreTLS, s.tlsCert, s.logger)
 	if err != nil {
 		return fmt.Errorf("invalid credentials: %w", err)
 	}
-	defer userClient.Close()
+	defer func(userClient Conn) {
+		err := userClient.Close()
+		if err != nil {
+			s.logger.Error("Failed to close ldap user client", slog.String("error", err.Error()))
+		}
+	}(userClient)
 
 	passwdModifyRequest := ldap.NewPasswordModifyRequest(userDN, currentPassword, newPassword)
 	if _, err := userClient.PasswordModify(passwdModifyRequest); err != nil {

@@ -30,8 +30,14 @@ func Handler(ldapService ldap.Service, validator validation.Validator, logger *s
 			renderErrorToastie(w, r, http.StatusBadRequest, "Some input was not valid", validationError, l)
 			return
 		}
+		user, err := ldapService.SearchUser(userInfo.username)
+		if err != nil {
+			l.Error("Could not find user", slog.String("error", err.Error()))
+			renderErrorToastie(w, r, http.StatusNotFound, "User not found", err, l)
+			return
+		}
 
-		changePasswordError := ldapService.ChangePassword(userInfo.username, userInfo.currentPassword, userInfo.newPassword)
+		changePasswordError := ldapService.ChangePassword(user.DN, userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if changePasswordError != nil {
 			l.Error("Could not change password", slog.String("error", changePasswordError.Error()))
 			renderErrorToastie(w, r, http.StatusInternalServerError, "Failed to change password", changePasswordError, l)

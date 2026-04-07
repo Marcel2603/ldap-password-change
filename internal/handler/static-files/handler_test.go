@@ -16,6 +16,7 @@ func init() {
 }
 
 func TestHandler(t *testing.T) {
+	t.Parallel()
 	t.Run("Embedded static file — no encoding", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/static/test.txt", nil)
 		rr := httptest.NewRecorder()

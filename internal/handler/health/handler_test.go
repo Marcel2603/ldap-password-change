@@ -3,21 +3,29 @@ package health
 import (
 	"encoding/json"
 	"errors"
-	"ldap-password-change/internal/service/ldap"
+	ldapService "ldap-password-change/internal/service/ldap"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/go-ldap/ldap/v3"
 )
 
 type mockServiceOK struct{}
 
-func (*mockServiceOK) ChangePassword(_, _, _ string) error { return nil }
-func (*mockServiceOK) Ping() error                         { return nil }
+func (*mockServiceOK) SearchUser(_ string) (*ldap.Entry, error) {
+	return &ldap.Entry{DN: "cn=test,dc=example,dc=com"}, nil
+}
+func (*mockServiceOK) ChangePassword(_, _, _, _ string) error { return nil }
+func (*mockServiceOK) Ping() error                            { return nil }
 
 type mockServiceDown struct{}
 
-func (*mockServiceDown) ChangePassword(_, _, _ string) error { return nil }
-func (*mockServiceDown) Ping() error                         { return errors.New("connection refused") }
+func (*mockServiceDown) SearchUser(_ string) (*ldap.Entry, error) {
+	return &ldap.Entry{DN: "cn=test,dc=example,dc=com"}, nil
+}
+func (*mockServiceDown) ChangePassword(_, _, _, _ string) error { return nil }
+func (*mockServiceDown) Ping() error                            { return errors.New("connection refused") }
 
 func TestLivenessHandler(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/health/live", nil)
@@ -40,7 +48,7 @@ func TestLivenessHandler(t *testing.T) {
 func TestReadinessHandler(t *testing.T) {
 	tests := []struct {
 		name           string
-		svc            ldap.Service
+		svc            ldapService.Service
 		expectedStatus int
 		expectedBody   string
 	}{

@@ -9,6 +9,8 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/go-ldap/ldap/v3"
 )
 
 type mockValidator struct {
@@ -26,7 +28,11 @@ type mockLdapService struct {
 	newPwd       string
 }
 
-func (m *mockLdapService) ChangePassword(username string, currentPassword string, newPassword string) error {
+func (m *mockLdapService) SearchUser(username string) (*ldap.Entry, error) {
+	return &ldap.Entry{DN: "cn=testuser,dc=example,dc=com"}, nil
+}
+
+func (m *mockLdapService) ChangePassword(userDN string, username string, currentPassword string, newPassword string) error {
 	m.username = username
 	m.oldPwd = currentPassword
 	m.newPwd = newPassword

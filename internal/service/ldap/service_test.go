@@ -85,7 +85,7 @@ var defaultConfig = &config.LdapConfig{
 	SearchFilter: "(objectClass=*)",
 }
 
-func Test_serviceImpl_ChangePassword(t *testing.T) {
+func Test_serviceImpl_SearchUser(t *testing.T) {
 	tests := []struct {
 		name            string
 		config          config.LdapConfig
@@ -112,6 +112,38 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 			currentPassword: "123456",
 			newPassword:     "Test1234",
 			wantErr:         true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
+			svc := ldap.CreateService(tt.config, tt.ldapWrapperMock, mockLogger)
+			_, err := svc.SearchUser(tt.username)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("SearchUser() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_serviceImpl_ChangePassword(t *testing.T) {
+	tests := []struct {
+		name            string
+		config          config.LdapConfig
+		ldapWrapperMock ldap.Wrapper
+		username        string
+		currentPassword string
+		newPassword     string
+		wantErr         bool
+	}{
+		{
+			name:            "success",
+			config:          *defaultConfig,
+			ldapWrapperMock: &mockLdapWrapperDefault{},
+			username:        "tester",
+			currentPassword: "123456",
+			newPassword:     "Test1234",
+			wantErr:         false,
 		},
 		{
 			name:            "dial fails",
@@ -141,12 +173,12 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 			wantErr:         true,
 		},
 	}
-
+	t.Parallel()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
 			svc := ldap.CreateService(tt.config, tt.ldapWrapperMock, mockLogger)
-			err := svc.ChangePassword(tt.username, tt.currentPassword, tt.newPassword)
+			err := svc.ChangePassword("someDN", tt.username, tt.currentPassword, tt.newPassword)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ChangePassword() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -156,7 +188,7 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 
 func Test_serviceImpl_Ping(t *testing.T) {
 	mockLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
-
+	t.Parallel()
 	t.Run("ping succeeds", func(t *testing.T) {
 		svc := ldap.CreateService(*defaultConfig, &mockLdapWrapperDefault{}, mockLogger)
 		if err := svc.Ping(); err != nil {
