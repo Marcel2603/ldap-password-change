@@ -1,9 +1,10 @@
 package validation_test
 
 import (
-	"ldap-password-change/cmd/config"
-	"ldap-password-change/internal/validation"
 	"testing"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
+	"github.com/Marcel2603/ldap-password-change/internal/validation"
 )
 
 const defaultPattern = "^[a-zA-Z0-9]*$"

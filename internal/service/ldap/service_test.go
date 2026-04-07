@@ -4,10 +4,11 @@ import (
 	"crypto/tls"
 	"errors"
 	"io"
-	"ldap-password-change/cmd/config"
-	"ldap-password-change/internal/service/ldap"
 	"log/slog"
 	"testing"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
+	"github.com/Marcel2603/ldap-password-change/internal/service/ldap"
 
 	ldapext "github.com/go-ldap/ldap/v3"
 )

@@ -8,7 +8,7 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "ldap-password-change/cmd/config"
+import "github.com/Marcel2603/ldap-password-change/cmd/config"
 
 func SuccessfulPasswordChange() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {

@@ -2,8 +2,9 @@ package validation
 
 import (
 	"errors"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
 	"github.com/dlclark/regexp2"
-	"ldap-password-change/cmd/config"
 )
 
 type Validator interface {

@@ -4,11 +4,12 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"ldap-password-change/cmd/config"
-	"ldap-password-change/internal/types"
 	"log/slog"
 	"os"
 	"time"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
+	"github.com/Marcel2603/ldap-password-change/internal/types"
 
 	"github.com/go-ldap/ldap/v3"
 	"github.com/prometheus/client_golang/prometheus"

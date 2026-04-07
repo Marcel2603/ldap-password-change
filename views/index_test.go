@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"ldap-password-change/cmd/config"
 	"strings"
 	"testing"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
 
 	"github.com/PuerkitoBio/goquery"
 )

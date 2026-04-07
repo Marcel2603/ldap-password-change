@@ -2,18 +2,19 @@ package main
 
 import (
 	"embed"
-	"ldap-password-change/cmd/config"
-	changepassword "ldap-password-change/internal/handler/change-password"
-	"ldap-password-change/internal/handler/health"
-	"ldap-password-change/internal/handler/index"
-	staticfiles "ldap-password-change/internal/handler/static-files"
-	custommw "ldap-password-change/internal/middleware"
-	"ldap-password-change/internal/service/ldap"
-	"ldap-password-change/internal/validation"
 	"log/slog"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
+	changepassword "github.com/Marcel2603/ldap-password-change/internal/handler/change-password"
+	"github.com/Marcel2603/ldap-password-change/internal/handler/health"
+	"github.com/Marcel2603/ldap-password-change/internal/handler/index"
+	staticfiles "github.com/Marcel2603/ldap-password-change/internal/handler/static-files"
+	custommw "github.com/Marcel2603/ldap-password-change/internal/middleware"
+	"github.com/Marcel2603/ldap-password-change/internal/service/ldap"
+	"github.com/Marcel2603/ldap-password-change/internal/validation"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/metrics"
@@ -26,6 +27,11 @@ import (
 
 //go:embed static
 var staticFiles embed.FS
+
+var (
+	BuildVersion = "dev"
+	BuildCommit  = "none"
+)
 
 func main() {
 	configuration := config.Configuration
@@ -40,7 +46,10 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
-	logger.Info("Starting server")
+	logger.Info("Starting LDAP Password Change service",
+		slog.String("version", BuildVersion),
+		slog.String("commit", BuildCommit),
+	)
 
 	staticfiles.NewHandler(staticFiles)
 

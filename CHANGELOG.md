@@ -5,7 +5,7 @@
 ### Features
 
 - *(metrics)* Add prometheus metrics endpoint ([#50](https://github.com/marcel2603/ldap-password-change/issues/50)) - ([8e2c6bc](https://github.com/Marcel2603/ldap-password-change/commit/8e2c6bc0eb1491b1cd0653333a2391f0066658c5))  by @Marcel2603
-- [**breaking**] Initial stable release - ([416b83a](https://github.com/Marcel2603/ldap-password-change/commit/416b83a016d09ed7cebe925b36cf1e1495b0993b))  by @Marcel2603
+- [**breaking**] Initial stable release - ([416b83a](https://github.com/marcel2603/ldap-password-change/commit/416b83a016d09ed7cebe925b36cf1e1495b0993b))  by @Marcel2603
 ### Refactor
 
 - *(ldap-service)* Separate search and PW Change ([#49](https://github.com/marcel2603/ldap-password-change/issues/49)) - ([3b251e3](https://github.com/Marcel2603/ldap-password-change/commit/3b251e3b7da69137b15974af18086039ccae297c))  by @Marcel2603
@@ -19,7 +19,7 @@
 
 ### Features
 
-- *(app)* First release ([#46](https://github.com/marcel2603/ldap-password-change/issues/46)) - ([1d26cd8](https://github.com/Marcel2603/ldap-password-change/commit/1d26cd82e5dd8e5f66f26bd2616933acbb3ce902))  by @Marcel2603
+- *(app)* First release ([#46](https://github.com/Marcel2603/ldap-password-change/issues/46)) - ([1d26cd8](https://github.com/Marcel2603/ldap-password-change/commit/1d26cd82e5dd8e5f66f26bd2616933acbb3ce902))  by @Marcel2603
 - *(ldap)* Implement ldaps - ([8f88390](https://github.com/Marcel2603/ldap-password-change/commit/8f883906122a9b5603a2912c4fa176c0db15cba8))  by @Marcel2603
 
 ### Bug Fixes

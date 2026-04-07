@@ -8,9 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"ldap-password-change/cmd/config"
-	staticfiles "ldap-password-change/internal/handler/static-files"
-	"ldap-password-change/internal/service/ldap"
+	"github.com/Marcel2603/ldap-password-change/cmd/config"
+	staticfiles "github.com/Marcel2603/ldap-password-change/internal/handler/static-files"
+	"github.com/Marcel2603/ldap-password-change/internal/service/ldap"
 
 	goldap "github.com/go-ldap/ldap/v3"
 )

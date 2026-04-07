@@ -3,10 +3,11 @@ package health
 import (
 	"encoding/json"
 	"errors"
-	ldapService "ldap-password-change/internal/service/ldap"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	ldapService "github.com/Marcel2603/ldap-password-change/internal/service/ldap"
 
 	"github.com/go-ldap/ldap/v3"
 )
