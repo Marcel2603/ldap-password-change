@@ -20,6 +20,11 @@ type userInformation struct {
 	confirmPassword string
 }
 
+type InvalidCredentialsError struct{}
+
+func (m *InvalidCredentialsError) Error() string {
+	return "Invalid Credentials!"
+}
 func Handler(ldapService ldap.Service, validator validation.Validator, logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		reqID := middleware.GetReqID(r.Context())
@@ -34,14 +39,14 @@ func Handler(ldapService ldap.Service, validator validation.Validator, logger *s
 		user, err := ldapService.SearchUser(userInfo.username)
 		if err != nil {
 			l.Error("Could not find user", slog.String("error", err.Error()))
-			renderErrorToastie(w, r, http.StatusNotFound, "User not found", err, l)
+			renderErrorToastie(w, r, http.StatusUnauthorized, "Invalid Credentials", &InvalidCredentialsError{}, l)
 			return
 		}
 
 		changePasswordError := ldapService.ChangePassword(user.DN, userInfo.username, userInfo.currentPassword, userInfo.newPassword)
 		if changePasswordError != nil {
 			l.Error("Could not change password", slog.String("error", changePasswordError.Error()))
-			renderErrorToastie(w, r, http.StatusInternalServerError, "Failed to change password", changePasswordError, l)
+			renderErrorToastie(w, r, http.StatusInternalServerError, "Failed to change password", &InvalidCredentialsError{}, l)
 			return
 		}
 
