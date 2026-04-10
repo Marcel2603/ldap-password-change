@@ -61,7 +61,7 @@ func (m *mockWrapper) DialURL(addr string, opts ...ldapext.DialOpt) (ldap.Conn, 
 	return &mockConn{}, nil
 }
 
-func (m *mockWrapper) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
+func (*mockWrapper) DialWithTLSConfig(_ *tls.Config) ldapext.DialOpt {
 	return func(_ *ldapext.DialContext) {}
 }
 
@@ -95,9 +95,9 @@ func Test_serviceImpl_SearchUser(t *testing.T) {
 			name:   "user not found",
 			config: *defaultConfig,
 			ldapWrapperMock: &mockWrapper{
-				DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+				DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 					return &mockConn{
-						SearchFunc: func(req *ldapext.SearchRequest) (*ldapext.SearchResult, error) {
+						SearchFunc: func(_ *ldapext.SearchRequest) (*ldapext.SearchResult, error) {
 							return &ldapext.SearchResult{Entries: []*ldapext.Entry{}}, nil
 						},
 					}, nil
@@ -110,7 +110,7 @@ func Test_serviceImpl_SearchUser(t *testing.T) {
 			name:   "dial fails",
 			config: *defaultConfig,
 			ldapWrapperMock: &mockWrapper{
-				DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+				DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 					return nil, errors.New("test error on DialURL")
 				},
 			},
@@ -121,9 +121,9 @@ func Test_serviceImpl_SearchUser(t *testing.T) {
 			name:   "search returns error",
 			config: *defaultConfig,
 			ldapWrapperMock: &mockWrapper{
-				DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+				DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 					return &mockConn{
-						SearchFunc: func(req *ldapext.SearchRequest) (*ldapext.SearchResult, error) {
+						SearchFunc: func(_ *ldapext.SearchRequest) (*ldapext.SearchResult, error) {
 							return nil, errors.New("search failed")
 						},
 					}, nil
@@ -178,7 +178,7 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 			name:   "dial fails",
 			config: *defaultConfig,
 			ldapWrapperMock: &mockWrapper{
-				DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+				DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 					return nil, errors.New("test error on DialURL")
 				},
 			},
@@ -192,9 +192,9 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 			name:   "bind fails (wrong credentials)",
 			config: *defaultConfig,
 			ldapWrapperMock: &mockWrapper{
-				DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+				DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 					return &mockConn{
-						BindFunc: func(u, p string) error { return errors.New("test error on Bind") },
+						BindFunc: func(_, _ string) error { return errors.New("test error on Bind") },
 					}, nil
 				},
 			},
@@ -208,9 +208,9 @@ func Test_serviceImpl_ChangePassword(t *testing.T) {
 			name:   "password modify fails",
 			config: *defaultConfig,
 			ldapWrapperMock: &mockWrapper{
-				DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+				DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 					return &mockConn{
-						PasswordModifyFunc: func(req *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
+						PasswordModifyFunc: func(_ *ldapext.PasswordModifyRequest) (*ldapext.PasswordModifyResult, error) {
 							return nil, errors.New("test error on PasswordModify")
 						},
 					}, nil
@@ -249,7 +249,7 @@ func Test_serviceImpl_Ping(t *testing.T) {
 
 	t.Run("ping fails when dial fails", func(t *testing.T) {
 		mockWrapperErr := &mockWrapper{
-			DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+			DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 				return nil, errors.New("dial failed")
 			},
 		}
@@ -261,9 +261,9 @@ func Test_serviceImpl_Ping(t *testing.T) {
 
 	t.Run("ping fails when bind fails", func(t *testing.T) {
 		mockWrapperErr := &mockWrapper{
-			DialURLFunc: func(addr string, opts ...ldapext.DialOpt) (ldap.Conn, error) {
+			DialURLFunc: func(_ string, _ ...ldapext.DialOpt) (ldap.Conn, error) {
 				return &mockConn{
-					BindFunc: func(u, p string) error { return errors.New("bind failed") },
+					BindFunc: func(_, _ string) error { return errors.New("bind failed") },
 				}, nil
 			},
 		}

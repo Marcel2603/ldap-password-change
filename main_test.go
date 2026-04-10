@@ -17,25 +17,25 @@ import (
 
 type mockConn struct{}
 
-func (m *mockConn) Bind(username, password string) error { return nil }
-func (m *mockConn) Close() error                         { return nil }
-func (m *mockConn) Search(_ *goldap.SearchRequest) (*goldap.SearchResult, error) {
+func (*mockConn) Bind(_, _ string) error { return nil }
+func (*mockConn) Close() error           { return nil }
+func (*mockConn) Search(_ *goldap.SearchRequest) (*goldap.SearchResult, error) {
 	return &goldap.SearchResult{
 		Entries: []*goldap.Entry{
 			{DN: "cn=test,ou=users,dc=example,dc=org"},
 		},
 	}, nil
 }
-func (m *mockConn) PasswordModify(req *goldap.PasswordModifyRequest) (*goldap.PasswordModifyResult, error) {
+func (*mockConn) PasswordModify(_ *goldap.PasswordModifyRequest) (*goldap.PasswordModifyResult, error) {
 	return nil, nil
 }
 
 type mockWrapper struct{}
 
-func (m *mockWrapper) DialURL(addr string, opts ...goldap.DialOpt) (ldap.Conn, error) {
+func (*mockWrapper) DialURL(_ string, _ ...goldap.DialOpt) (ldap.Conn, error) {
 	return &mockConn{}, nil
 }
-func (m *mockWrapper) DialWithTLSConfig(tc *tls.Config) goldap.DialOpt {
+func (*mockWrapper) DialWithTLSConfig(_ *tls.Config) goldap.DialOpt {
 	return nil
 }
 

@@ -22,8 +22,7 @@ server:
   port: "8081"
 `), 0644)
 
-	os.Setenv("SERVER_HOST", "example.com")
-	defer os.Unsetenv("SERVER_HOST")
+	t.Setenv("SERVER_HOST", "example.com")
 
 	loadConfig()
 
@@ -59,7 +58,7 @@ func TestFormatUIConfig(t *testing.T) {
 	c := Config{
 		UI: UIConfig{
 			BackgroundImage: "bg.jpg",
-			CustomCss:       "custom/mycss.css",
+			CustomCSS:       "custom/mycss.css",
 			Favicon:         "/custom/favicon.ico",
 			Icon:            "https://example.com/logo.png",
 		},
@@ -70,8 +69,8 @@ func TestFormatUIConfig(t *testing.T) {
 	if c.UI.BackgroundImage != "/custom/bg.jpg" {
 		t.Errorf("Expected /custom/bg.jpg, got %v", c.UI.BackgroundImage)
 	}
-	if c.UI.CustomCss != "/custom/mycss.css" {
-		t.Errorf("Expected /custom/mycss.css, got %v", c.UI.CustomCss)
+	if c.UI.CustomCSS != "/custom/mycss.css" {
+		t.Errorf("Expected /custom/mycss.css, got %v", c.UI.CustomCSS)
 	}
 	if c.UI.Favicon != "/custom/favicon.ico" {
 		t.Errorf("Expected /custom/favicon.ico, got %v", c.UI.Favicon)

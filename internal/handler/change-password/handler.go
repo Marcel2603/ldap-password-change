@@ -22,7 +22,7 @@ type userInformation struct {
 
 type InvalidCredentialsError struct{}
 
-func (m *InvalidCredentialsError) Error() string {
+func (*InvalidCredentialsError) Error() string {
 	return "Invalid Credentials!"
 }
 func Handler(ldapService ldap.Service, validator validation.Validator, logger *slog.Logger) http.HandlerFunc {

@@ -25,9 +25,9 @@ func TestVersionHandler(t *testing.T) {
 		t.Fatalf("failed to unmarshal: %v", err)
 	}
 	if resp.Version != versionStr {
-		t.Errorf("expected status '%s', got %q", versionStr, resp.Version)
+		t.Errorf("expected version '%s', got %q", versionStr, resp.Version)
 	}
 	if resp.Commit != commit {
-		t.Errorf("expected status '%s', got %q", commit, resp.Commit)
+		t.Errorf("expected commit '%s', got %q", commit, resp.Commit)
 	}
 }
