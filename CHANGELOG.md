@@ -1,6 +1,24 @@
 # Changelog
 
-## [1.0.2](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.1..1.0.2) - 2026-04-07
+## [1.1.0](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.2..1.1.0) - 2026-04-10
+
+### Features
+
+- *(version)* Create version endpoints ([#54](https://github.com/marcel2603/ldap-password-change/issues/54)) - ([ed5d7ca](https://github.com/Marcel2603/ldap-password-change/commit/ed5d7ca7a085c29d8967344e38b46dd31f21bd4a))  by @Marcel2603
+
+### Bug Fixes
+
+- *(deps)* Update module github.com/prometheus/client_golang to v1.23.2 ([#53](https://github.com/marcel2603/ldap-password-change/issues/53)) - ([22a5b59](https://github.com/Marcel2603/ldap-password-change/commit/22a5b59c773cc1885326bffc9654ab1941c8b913))  by @renovate[bot]
+
+### Refactor
+
+- *(general)* Improve code quality ([#55](https://github.com/marcel2603/ldap-password-change/issues/55)) - ([34487f8](https://github.com/Marcel2603/ldap-password-change/commit/34487f8496494850d49aac0570a3d710078a85ba))  by @Marcel2603
+
+### Dependencies
+
+- *(deps)* Update dependency zensical to v0.0.32 ([#52](https://github.com/marcel2603/ldap-password-change/issues/52)) - ([886d31f](https://github.com/Marcel2603/ldap-password-change/commit/886d31f72de1e37eeecdc46812e668a5cfc7dbf8))  by @renovate[bot]
+
+## [1.0.2](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.1..v1.0.2) - 2026-04-07
 
 ### Bug Fixes
 
