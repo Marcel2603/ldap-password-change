@@ -12,6 +12,7 @@ import (
 	"github.com/Marcel2603/ldap-password-change/internal/handler/health"
 	"github.com/Marcel2603/ldap-password-change/internal/handler/index"
 	staticfiles "github.com/Marcel2603/ldap-password-change/internal/handler/static-files"
+	"github.com/Marcel2603/ldap-password-change/internal/handler/version"
 	custommw "github.com/Marcel2603/ldap-password-change/internal/middleware"
 	"github.com/Marcel2603/ldap-password-change/internal/service/ldap"
 	"github.com/Marcel2603/ldap-password-change/internal/validation"
@@ -81,6 +82,7 @@ func setupApp(configuration config.Config, wrapper ldap.Wrapper, logger *slog.Lo
 	r.Get("/health/live", health.LivenessHandler)
 	r.Get("/health/ready", health.ReadinessHandler(service))
 	r.Handle("/metrics", metrics.Handler())
+	r.Get("/version", version.Handler(BuildVersion, BuildCommit))
 
 	r.Get("/favicon.ico", staticfiles.HandleFavicon)
 	r.Get("/static/*", staticfiles.Handler)
