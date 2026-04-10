@@ -22,10 +22,7 @@ server:
   port: "8081"
 `), 0644)
 
-	_ = os.Setenv("SERVER_HOST", "example.com")
-	defer func() {
-		_ = os.Unsetenv("SERVER_HOST")
-	}()
+	t.Setenv("SERVER_HOST", "example.com")
 
 	loadConfig()
 
