@@ -134,13 +134,13 @@ func Index(conf config.Config) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if conf.UI.CustomCss != "" {
+		if conf.UI.CustomCSS != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<link href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 templ.SafeURL
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinURLErrs(conf.UI.CustomCss)
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinURLErrs(conf.UI.CustomCSS)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 56, Col: 34}
 			}
@@ -163,13 +163,13 @@ func Index(conf config.Config) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		if conf.UI.CustomCss != "" {
+		if conf.UI.CustomCSS != "" {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<link href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 templ.SafeURL
-			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs(conf.UI.CustomCss)
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs(conf.UI.CustomCSS)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 190, Col: 34}
 			}

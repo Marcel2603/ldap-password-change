@@ -52,8 +52,8 @@ templ Index(conf config.Config) {
 			<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
 			<link href="./../static/bootstrap.min.css" rel="stylesheet"/>
-			if conf.UI.CustomCss != "" {
-				<link href={ conf.UI.CustomCss } rel="stylesheet"/>
+			if conf.UI.CustomCSS != "" {
+				<link href={ conf.UI.CustomCSS } rel="stylesheet"/>
 			}
 			<script defer src="./../static/alpine.min.js"></script>
 			<script defer src="./../static/htmx.min.js"></script>
@@ -186,8 +186,8 @@ templ Index(conf config.Config) {
 			if conf.UI.BackgroundImage != "" {
 				@templ.Raw("<style>body { background: url('" + conf.UI.BackgroundImage + "') no-repeat center center fixed !important; background-size: cover !important; animation: none !important; }</style>")
 			}
-			if conf.UI.CustomCss != "" {
-				<link href={ conf.UI.CustomCss } rel="stylesheet"/>
+			if conf.UI.CustomCSS != "" {
+				<link href={ conf.UI.CustomCSS } rel="stylesheet"/>
 			}
 		</head>
 		<body
