@@ -10,7 +10,7 @@ type Config struct {
 
 type UIConfig struct {
 	BackgroundImage string `yaml:"backgroundImage"`
-	CustomCss       string `yaml:"customCss"`
+	CustomCSS       string `yaml:"customCSS"`
 	Favicon         string `yaml:"favicon"`
 	Icon            string `yaml:"icon"`
 }
@@ -31,7 +31,7 @@ type LdapConfig struct {
 	BaseDn       string `yaml:"baseDn"`
 	SearchFilter string `yaml:"searchFilter"`
 	IgnoreTLS    bool   `yaml:"ignoreTLS"`
-	TlsCert      string `yaml:"tlsCert"`
+	TLSCert      string `yaml:"tlsCert"`
 }
 
 type ValidationConfig struct {

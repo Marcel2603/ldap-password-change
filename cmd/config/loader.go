@@ -52,7 +52,7 @@ func formatUIConfig(c *Config) {
 	}
 
 	c.UI.BackgroundImage = prefix(c.UI.BackgroundImage)
-	c.UI.CustomCss = prefix(c.UI.CustomCss)
+	c.UI.CustomCSS = prefix(c.UI.CustomCSS)
 	c.UI.Favicon = prefix(c.UI.Favicon)
 	c.UI.Icon = prefix(c.UI.Icon)
 }

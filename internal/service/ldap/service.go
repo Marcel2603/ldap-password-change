@@ -60,7 +60,7 @@ func CreateService(c config.LdapConfig, wrapper Wrapper, logger *slog.Logger) Se
 		password:     c.Password,
 		host:         c.Host,
 		ignoreTLS:    c.IgnoreTLS,
-		tlsCert:      c.TlsCert,
+		tlsCert:      c.TLSCert,
 		searchFilter: c.SearchFilter,
 		logger:       logger.With(slog.String("class", "service_ldap")),
 		ldapWrapper:  wrapper,

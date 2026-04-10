@@ -100,7 +100,7 @@ func TestIndex(t *testing.T) {
 	}
 }
 
-func TestComponentsFailingWriter(t *testing.T) {
+func TestComponentsFailingWriter(_ *testing.T) {
 	for i := 0; i < 50; i++ {
 		_ = Index(config.Config{}).Render(context.Background(), &failWriter{target: i})
 		_ = SuccessfulPasswordChange().Render(context.Background(), &failWriter{target: i})

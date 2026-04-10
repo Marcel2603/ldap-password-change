@@ -18,8 +18,8 @@ type mockValidator struct {
 	passwordValid bool
 }
 
-func (m *mockValidator) ValidateUsername(username string) bool { return m.usernameValid }
-func (m *mockValidator) ValidatePassword(password string) bool { return m.passwordValid }
+func (m *mockValidator) ValidateUsername(_ string) bool { return m.usernameValid }
+func (m *mockValidator) ValidatePassword(_ string) bool { return m.passwordValid }
 
 type mockLdapService struct {
 	returnsError error
@@ -28,11 +28,11 @@ type mockLdapService struct {
 	newPwd       string
 }
 
-func (m *mockLdapService) SearchUser(username string) (*ldap.Entry, error) {
+func (*mockLdapService) SearchUser(_ string) (*ldap.Entry, error) {
 	return &ldap.Entry{DN: "cn=testuser,dc=example,dc=com"}, nil
 }
 
-func (m *mockLdapService) ChangePassword(userDN string, username string, currentPassword string, newPassword string) error {
+func (m *mockLdapService) ChangePassword(_ string, username string, currentPassword string, newPassword string) error {
 	m.username = username
 	m.oldPwd = currentPassword
 	m.newPwd = newPassword
