@@ -90,7 +90,7 @@ Controls visual customisation. All values are optional — defaults fall back to
 ```yaml
 ui:
   backgroundImage: ""
-  customCss: ""
+  customCSS: ""
   favicon: ""
   icon: ""
 ```
@@ -98,7 +98,7 @@ ui:
 | Key                    | Type   | Description                                                  |
 |------------------------|--------|--------------------------------------------------------------|
 | `ui.backgroundImage`   | string | URL or filename of a background image                        |
-| `ui.customCss`         | string | URL or filename of an additional CSS stylesheet              |
+| `ui.customCSS`         | string | URL or filename of an additional CSS stylesheet              |
 | `ui.favicon`           | string | URL or filename to replace the browser favicon               |
 | `ui.icon`              | string | URL or filename to replace the logo shown above the form     |
 
