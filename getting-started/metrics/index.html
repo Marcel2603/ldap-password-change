@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="zensical-0.0.32">
+      <meta name="generator" content="zensical-0.0.33">
     
     
       
@@ -51,8 +51,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetbrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Jetbrains Mono"}</style>
       
     
     
@@ -1102,21 +1102,21 @@
   
 
 
-<h1 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h1>
+<h1 id="metrics">Metrics</h1>
 <p>The LDAP Password Change service exposes a Prometheus-compatible <code>/metrics</code> endpoint to help you monitor the health,
 performance, and usage of the application.</p>
 <p>This endpoint combines standard HTTP/application metrics with custom metrics specifically designed to track LDAP
 operation performance.</p>
-<h2 id="endpoint-details">Endpoint Details<a class="headerlink" href="#endpoint-details" title="Permanent link">&para;</a></h2>
+<h2 id="endpoint-details">Endpoint Details</h2>
 <ul>
 <li><strong>Path:</strong> <code>/metrics</code></li>
 <li><strong>Method:</strong> <code>GET</code></li>
 <li><strong>Format:</strong> Prometheus Text-based format (<code>text/plain</code>)</li>
 </ul>
 <hr />
-<h2 id="custom-ldap-metrics">Custom LDAP Metrics<a class="headerlink" href="#custom-ldap-metrics" title="Permanent link">&para;</a></h2>
+<h2 id="custom-ldap-metrics">Custom LDAP Metrics</h2>
 <p>To help monitor the performance and reliability of your connected LDAP server, the service exposes the following custom metric:</p>
-<h3 id="ldap_operation_duration_seconds-histogram"><code>ldap_operation_duration_seconds</code> (Histogram)<a class="headerlink" href="#ldap_operation_duration_seconds-histogram" title="Permanent link">&para;</a></h3>
+<h3 id="ldap_operation_duration_seconds-histogram"><code>ldap_operation_duration_seconds</code> (Histogram)</h3>
 <p>Tracks the duration and count of specific LDAP operations executed by the service. Because it is a Histogram,
 it automatically provides <code>_count</code> and <code>_sum</code> metrics, allowing you to calculate the average operation duration
 and monitor total operation volume.</p>
@@ -1145,7 +1145,7 @@ and monitor total operation volume.</p>
 <p><strong>Buckets:</strong>
 This metric uses the default Prometheus time buckets (<code>.005, .01, .025, .05, .1, .25, .5, 1, 2.5, 5, 10</code> seconds)
 to help you accurately track percentiles (e.g., P95, P99) for your LDAP query times.</p>
-<h4 id="example-queries-promql">Example Queries (PromQL)<a class="headerlink" href="#example-queries-promql" title="Permanent link">&para;</a></h4>
+<h4 id="example-queries-promql">Example Queries (PromQL)</h4>
 <p><strong>Average LDAP Search Duration (Last 5 minutes):</strong></p>
 <p>```promql
 rate(ldap_operation_duration_seconds_sum{operation="search", status="success"}[5m])
@@ -1207,7 +1207,7 @@ rate(ldap_operation_duration_seconds_count{operation="search", status="success"}
       <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["navigation.indexes","navigation.instant","navigation.tracking","navigation.path","search.suggest","search.highlight","content.code.copy","content.code.annotate","content.tabs.link"],"search":"../../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.91a19a9e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.63456bd9.min.js"></script>
       
     
   </body>

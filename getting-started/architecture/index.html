@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="zensical-0.0.32">
+      <meta name="generator" content="zensical-0.0.33">
     
     
       
@@ -51,8 +51,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetbrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Jetbrains Mono"}</style>
       
     
     
@@ -1144,20 +1144,20 @@
   
 
 
-<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<h1 id="architecture">Architecture</h1>
+<h2 id="overview">Overview</h2>
 <p><code>ldap-password-change</code> is a stateless Go HTTP service with a single purpose: allowing users to change
 their LDAP password via a web browser. It contains no database and holds no session state.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Browser  ──►  Chi HTTP Router  ──►  Handler  ──►  LDAP Service  ──►  LDAP Server
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                    │
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                    ├── GET  /              → Render HTML form (Templ)
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                    ├── POST /change-password → Validate + Search-then-Bind + PasswordModify
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                    ├── GET  /health/live   → Liveness probe (no LDAP call, not logged)
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                    ├── GET  /health/ready  → Readiness probe (LDAP ping, not logged)
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                    ├── GET  /static/*      → Bundled CSS/JS assets
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                    └── GET  /custom/*      → User-mounted assets
-</span></code></pre></div>
-<h2 id="component-breakdown">Component Breakdown<a class="headerlink" href="#component-breakdown" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Browser  ──►  Chi HTTP Router  ──►  Handler  ──►  LDAP Service  ──►  LDAP Server
+                    │
+                    ├── GET  /              → Render HTML form (Templ)
+                    ├── POST /change-password → Validate + Search-then-Bind + PasswordModify
+                    ├── GET  /health/live   → Liveness probe (no LDAP call, not logged)
+                    ├── GET  /health/ready  → Readiness probe (LDAP ping, not logged)
+                    ├── GET  /static/*      → Bundled CSS/JS assets
+                    └── GET  /custom/*      → User-mounted assets
+</code></pre></div>
+<h2 id="component-breakdown">Component Breakdown</h2>
 <table>
 <thead>
 <tr>
@@ -1204,7 +1204,7 @@ their LDAP password via a web browser. It contains no database and holds no sess
 </tr>
 </tbody>
 </table>
-<h2 id="request-flow-password-change-search-then-bind">Request Flow — Password Change (Search-then-Bind)<a class="headerlink" href="#request-flow-password-change-search-then-bind" title="Permanent link">&para;</a></h2>
+<h2 id="request-flow-password-change-search-then-bind">Request Flow — Password Change (Search-then-Bind)</h2>
 <p>The service implements the <strong>Search-then-Bind</strong> pattern. The service account is only used to locate the
 user's real DN; every password operation is then performed on a connection authenticated as the <strong>user
 themselves</strong>, so the LDAP server enforces its own password policies.</p>
@@ -1254,7 +1254,7 @@ themselves</strong>, so the LDAP server enforces its own password policies.</p>
 
     LDAP--&gt;&gt;SVC: Modify success
     SVC--&gt;&gt;User: 200 – Success page (HTMX swap)</code></pre>
-<h2 id="request-flow-health-probes">Request Flow — Health Probes<a class="headerlink" href="#request-flow-health-probes" title="Permanent link">&para;</a></h2>
+<h2 id="request-flow-health-probes">Request Flow — Health Probes</h2>
 <pre class="mermaid"><code>sequenceDiagram
     actor K8s as Orchestrator (K8s / Docker)
     participant SVC as ldap-password-change
@@ -1274,7 +1274,7 @@ themselves</strong>, so the LDAP server enforces its own password policies.</p>
         SVC--&gt;&gt;K8s: 503 {"status":"unavailable","message":"ldap unreachable"}
     end
     Note over SVC: Not logged.</code></pre>
-<h2 id="tech-stack">Tech Stack<a class="headerlink" href="#tech-stack" title="Permanent link">&para;</a></h2>
+<h2 id="tech-stack">Tech Stack</h2>
 <table>
 <thead>
 <tr>
@@ -1317,7 +1317,7 @@ themselves</strong>, so the LDAP server enforces its own password policies.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="security-notes">Security Notes<a class="headerlink" href="#security-notes" title="Permanent link">&para;</a></h2>
+<h2 id="security-notes">Security Notes</h2>
 <ul>
 <li>The service <strong>never logs passwords</strong> or bind credentials.</li>
 <li>The service account bind is used <strong>only</strong> to search for the user's real DN — it is never used to
@@ -1326,7 +1326,7 @@ themselves</strong>, so the LDAP server enforces its own password policies.</p>
   server's own password policies (history, complexity, minimum age) are fully enforced.</li>
 <li>TLS is enforced in production via <code>ldap.ignoreTLS: false</code> and a trusted CA cert.</li>
 </ul>
-<h2 id="ldap-permissions-required">LDAP Permissions Required<a class="headerlink" href="#ldap-permissions-required" title="Permanent link">&para;</a></h2>
+<h2 id="ldap-permissions-required">LDAP Permissions Required</h2>
 <p>The service account (<code>ldap.userDn</code>) only needs:</p>
 <table>
 <thead>
@@ -1407,7 +1407,7 @@ by the user's own authenticated connection, relying on the LDAP server's built-i
       <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["navigation.indexes","navigation.instant","navigation.tracking","navigation.path","search.suggest","search.highlight","content.code.copy","content.code.annotate","content.tabs.link"],"search":"../../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.91a19a9e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.63456bd9.min.js"></script>
       
     
   </body>

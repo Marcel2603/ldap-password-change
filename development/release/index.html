@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="zensical-0.0.32">
+      <meta name="generator" content="zensical-0.0.33">
     
     
       
@@ -51,8 +51,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetbrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"Jetbrains Mono"}</style>
       
     
     
@@ -1056,15 +1056,15 @@
   
 
 
-<h1 id="release">Release<a class="headerlink" href="#release" title="Permanent link">&para;</a></h1>
+<h1 id="release">Release</h1>
 <p>We use Github Action to release using <a href="https://github.com/semantic-release/semantic-release">semantic-release</a>
 and <a href="https://goreleaser.com/">goreleaser</a>.</p>
-<h2 id="strategy">Strategy<a class="headerlink" href="#strategy" title="Permanent link">&para;</a></h2>
+<h2 id="strategy">Strategy</h2>
 <p>We release as needed, for example if we have added some rules or fixes any bug.</p>
 <p>The release is currently manually and gets triggered by admins.</p>
 <p>If you need to get a release, simply create an <a href="https://github.com/Marcel2603/ldap-password-change/issues">Issue</a> or
 mention it in your pr.</p>
-<h2 id="releaseflow">ReleaseFlow<a class="headerlink" href="#releaseflow" title="Permanent link">&para;</a></h2>
+<h2 id="releaseflow">ReleaseFlow</h2>
 <pre class="mermaid"><code>sequenceDiagram
     autonumber
     participant Dev as Developer
@@ -1093,7 +1093,7 @@ mention it in your pr.</p>
         ReleaseGate--&gt;&gt;DeployWF: outputs {released:false}
         DeployWF--x GH: skip build &amp; push
     end</code></pre>
-<h2 id="artifacts">Artifacts<a class="headerlink" href="#artifacts" title="Permanent link">&para;</a></h2>
+<h2 id="artifacts">Artifacts</h2>
 <p>We release multiple artifacts:</p>
 <table>
 <thead>
@@ -1172,7 +1172,7 @@ mention it in your pr.</p>
       <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["navigation.indexes","navigation.instant","navigation.tracking","navigation.path","search.suggest","search.highlight","content.code.copy","content.code.annotate","content.tabs.link"],"search":"../../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.91a19a9e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.63456bd9.min.js"></script>
       
     
   </body>
