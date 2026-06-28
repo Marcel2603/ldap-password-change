@@ -1,6 +1,37 @@
 # Changelog
 
-## [1.1.0](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.2..1.1.0) - 2026-04-10
+## [1.1.1](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.0..1.1.1) - 2026-06-28
+
+### Bug Fixes
+
+- *(deps)* Update module github.com/dlclark/regexp2 to v2 ([#67](https://github.com/marcel2603/ldap-password-change/issues/67)) - ([0d3c3bb](https://github.com/Marcel2603/ldap-password-change/commit/0d3c3bb53565b86f035d93ba4391cae2dbf9d19b))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2/v2 to v2.2.1 ([#71](https://github.com/marcel2603/ldap-password-change/issues/71)) - ([3124256](https://github.com/Marcel2603/ldap-password-change/commit/3124256d37ea17123049ebad7f3de4c93277416c))  by @renovate[bot]
+- *(deps)* Update module github.com/go-chi/chi/v5 to v5.3.0 ([#69](https://github.com/marcel2603/ldap-password-change/issues/69)) - ([4dc280e](https://github.com/Marcel2603/ldap-password-change/commit/4dc280e9ec4a34f77cded606c32c1af9da754b66))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2/v2 to v2.1.1 ([#68](https://github.com/marcel2603/ldap-password-change/issues/68)) - ([e366e2b](https://github.com/Marcel2603/ldap-password-change/commit/e366e2b3d932e4a8373915ce690f3fcb018137fd))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2 to v2 ([#61](https://github.com/marcel2603/ldap-password-change/issues/61)) - ([742fd32](https://github.com/Marcel2603/ldap-password-change/commit/742fd32efab4d9b2ea8589679374013d8bc6fd83))  by @renovate[bot]
+- *(deps)* Update module github.com/a-h/templ to v0.3.1020 ([#64](https://github.com/marcel2603/ldap-password-change/issues/64)) - ([bf4e591](https://github.com/Marcel2603/ldap-password-change/commit/bf4e5913ca3db2cf821cc7b3160011bd38be6e10))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2 to v1.12.0 ([#57](https://github.com/marcel2603/ldap-password-change/issues/57)) - ([3e7343a](https://github.com/Marcel2603/ldap-password-change/commit/3e7343a55c0ed4442d6d24eb68662424c48b7f1e))  by @renovate[bot]
+
+### Documentation
+
+- *(configuration)* Rename customCss to customCSS - ([2579cd2](https://github.com/Marcel2603/ldap-password-change/commit/2579cd2a6a60feb1acd7cdad560ec47dcbd4ae51))  by @Marcel2603
+
+### Dependencies
+
+- *(deps)* Update dependency mkdocs-git-revision-date-localized-plugin to v1.5.3 ([#65](https://github.com/marcel2603/ldap-password-change/issues/65)) - ([e38633a](https://github.com/Marcel2603/ldap-password-change/commit/e38633ada4961440995e521c83b99d3e5ce450a7))  by @renovate[bot]
+- *(deps)* Update actions/checkout action to v7 ([#73](https://github.com/marcel2603/ldap-password-change/issues/73)) - ([6357731](https://github.com/Marcel2603/ldap-password-change/commit/63577316c335c1853bf380b30b8c9f7fb6310e3d))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.46 ([#74](https://github.com/marcel2603/ldap-password-change/issues/74)) - ([92b7aa4](https://github.com/Marcel2603/ldap-password-change/commit/92b7aa4e41e0f1fc992c97a4c7b50e7e40b1d007))  by @renovate[bot]
+- *(deps)* Update actions/cache action to v6 ([#75](https://github.com/marcel2603/ldap-password-change/issues/75)) - ([ffd1bd7](https://github.com/Marcel2603/ldap-password-change/commit/ffd1bd71ff2f9a95740bc7214b6308c76ed043b9))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.45 ([#70](https://github.com/marcel2603/ldap-password-change/issues/70)) - ([b0afd3e](https://github.com/Marcel2603/ldap-password-change/commit/b0afd3e29d31b6edd61449baf30e36459cdef072))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.43 ([#66](https://github.com/marcel2603/ldap-password-change/issues/66)) - ([5172325](https://github.com/Marcel2603/ldap-password-change/commit/5172325c6d486bcc2666a6027718976753fc78d0))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.41 ([#63](https://github.com/marcel2603/ldap-password-change/issues/63)) - ([8bd3000](https://github.com/Marcel2603/ldap-password-change/commit/8bd300007c4a1a0b5ed05e56fedabe73acf1ee6a))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.40 ([#62](https://github.com/marcel2603/ldap-password-change/issues/62)) - ([86cdfba](https://github.com/Marcel2603/ldap-password-change/commit/86cdfba55d88c1a7bb215e72be88a43057a784ff))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.39 ([#60](https://github.com/marcel2603/ldap-password-change/issues/60)) - ([180a868](https://github.com/Marcel2603/ldap-password-change/commit/180a86888e59bf6abfc0aedc356b04b294051752))  by @renovate[bot]
+- *(deps)* Update cycjimmy/semantic-release-action action to v6 ([#59](https://github.com/marcel2603/ldap-password-change/issues/59)) - ([8308870](https://github.com/Marcel2603/ldap-password-change/commit/83088704624ab56fdc6b5d4453a0f18b72e22507))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.38 ([#58](https://github.com/marcel2603/ldap-password-change/issues/58)) - ([6748d06](https://github.com/Marcel2603/ldap-password-change/commit/6748d06dfbd74c8a2139956d238a222b3b1a28e3))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.33 ([#56](https://github.com/marcel2603/ldap-password-change/issues/56)) - ([c6423a7](https://github.com/Marcel2603/ldap-password-change/commit/c6423a760c0d7be1ecd72e35e73f9ac8199a448a))  by @renovate[bot]
+
+## [1.1.0](https://github.com/Marcel2603/ldap-password-change/compare/v1.0.2..v1.1.0) - 2026-04-10
 
 ### Features
 
