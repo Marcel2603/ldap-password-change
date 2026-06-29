@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/Marcel2603/ldap-password-change/cmd/config"
-	"github.com/dlclark/regexp2"
+	"github.com/dlclark/regexp2/v2"
 )
 
 type Validator interface {
