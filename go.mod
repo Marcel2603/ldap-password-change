@@ -10,7 +10,7 @@ require (
 	dario.cat/mergo v1.0.2
 	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/a-h/templ v0.3.1020
-	github.com/dlclark/regexp2/v2 v2.2.2
+	github.com/dlclark/regexp2/v2 v2.5.2
 	github.com/go-chi/metrics v0.1.1
 	github.com/go-ldap/ldap/v3 v3.4.13
 	github.com/prometheus/client_golang v1.23.2
