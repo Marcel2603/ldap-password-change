@@ -1,6 +1,21 @@
 # Changelog
 
-## [1.1.1](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.0..1.1.1) - 2026-06-28
+## [1.1.2](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.1..1.1.2) - 2026-07-21
+
+### Bug Fixes
+
+- *(deps)* Update module github.com/go-chi/chi/v5 to v5.3.1 ([#80](https://github.com/marcel2603/ldap-password-change/issues/80)) - ([303d510](https://github.com/Marcel2603/ldap-password-change/commit/303d510da397c2abacc93cd21ce0649d51e6e4fa))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2/v2 to v2.5.2 ([#81](https://github.com/marcel2603/ldap-password-change/issues/81)) - ([5f0d75f](https://github.com/Marcel2603/ldap-password-change/commit/5f0d75ff675b0084b2b4a26dc1169d3ad86dde34))  by @renovate[bot]
+- *(deps)* Update module github.com/go-ldap/ldap/v3 to v3.4.14 ([#82](https://github.com/marcel2603/ldap-password-change/issues/82)) - ([df9f33a](https://github.com/Marcel2603/ldap-password-change/commit/df9f33aa7186a64df8984e4a0f1f0b1de280a893))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2 to v2 ([#76](https://github.com/marcel2603/ldap-password-change/issues/76)) - ([5da7089](https://github.com/Marcel2603/ldap-password-change/commit/5da7089e6b95f92a98c9319e29dd126116db13c2))  by @renovate[bot]
+
+### Dependencies
+
+- *(deps)* Update davidanson/markdownlint-cli2-action action to v24 ([#78](https://github.com/marcel2603/ldap-password-change/issues/78)) - ([0cd17ef](https://github.com/Marcel2603/ldap-password-change/commit/0cd17ef3e78679b46e29c5449d486433bda26345))  by @renovate[bot]
+- *(deps)* Update dependency zensical to v0.0.51 ([#79](https://github.com/marcel2603/ldap-password-change/issues/79)) - ([8835f5c](https://github.com/Marcel2603/ldap-password-change/commit/8835f5c041beaf5d29bd7d481f69eb83cd83fc9b))  by @renovate[bot]
+- *(deps)* Update actions/setup-go action to v7 ([#83](https://github.com/marcel2603/ldap-password-change/issues/83)) - ([aaed664](https://github.com/Marcel2603/ldap-password-change/commit/aaed66465f79d60e122102427ce4b50eebccd5b6))  by @renovate[bot]
+
+## [1.1.1](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.0..v1.1.1) - 2026-06-28
 
 ### Bug Fixes
 
