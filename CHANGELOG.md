@@ -1,6 +1,22 @@
 # Changelog
 
-## [1.1.2](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.1..1.1.2) - 2026-07-21
+## [1.1.3](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.2..1.1.3) - 2026-10-04
+
+### Bug Fixes
+
+- *(deps)* Update module github.com/puerkitobio/goquery to v1.13.0 ([#91](https://github.com/marcel2603/ldap-password-change/issues/91)) - ([fcf301a](https://github.com/Marcel2603/ldap-password-change/commit/fcf301a0c8f31ed79d1ee2354387723aa3cd6d62))  by @renovate[bot]
+- *(deps)* Update module github.com/dlclark/regexp2/v2 to v2.8.2 ([#87](https://github.com/marcel2603/ldap-password-change/issues/87)) - ([32ca34e](https://github.com/Marcel2603/ldap-password-change/commit/32ca34eacc9628d50706acf941a162e4da57e09a))  by @renovate[bot]
+- *(deps)* Update module github.com/go-chi/chi/v5 to v5.3.2 ([#88](https://github.com/marcel2603/ldap-password-change/issues/88)) - ([2e95614](https://github.com/Marcel2603/ldap-password-change/commit/2e9561426b1fb510505e508d8f50008a087b55e7))  by @renovate[bot]
+- *(deps)* Update module github.com/andybalholm/brotli to v1.2.6 ([#77](https://github.com/marcel2603/ldap-password-change/issues/77)) - ([d8bf1e8](https://github.com/Marcel2603/ldap-password-change/commit/d8bf1e89c18b70b3f32e19b1743f957126f8f422))  by @renovate[bot]
+
+### Dependencies
+
+- *(deps)* Update dependency zensical to v0.0.67 ([#86](https://github.com/marcel2603/ldap-password-change/issues/86)) - ([4d855d2](https://github.com/Marcel2603/ldap-password-change/commit/4d855d25d292d1db453c9364b0c7e4bc3fcdce23))  by @renovate[bot]
+- *(deps)* Update actions/setup-python action to v7 ([#85](https://github.com/marcel2603/ldap-password-change/issues/85)) - ([b8a78b8](https://github.com/Marcel2603/ldap-password-change/commit/b8a78b8ee3316c64216b43548777e2179232ab67))  by @renovate[bot]
+- *(deps)* Update dependency go to 1.27.x ([#89](https://github.com/marcel2603/ldap-password-change/issues/89)) - ([3c50662](https://github.com/Marcel2603/ldap-password-change/commit/3c506629d1b73b72c5f653d20d53129d61472a89))  by @renovate[bot]
+- *(deps)* Update dependency mkdocs-git-revision-date-localized-plugin to v1.6.0 ([#90](https://github.com/marcel2603/ldap-password-change/issues/90)) - ([37216c0](https://github.com/Marcel2603/ldap-password-change/commit/37216c0a92496df5a520347f3b346dcf3a76f3e6))  by @renovate[bot]
+
+## [1.1.2](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.1..v1.1.2) - 2026-07-21
 
 ### Bug Fixes
 
