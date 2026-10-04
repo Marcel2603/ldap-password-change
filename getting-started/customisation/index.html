@@ -1120,10 +1120,10 @@
 at runtime based on the <code>ui</code> configuration block.</p>
 <h2 id="configuration">Configuration</h2>
 <div class="highlight"><pre><span></span><code><span class="nt">ui</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">backgroundImage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">   </span><span class="c1"># Replaces the animated gradient background</span>
-<span class="w">  </span><span class="nt">customCss</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">         </span><span class="c1"># Injected as an additional stylesheet (after Bootstrap)</span>
-<span class="w">  </span><span class="nt">favicon</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">           </span><span class="c1"># Replaces the browser tab icon</span>
-<span class="w">  </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w">              </span><span class="c1"># Replaces the logo image above the form</span>
+<span class="w">  </span><span class="nt">backgroundImage</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="w">   </span><span class="c1"># Replaces the animated gradient background</span>
+<span class="w">  </span><span class="nt">customCss</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="w">         </span><span class="c1"># Injected as an additional stylesheet (after Bootstrap)</span>
+<span class="w">  </span><span class="nt">favicon</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="w">           </span><span class="c1"># Replaces the browser tab icon</span>
+<span class="w">  </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="w">              </span><span class="c1"># Replaces the logo image above the form</span>
 </code></pre></div>
 <h2 id="asset-resolution">Asset Resolution</h2>
 <p>Values are resolved in this order of precedence:</p>
@@ -1167,17 +1167,17 @@ on the host filesystem.</p>
 <span class="w">  </span><span class="nt">ldap-password-change</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest</span>
 <span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;3000:3000&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"3000:3000"</span>
 <span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./app.yml:/app/app.yml</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./custom:/app/custom</span><span class="w">   </span><span class="c1"># &lt;-- mount your assets here</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># app.yml</span>
 <span class="nt">ui</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">backgroundImage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;bg.jpg&quot;</span><span class="w">           </span><span class="c1"># served from ./custom/bg.jpg</span>
-<span class="w">  </span><span class="nt">customCss</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;corporate-theme.css&quot;</span><span class="w">    </span><span class="c1"># served from ./custom/corporate-theme.css</span>
-<span class="w">  </span><span class="nt">favicon</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;favicon.ico&quot;</span><span class="w">              </span><span class="c1"># served from ./custom/favicon.ico</span>
-<span class="w">  </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logo.png&quot;</span><span class="w">                    </span><span class="c1"># served from ./custom/logo.png</span>
+<span class="w">  </span><span class="nt">backgroundImage</span><span class="p">:</span><span class="w"> </span><span class="s">"bg.jpg"</span><span class="w">           </span><span class="c1"># served from ./custom/bg.jpg</span>
+<span class="w">  </span><span class="nt">customCss</span><span class="p">:</span><span class="w"> </span><span class="s">"corporate-theme.css"</span><span class="w">    </span><span class="c1"># served from ./custom/corporate-theme.css</span>
+<span class="w">  </span><span class="nt">favicon</span><span class="p">:</span><span class="w"> </span><span class="s">"favicon.ico"</span><span class="w">              </span><span class="c1"># served from ./custom/favicon.ico</span>
+<span class="w">  </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s">"logo.png"</span><span class="w">                    </span><span class="c1"># served from ./custom/logo.png</span>
 </code></pre></div>
 <h2 id="theme-selector">Theme Selector</h2>
 <p>The built-in theme switcher in the top-right corner lets users pick:</p>
@@ -1193,7 +1193,7 @@ on the host filesystem.</p>
 <span class="w">  </span><span class="nv">--app-bg</span><span class="p">:</span><span class="w"> </span><span class="nb">linear-gradient</span><span class="p">(</span><span class="mi">135</span><span class="kt">deg</span><span class="p">,</span><span class="w"> </span><span class="mh">#003366</span><span class="p">,</span><span class="w"> </span><span class="mh">#0066cc</span><span class="p">);</span>
 <span class="p">}</span>
 
-<span class="o">[</span><span class="nt">data-bs-theme</span><span class="o">=</span><span class="s2">&quot;dark&quot;</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
+<span class="o">[</span><span class="nt">data-bs-theme</span><span class="o">=</span><span class="s2">"dark"</span><span class="o">]</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nv">--glass-bg</span><span class="p">:</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>

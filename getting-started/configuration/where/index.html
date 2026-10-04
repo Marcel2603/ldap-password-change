@@ -1231,9 +1231,9 @@ uppercasing the YAML path and joining segments with <code>_</code>.</p>
 <div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-p<span class="w"> </span><span class="m">3000</span>:3000<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_HOST</span><span class="o">=</span>ldap.mycompany.com:636<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_USERDN</span><span class="o">=</span><span class="s2">&quot;cn=svc-ldap,dc=mycompany,dc=com&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_USERDN</span><span class="o">=</span><span class="s2">"cn=svc-ldap,dc=mycompany,dc=com"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_PASSWORD</span><span class="o">=</span>s3cr3t<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_BASEDN</span><span class="o">=</span><span class="s2">&quot;ou=employees,dc=mycompany,dc=com&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_BASEDN</span><span class="o">=</span><span class="s2">"ou=employees,dc=mycompany,dc=com"</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-e<span class="w"> </span><span class="nv">LDAP_IGNORETLS</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>ghcr.io/marcel2603/ldap-password-change/ldap-password-change:latest
 </code></pre></div>
