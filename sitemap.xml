@@ -4,22 +4,28 @@
         <loc>https://marcel2603.github.io/ldap-password-change/</loc>
       </url>
       <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/about/license/</loc>
+      </url>
+      <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/about/security/</loc>
+      </url>
+      <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/development/</loc>
+      </url>
+      <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/development/release/</loc>
+      </url>
+      <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/development/tools/</loc>
+      </url>
+      <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/development/tools/generate-static-files/</loc>
+      </url>
+      <url>
         <loc>https://marcel2603.github.io/ldap-password-change/getting-started/</loc>
       </url>
       <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/customisation/</loc>
-      </url>
-      <url>
         <loc>https://marcel2603.github.io/ldap-password-change/getting-started/architecture/</loc>
-      </url>
-      <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/health/</loc>
-      </url>
-      <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/metrics/</loc>
-      </url>
-      <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/usage/</loc>
       </url>
       <url>
         <loc>https://marcel2603.github.io/ldap-password-change/getting-started/configuration/</loc>
@@ -31,15 +37,18 @@
         <loc>https://marcel2603.github.io/ldap-password-change/getting-started/configuration/where/</loc>
       </url>
       <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/development/</loc>
+        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/customisation/</loc>
       </url>
       <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/development/release/</loc>
+        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/health/</loc>
       </url>
       <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/about/security/</loc>
+        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/metrics/</loc>
       </url>
       <url>
-        <loc>https://marcel2603.github.io/ldap-password-change/about/license/</loc>
+        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/usage/</loc>
+      </url>
+      <url>
+        <loc>https://marcel2603.github.io/ldap-password-change/getting-started/version/</loc>
       </url>
 </urlset>
