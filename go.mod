@@ -12,7 +12,7 @@ require (
 	github.com/a-h/templ v0.3.1020
 	github.com/dlclark/regexp2/v2 v2.8.2
 	github.com/go-chi/metrics v0.1.1
-	github.com/go-ldap/ldap/v3 v3.4.14
+	github.com/go-ldap/ldap/v3 v3.4.15
 	github.com/prometheus/client_golang v1.23.2
 )
 
