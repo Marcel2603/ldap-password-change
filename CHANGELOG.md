@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.1.3](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.2..1.1.3) - 2026-10-04
+## [1.1.4](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.3..1.1.4) - 2026-10-16
+
+### Bug Fixes
+
+- *(homebrew)* Fix macos deprecation warning ([#100](https://github.com/marcel2603/ldap-password-change/issues/100)) - ([34e8de1](https://github.com/Marcel2603/ldap-password-change/commit/34e8de1720e6f65d14f111205d5a21c6beceb2ac))  by @Marcel2603
+
+## [1.1.3](https://github.com/Marcel2603/ldap-password-change/compare/v1.1.2..v1.1.3) - 2026-10-04
 
 ### Bug Fixes
 
